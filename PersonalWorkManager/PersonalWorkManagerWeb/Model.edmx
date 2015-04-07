@@ -1,0 +1,662 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="PWMModel.Store" Alias="Self" Provider="System.Data.SQLite" ProviderManifestToken="ISO8601" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="PWMModelStoreContainer">
+          <EntitySet Name="Alert" EntityType="PWMModel.Store.Alert" store:Type="Tables" />
+          <EntitySet Name="Note" EntityType="PWMModel.Store.Note" store:Type="Tables" />
+          <EntitySet Name="Parameter" EntityType="PWMModel.Store.Parameter" store:Type="Tables" />
+          <EntitySet Name="Project" EntityType="PWMModel.Store.Project" store:Type="Tables" />
+          <EntitySet Name="Resource" EntityType="PWMModel.Store.Resource" store:Type="Tables" />
+          <EntitySet Name="Session" EntityType="PWMModel.Store.Session" store:Type="Tables" />
+          <EntitySet Name="Status" EntityType="PWMModel.Store.Status" store:Type="Tables" />
+          <EntitySet Name="StatusType" EntityType="PWMModel.Store.StatusType" store:Type="Tables" />
+          <EntitySet Name="Task" EntityType="PWMModel.Store.Task" store:Type="Tables" />
+          <AssociationSet Name="FK_Alert_0_0" Association="PWMModel.Store.FK_Alert_0_0">
+            <End Role="Project" EntitySet="Project" />
+            <End Role="Alert" EntitySet="Alert" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Note_0_0" Association="PWMModel.Store.FK_Note_0_0">
+            <End Role="Project" EntitySet="Project" />
+            <End Role="Note" EntitySet="Note" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Project_0_0" Association="PWMModel.Store.FK_Project_0_0">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Project" EntitySet="Project" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Resource_0_0" Association="PWMModel.Store.FK_Resource_0_0">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Resource" EntitySet="Resource" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Session_0_0" Association="PWMModel.Store.FK_Session_0_0">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Session" EntitySet="Session" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Session_1_0" Association="PWMModel.Store.FK_Session_1_0">
+            <End Role="Task" EntitySet="Task" />
+            <End Role="Session" EntitySet="Session" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Status_0_0" Association="PWMModel.Store.FK_Status_0_0">
+            <End Role="StatusType" EntitySet="StatusType" />
+            <End Role="Status" EntitySet="Status" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Task_0_0" Association="PWMModel.Store.FK_Task_0_0">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Task" EntitySet="Task" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Task_1_0" Association="PWMModel.Store.FK_Task_1_0">
+            <End Role="Project" EntitySet="Project" />
+            <End Role="Task" EntitySet="Task" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Alert">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="200" />
+          <Property Name="Description" Type="varchar" MaxLength="1000" />
+          <Property Name="DueDate" Type="datetime" Nullable="false" />
+          <Property Name="IdProject" Type="integer" />
+        </EntityType>
+        <EntityType Name="Note">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Text" Type="varchar" MaxLength="4000" />
+          <Property Name="IdProject" Type="integer" />
+        </EntityType>
+        <EntityType Name="Parameter">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="200" />
+          <Property Name="Value" Type="varchar" MaxLength="2000" />
+          <Property Name="Description" Type="varchar" MaxLength="1000" />
+        </EntityType>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="200" />
+          <Property Name="Description" Type="varchar" MaxLength="1000" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="EndDate" Type="datetime" />
+          <Property Name="EstimatedDuration" Type="integer" />
+          <Property Name="IdStatus" Type="integer" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Resource">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Login" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="200" />
+          <Property Name="Password" Type="varchar" MaxLength="1000" />
+          <Property Name="IdStatus" Type="integer" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Session">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="StartTime" Type="datetime" Nullable="false" />
+          <Property Name="EndTime" Type="datetime" Nullable="false" />
+          <Property Name="ElapsedSeconds" Type="integer" Nullable="false" />
+          <Property Name="IdTask" Type="integer" Nullable="false" />
+          <Property Name="IdResource" Type="integer" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Status">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="200" />
+          <Property Name="Description" Type="varchar" MaxLength="1000" />
+          <Property Name="Order" Type="integer" Nullable="false" />
+          <Property Name="IdStatusType" Type="integer" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StatusType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="200" />
+          <Property Name="Description" Type="varchar" MaxLength="1000" />
+        </EntityType>
+        <EntityType Name="Task">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="200" />
+          <Property Name="Description" Type="varchar" MaxLength="1000" />
+          <Property Name="Order" Type="integer" Nullable="false" />
+          <Property Name="IdProject" Type="integer" Nullable="false" />
+          <Property Name="IdStatus" Type="integer" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Alert_0_0">
+          <End Role="Project" Type="PWMModel.Store.Project" Multiplicity="0..1" />
+          <End Role="Alert" Type="PWMModel.Store.Alert" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Alert">
+              <PropertyRef Name="IdProject" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Note_0_0">
+          <End Role="Project" Type="PWMModel.Store.Project" Multiplicity="0..1" />
+          <End Role="Note" Type="PWMModel.Store.Note" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Note">
+              <PropertyRef Name="IdProject" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Project_0_0">
+          <End Role="Status" Type="PWMModel.Store.Status" Multiplicity="1" />
+          <End Role="Project" Type="PWMModel.Store.Project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Project">
+              <PropertyRef Name="IdStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Resource_0_0">
+          <End Role="Status" Type="PWMModel.Store.Status" Multiplicity="1" />
+          <End Role="Resource" Type="PWMModel.Store.Resource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Resource">
+              <PropertyRef Name="IdStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Session_0_0">
+          <End Role="Status" Type="PWMModel.Store.Status" Multiplicity="1" />
+          <End Role="Session" Type="PWMModel.Store.Session" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Session">
+              <PropertyRef Name="IdResource" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Session_1_0">
+          <End Role="Task" Type="PWMModel.Store.Task" Multiplicity="1" />
+          <End Role="Session" Type="PWMModel.Store.Session" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Task">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Session">
+              <PropertyRef Name="IdTask" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Status_0_0">
+          <End Role="StatusType" Type="PWMModel.Store.StatusType" Multiplicity="1" />
+          <End Role="Status" Type="PWMModel.Store.Status" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StatusType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Status">
+              <PropertyRef Name="IdStatusType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Task_0_0">
+          <End Role="Status" Type="PWMModel.Store.Status" Multiplicity="1" />
+          <End Role="Task" Type="PWMModel.Store.Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="IdStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Task_1_0">
+          <End Role="Project" Type="PWMModel.Store.Project" Multiplicity="1" />
+          <End Role="Task" Type="PWMModel.Store.Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="IdProject" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PWMModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="PWMEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Alert" EntityType="PWMModel.Alert" />
+          <EntitySet Name="Note" EntityType="PWMModel.Note" />
+          <EntitySet Name="Parameter" EntityType="PWMModel.Parameter" />
+          <EntitySet Name="Project" EntityType="PWMModel.Project" />
+          <EntitySet Name="Resource" EntityType="PWMModel.Resource" />
+          <EntitySet Name="Session" EntityType="PWMModel.Session" />
+          <EntitySet Name="Status" EntityType="PWMModel.Status" />
+          <EntitySet Name="StatusType" EntityType="PWMModel.StatusType" />
+          <EntitySet Name="Task" EntityType="PWMModel.Task" />
+          <AssociationSet Name="FK_Alert_0_0" Association="PWMModel.FK_Alert_0_0">
+            <End Role="Project" EntitySet="Project" />
+            <End Role="Alert" EntitySet="Alert" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Note_0_0" Association="PWMModel.FK_Note_0_0">
+            <End Role="Project" EntitySet="Project" />
+            <End Role="Note" EntitySet="Note" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Project_0_0" Association="PWMModel.FK_Project_0_0">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Project" EntitySet="Project" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Task_1_0" Association="PWMModel.FK_Task_1_0">
+            <End Role="Project" EntitySet="Project" />
+            <End Role="Task" EntitySet="Task" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Resource_0_0" Association="PWMModel.FK_Resource_0_0">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Resource" EntitySet="Resource" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Session_0_0" Association="PWMModel.FK_Session_0_0">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Session" EntitySet="Session" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Session_1_0" Association="PWMModel.FK_Session_1_0">
+            <End Role="Task" EntitySet="Task" />
+            <End Role="Session" EntitySet="Session" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Status_0_0" Association="PWMModel.FK_Status_0_0">
+            <End Role="StatusType" EntitySet="StatusType" />
+            <End Role="Status" EntitySet="Status" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Task_0_0" Association="PWMModel.FK_Task_0_0">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Task" EntitySet="Task" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Alert">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
+          <Property Name="DueDate" Type="DateTime" Nullable="false" />
+          <Property Name="IdProject" Type="Int64" />
+          <NavigationProperty Name="Project" Relationship="PWMModel.FK_Alert_0_0" FromRole="Alert" ToRole="Project" />
+        </EntityType>
+        <EntityType Name="Note">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Text" Type="String" MaxLength="4000" Unicode="false" FixedLength="false" />
+          <Property Name="IdProject" Type="Int64" />
+          <NavigationProperty Name="Project" Relationship="PWMModel.FK_Note_0_0" FromRole="Note" ToRole="Project" />
+        </EntityType>
+        <EntityType Name="Parameter">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="Value" Type="String" MaxLength="2000" Unicode="false" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" />
+          <Property Name="EndDate" Type="DateTime" />
+          <Property Name="EstimatedDuration" Type="Int64" />
+          <Property Name="IdStatus" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Alert" Relationship="PWMModel.FK_Alert_0_0" FromRole="Project" ToRole="Alert" />
+          <NavigationProperty Name="Note" Relationship="PWMModel.FK_Note_0_0" FromRole="Project" ToRole="Note" />
+          <NavigationProperty Name="Status" Relationship="PWMModel.FK_Project_0_0" FromRole="Project" ToRole="Status" />
+          <NavigationProperty Name="Task" Relationship="PWMModel.FK_Task_1_0" FromRole="Project" ToRole="Task" />
+        </EntityType>
+        <EntityType Name="Resource">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Login" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="Password" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
+          <Property Name="IdStatus" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Status" Relationship="PWMModel.FK_Resource_0_0" FromRole="Resource" ToRole="Status" />
+        </EntityType>
+        <EntityType Name="Session">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StartTime" Type="DateTime" Nullable="false" />
+          <Property Name="EndTime" Type="DateTime" Nullable="false" />
+          <Property Name="ElapsedSeconds" Type="Int64" Nullable="false" />
+          <Property Name="IdTask" Type="Int64" Nullable="false" />
+          <Property Name="IdResource" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Status" Relationship="PWMModel.FK_Session_0_0" FromRole="Session" ToRole="Status" />
+          <NavigationProperty Name="Task" Relationship="PWMModel.FK_Session_1_0" FromRole="Session" ToRole="Task" />
+        </EntityType>
+        <EntityType Name="Status">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
+          <Property Name="Order" Type="Int64" Nullable="false" />
+          <Property Name="IdStatusType" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Project" Relationship="PWMModel.FK_Project_0_0" FromRole="Status" ToRole="Project" />
+          <NavigationProperty Name="Resource" Relationship="PWMModel.FK_Resource_0_0" FromRole="Status" ToRole="Resource" />
+          <NavigationProperty Name="Session" Relationship="PWMModel.FK_Session_0_0" FromRole="Status" ToRole="Session" />
+          <NavigationProperty Name="StatusType" Relationship="PWMModel.FK_Status_0_0" FromRole="Status" ToRole="StatusType" />
+          <NavigationProperty Name="Task" Relationship="PWMModel.FK_Task_0_0" FromRole="Status" ToRole="Task" />
+        </EntityType>
+        <EntityType Name="StatusType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Status" Relationship="PWMModel.FK_Status_0_0" FromRole="StatusType" ToRole="Status" />
+        </EntityType>
+        <EntityType Name="Task">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
+          <Property Name="Order" Type="Int64" Nullable="false" />
+          <Property Name="IdProject" Type="Int64" Nullable="false" />
+          <Property Name="IdStatus" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Project" Relationship="PWMModel.FK_Task_1_0" FromRole="Task" ToRole="Project" />
+          <NavigationProperty Name="Session" Relationship="PWMModel.FK_Session_1_0" FromRole="Task" ToRole="Session" />
+          <NavigationProperty Name="Status" Relationship="PWMModel.FK_Task_0_0" FromRole="Task" ToRole="Status" />
+        </EntityType>
+        <Association Name="FK_Alert_0_0">
+          <End Role="Project" Type="PWMModel.Project" Multiplicity="0..1" />
+          <End Role="Alert" Type="PWMModel.Alert" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Alert">
+              <PropertyRef Name="IdProject" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Note_0_0">
+          <End Role="Project" Type="PWMModel.Project" Multiplicity="0..1" />
+          <End Role="Note" Type="PWMModel.Note" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Note">
+              <PropertyRef Name="IdProject" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Project_0_0">
+          <End Role="Status" Type="PWMModel.Status" Multiplicity="1" />
+          <End Role="Project" Type="PWMModel.Project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Project">
+              <PropertyRef Name="IdStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Task_1_0">
+          <End Role="Project" Type="PWMModel.Project" Multiplicity="1" />
+          <End Role="Task" Type="PWMModel.Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="IdProject" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Resource_0_0">
+          <End Role="Status" Type="PWMModel.Status" Multiplicity="1" />
+          <End Role="Resource" Type="PWMModel.Resource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Resource">
+              <PropertyRef Name="IdStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Session_0_0">
+          <End Role="Status" Type="PWMModel.Status" Multiplicity="1" />
+          <End Role="Session" Type="PWMModel.Session" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Session">
+              <PropertyRef Name="IdResource" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Session_1_0">
+          <End Role="Task" Type="PWMModel.Task" Multiplicity="1" />
+          <End Role="Session" Type="PWMModel.Session" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Task">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Session">
+              <PropertyRef Name="IdTask" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Status_0_0">
+          <End Role="StatusType" Type="PWMModel.StatusType" Multiplicity="1" />
+          <End Role="Status" Type="PWMModel.Status" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StatusType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Status">
+              <PropertyRef Name="IdStatusType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Task_0_0">
+          <End Role="Status" Type="PWMModel.Status" Multiplicity="1" />
+          <End Role="Task" Type="PWMModel.Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="IdStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PWMModelStoreContainer" CdmEntityContainer="PWMEntities">
+          <EntitySetMapping Name="Alert"><EntityTypeMapping TypeName="PWMModel.Alert"><MappingFragment StoreEntitySet="Alert">
+            <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+            <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+            <ScalarProperty Name="IdProject" ColumnName="IdProject" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Note"><EntityTypeMapping TypeName="PWMModel.Note"><MappingFragment StoreEntitySet="Note">
+            <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="Text" ColumnName="Text" />
+            <ScalarProperty Name="IdProject" ColumnName="IdProject" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Parameter"><EntityTypeMapping TypeName="PWMModel.Parameter"><MappingFragment StoreEntitySet="Parameter">
+            <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Value" ColumnName="Value" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Project"><EntityTypeMapping TypeName="PWMModel.Project"><MappingFragment StoreEntitySet="Project">
+            <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+            <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+            <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+            <ScalarProperty Name="EstimatedDuration" ColumnName="EstimatedDuration" />
+            <ScalarProperty Name="IdStatus" ColumnName="IdStatus" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Resource"><EntityTypeMapping TypeName="PWMModel.Resource"><MappingFragment StoreEntitySet="Resource">
+            <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="Login" ColumnName="Login" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Password" ColumnName="Password" />
+            <ScalarProperty Name="IdStatus" ColumnName="IdStatus" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Session"><EntityTypeMapping TypeName="PWMModel.Session"><MappingFragment StoreEntitySet="Session">
+            <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+            <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+            <ScalarProperty Name="ElapsedSeconds" ColumnName="ElapsedSeconds" />
+            <ScalarProperty Name="IdTask" ColumnName="IdTask" />
+            <ScalarProperty Name="IdResource" ColumnName="IdResource" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Status"><EntityTypeMapping TypeName="PWMModel.Status"><MappingFragment StoreEntitySet="Status">
+            <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+            <ScalarProperty Name="Order" ColumnName="Order" />
+            <ScalarProperty Name="IdStatusType" ColumnName="IdStatusType" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="StatusType"><EntityTypeMapping TypeName="PWMModel.StatusType"><MappingFragment StoreEntitySet="StatusType">
+            <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Task"><EntityTypeMapping TypeName="PWMModel.Task"><MappingFragment StoreEntitySet="Task">
+            <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+            <ScalarProperty Name="Order" ColumnName="Order" />
+            <ScalarProperty Name="IdProject" ColumnName="IdProject" />
+            <ScalarProperty Name="IdStatus" ColumnName="IdStatus" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="Model" ZoomLevel="64">
+        <EntityTypeShape EntityType="PWMModel.Alert" Width="1.5" PointX="7.5" PointY="2.875" Height="1.9210009765624996" IsExpanded="true" />
+        <EntityTypeShape EntityType="PWMModel.Note" Width="1.5" PointX="7.5" PointY="5.625" Height="1.5923063151041674" IsExpanded="true" />
+        <EntityTypeShape EntityType="PWMModel.Parameter" Width="1.5" PointX="0.75" PointY="0.75" Height="1.5923063151041665" IsExpanded="true" />
+        <EntityTypeShape EntityType="PWMModel.Project" Width="1.5" PointX="5.25" PointY="3.625" Height="2.9070849609374996" IsExpanded="true" />
+        <EntityTypeShape EntityType="PWMModel.Resource" Width="1.5" PointX="5.25" PointY="7.875" Height="1.9210009765624996" IsExpanded="true" />
+        <EntityTypeShape EntityType="PWMModel.Session" Width="1.5" PointX="12.75" PointY="4.875" Height="2.2496956380208317" IsExpanded="true" />
+        <EntityTypeShape EntityType="PWMModel.Status" Width="1.5" PointX="3" PointY="5.125" Height="2.5783902994791674" IsExpanded="true" />
+        <EntityTypeShape EntityType="PWMModel.StatusType" Width="1.5" PointX="0.75" PointY="5.625" Height="1.5923063151041674" IsExpanded="true" />
+        <EntityTypeShape EntityType="PWMModel.Task" Width="1.5" PointX="10.5" PointY="4.375" Height="2.4140429687499996" IsExpanded="true" />
+        <AssociationConnector Association="PWMModel.FK_Alert_0_0" ManuallyRouted="false">
+          <ConnectorPoint PointX="6.75" PointY="4.21050048828125" />
+          <ConnectorPoint PointX="7.5" PointY="4.21050048828125" />
+        </AssociationConnector>
+        <AssociationConnector Association="PWMModel.FK_Note_0_0" ManuallyRouted="false">
+          <ConnectorPoint PointX="6.75" PointY="6.07854248046875" />
+          <ConnectorPoint PointX="7.5" PointY="6.07854248046875" />
+        </AssociationConnector>
+        <AssociationConnector Association="PWMModel.FK_Project_0_0" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="5.82854248046875" />
+          <ConnectorPoint PointX="5.25" PointY="5.82854248046875" />
+        </AssociationConnector>
+        <AssociationConnector Association="PWMModel.FK_Task_1_0" ManuallyRouted="false">
+          <ConnectorPoint PointX="6.75" PointY="5.21050048828125" />
+          <ConnectorPoint PointX="10.5" PointY="5.21050048828125" />
+        </AssociationConnector>
+        <AssociationConnector Association="PWMModel.FK_Resource_0_0" ManuallyRouted="false">
+          <ConnectorPoint PointX="3.75" PointY="7.7033902994791674" />
+          <ConnectorPoint PointX="3.75" PointY="8.83550048828125" />
+          <ConnectorPoint PointX="5.25" PointY="8.83550048828125" />
+        </AssociationConnector>
+        <AssociationConnector Association="PWMModel.FK_Session_0_0" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="7.4915983072916674" />
+          <ConnectorPoint PointX="13.5" PointY="7.4915983072916674" />
+          <ConnectorPoint PointX="13.5" PointY="7.1246956380208317" />
+        </AssociationConnector>
+        <AssociationConnector Association="PWMModel.FK_Session_1_0" ManuallyRouted="false">
+          <ConnectorPoint PointX="12" PointY="5.832021484375" />
+          <ConnectorPoint PointX="12.75" PointY="5.832021484375" />
+        </AssociationConnector>
+        <AssociationConnector Association="PWMModel.FK_Status_0_0" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="6.4211531575520837" />
+          <ConnectorPoint PointX="3" PointY="6.4211531575520837" />
+        </AssociationConnector>
+        <AssociationConnector Association="PWMModel.FK_Task_0_0" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="7.3544498111979166" />
+          <ConnectorPoint PointX="11.25" PointY="7.3544498111979166" />
+          <ConnectorPoint PointX="11.25" PointY="6.78904296875" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

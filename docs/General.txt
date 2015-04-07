@@ -1,0 +1,151 @@
+
+       +---------------------------------+
+       |   PWM - Personal Work Manager   |
+       +---------------------------------+
+
+* Descrição:
+------------
+- O PWM (Personal Work Manager), é uma solução que permite gestão de várias informações relacionadas com o dia-a-dia de cada pessoa.
+  Nesta 1ª versão, permite a gestão de projectos pessoais e profissionais.
+  Para cada projecto, é possível atribuir notas, tarefas, alertas um estado (Activo, Pendente, ...).
+  Será contabilizado o tempo em que trabalhou nesse projecto de forma a poder ser efectuado um cálculo sobre o tempo que foi
+  consumido.
+  
+
+* Requisitos Gerais:
+--------------------
+- Projectos
+  . Gerir projectos profissionais e pessoais. Onde seja possível guardar a informação do projecto.
+  . Ter um alerta com intervalos muito curtos (10 min) com a indicação de qual o projecto onde estou a trabalhar. Desta forma
+    garante-se que a contagem de tempo do projecto é a correcta.
+- Tarefas
+  . Definição de tarefas gerais ou aplicadas aos projectos
+- Alertas
+  . Defnição de alertas gerais ou aplicados aos projectos/tarefas
+- Estados
+  . Definição de estados para cada tipo de objecto. Sendo que os estados dos projectos são diferentes do estado dos alertas,
+    por exemplo.
+- Recursos
+  . Definição de recursos (pessoas), a quem se entrega a execução dos projectos/tarefas
+  . O recurso deverá efectuar login à aplicação de forma a ser possível contabilizar o seu tempo de trabalho.
+    
+* Definição das tabelas da base de dados:
+-----------------------------------------
+- Projecto
+    . Id                INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
+    . Nome              NVARCHAR(200) UNIQUE NOT NULL
+    . Descricao         NVARCHAR(1000) NULL
+    . DataInicio        DATE NOT NULL
+    . DataFim           DATE NULL
+    . IdEstado          INTEGER NOT NULL
+- Tarefa
+    . Id                INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
+    . Nome              NVARCHAR(200) UNIQUE NOT NULL
+    . Descricao         NVARCHAR(1000) NULL
+    . Ordem             INTEGER NOT NULL
+    . IdProjecto        INTEGER NOT NULL
+    . IdEstado          INTEGER NOT NULL
+- Alerta
+    . Id                INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
+    . Nome              NVARCHAR(200) UNIQUE NOT NULL
+    . Descricao         NVARCHAR(1000) NULL
+    . DataHora          DATE NOT NULL
+    . IdTarefa          INTEGER NOT NULL
+- Sessao
+    . Id                INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
+    . DataInicio        DATE NOT NULL
+    . DataFim           DATE NOT NULL
+    . TempoDecorrido    INTEGER NOT NULL
+    . IdTarefa          INTEGER NOT NULL
+    . IdRecurso         INTEGER NOT NULL
+- Recurso
+    . Id                INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
+    . Login             NVARCHAR(100) UNIQUE NOT NULL
+    . Nome              NVARCHAR(200) UNIQUE NOT NULL
+    . Senha             NVARCHAR(1000) NULL
+    . IdEstado          INTEGER NOT NULL
+- Estado
+    . Id                INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
+    . Nome              NVARCHAR(200) UNIQUE NOT NULL
+    . Descricao         NVARCHAR(1000) NULL
+    . Tipo              INTEGER NOT NULL         --(1=Projecto, 2=Tarefa, 3=Alerta, 4=Recurso)
+    . Ordem             INTEGER NOT NULL
+- TipoEstado
+    . Id                INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
+    . Nome              NVARCHAR(200) UNIQUE NOT NULL
+    . Descricao         NVARCHAR(1000) NULL
+- Parametro
+    . Id                INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
+    . Nome              NVARCHAR(200) UNIQUE NOT NULL
+    . Valor             NVARCHAR(2000) NULL
+
+    
++ Análise Técnica:
+------------------
+- Criação de um projecto web para manter a informação das tabelas da base de dados
+    . Projectos
+        . Tarefas
+        . Recursos
+        . Sessões de trabalho
+    . 
+- Utilização do projecto PersistableMultiTimer para controlar o tempo dispendido em cada tarefa.
+  A ideia seria aparecer um popup não invasivo, com a indicação do projecto onde se está a trabalhar.
+  Terá um botão para mudar para outro projecto/tarefa, caso o utilizador assim o deseje.
+  Este alerta, deverá aparacer durante alguns segundos e depois desaparacer automaticamente.
+  O alerta, não deverá assumir o focus.
+  
+- Dashboard: O que mostrar
+  . Dados do projecto
+  . Tarefas
+  . Alertas
+  . Sessões / Contabilização de tempos
+  . 
+  
+  
++ A Fazer:
+----------
+OK- Validar se se define uma nova tabela para os tipos de estado
+  Sim, porque se pode reutilizar na alteração das tarefas e alertas, no sentido de permitir tarefas e alertas genéricos e não apenas para os projectos.
+OK- acrescentar uma nova tabela para notas sobre os projectos
+  Sim. Faz sentido
+- Acrescentar à tabela de projectos a duração estimada
+  Sim. Faz sentido
+OK- Acrescentar um código ao projecto
+  Sim. Faz sentido
+- Retirar a função eval() dos ficheiros de código.
+- Alterar os icons do menu principal
+  
++ Um caso prático:
+------------------
+- Projecto pessoal
+    Projecto:
+      Id: 1
+      Nome: Desenho Quadro Natureza Quase Morta
+      Descrição: Tela com uma árvore quase morta com uma flor a nascer no fim de uma ramificação.
+      Data Inicio: 15-12-2014
+      Data Fim: [Null]
+      Estado: Em Análise
+    Tarefas:
+      Id Nome                Descrição                       Id Projecto  Ordem no projecto  Estado
+      1  Estudo das formas   Estudar as formas e curvas ...  1            1                  Em Progresso
+      2  Compra dos materia  Comprar os seguintes materiais: 1            2                  Pendente
+      3  Pintura             Pintura do desenho              1            3                  Pendente
+    Recursos:
+      Id     Login           Nome Completo                   Senha        Estado
+      1      paacardoso      Paulo Cardoso                   ******       Activo
+    Sessões:
+      Id      Tempo decorrido        Id Tarefa     Id Recurso        
+      1       04:20:32               1             1
+    Estados
+      Id    Nome             Descrição                    Tipo de Estado       Ordem
+      1     Em Análise       Ideia                        1                    1
+      2     Em Progresso     Em execução                  2                    1
+      3     Pendente         Por executar                 2                    2
+      4     Em Espera        Em Espera                    3                    1
+      5     Activo           Activo                       4                    1
+      6     Inactivo         Não Activo                   4                    2
+    Parametros
+      Id    Nome             Valor
+      1     AppName          PWM - Personal Work Manager
+
+- Projecto profissional
