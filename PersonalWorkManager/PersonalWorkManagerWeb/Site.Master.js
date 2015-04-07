@@ -124,10 +124,10 @@ function validatePassword() {
     var msg = '';
     if ($('#txtOldPassword').val() == '')
         msg += "O campo 'Senha actual' é obrigatório."
-    if ($('#txtNewPassword').val() == '') {
-        if (msg.length > 0) msg += "<br>";
-        msg += "O campo 'Nova senha' é obrigatório."
-    }
+//    if ($('#txtNewPassword').val() == '') {
+//        if (msg.length > 0) msg += "<br>";
+//        msg += "O campo 'Nova senha' é obrigatório."
+//    }
     if ($('#txtConfirmPassword').val() == '') {
         if (msg.length > 0) msg += "<br>";
         msg += "O campo 'Confirmar senha' é obrigatório."
