@@ -128,10 +128,10 @@ function validatePassword() {
 //        if (msg.length > 0) msg += "<br>";
 //        msg += "O campo 'Nova senha' é obrigatório."
 //    }
-    if ($('#txtConfirmPassword').val() == '') {
-        if (msg.length > 0) msg += "<br>";
-        msg += "O campo 'Confirmar senha' é obrigatório."
-    }
+//    if ($('#txtConfirmPassword').val() == '') {
+//        if (msg.length > 0) msg += "<br>";
+//        msg += "O campo 'Confirmar senha' é obrigatório."
+//    }
     if (msg.length > 0) {
         ModalMessage.Info(msg);
         return false;
