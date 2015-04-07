@@ -1,0 +1,459 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="PersonalWorkManagerWeb.SiteMaster" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head runat="server">
+    <title>PWM - Personnal Work Manager</title>
+
+    <%--<meta http-equiv="Page-Exit" content="Alpha(opacity=100)" />--%>
+    <%--<meta http-equiv="Page-Enter" content="blendTrans(Duration=0)" />
+    <meta http-equiv="Page-Exit" content="blendTrans(Duration=0)" />--%>
+
+    <%--Site--%>
+    <%--<link href="~/Resources/Styles/Site.css" rel="stylesheet" type="text/css" />--%>
+    <link href="~/Resources/Styles/SiteEx.css" rel="stylesheet" type="text/css" />
+    <%--Bootstrap--%>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="~/Resources/bootstrap-3.3.2-dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Resources/bootstrap-3.3.2-dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
+    <%--Bootstrap Table Master--%>
+    <link href="~/Resources/bootstrap-table-master/bootstrap-table.min.css" rel="stylesheet" type="text/css" />
+    <!-- SB Admin -->
+    <link href="~/Resources/startbootstrap-sb-admin-2-1.0.5/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Resources/startbootstrap-sb-admin-2-1.0.5/dist/css/sb-admin-2.css" rel="stylesheet" type="text/css" />
+    <link href="~/Resources/startbootstrap-sb-admin-2-1.0.5/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <!-- Selectize -->
+    <link href="~/Resources/selectize.js-master/dist/css/selectize.css" rel="stylesheet" type="text/css" />
+    <!-- Bootstrap Date Picker -->
+    <link href="~/Resources/bootstrap-datetimepicker-master/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" />
+
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="Form1" runat="server">
+    <!-- S C R I P T   M A N A G E R -->
+    <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true">
+        <Scripts>
+            <%--Jquery--%>
+            <asp:ScriptReference Path="~/Resources/jquery-1.11.2.min.js" />
+            <%--Jquery Inputmask--%>
+            <asp:ScriptReference Path="~/Resources/jquery.inputmask-3.x/jquery.inputmask.bundle.min.js" />
+            <%--Bootstrap--%>
+            <asp:ScriptReference Path="~/Resources/bootstrap-3.3.2-dist/js/bootstrap.min.js" />
+            <%--Bootstrap Table Master--%>
+            <asp:ScriptReference Path="~/Resources/bootstrap-table-master/bootstrap-table.min.js" />
+            <asp:ScriptReference Path="~/Resources/bootstrap-table-master/locale/bootstrap-table-pt-PT.min.js" />
+
+            <%--SB ADmin--%>
+            <%--Metis Menu Plugin JavaScript--%>
+            <asp:ScriptReference Path="~/Resources/startbootstrap-sb-admin-2-1.0.5/bower_components/metisMenu/dist/metisMenu.min.js" />
+            <%--Custom Theme JavaScript--%>
+            <asp:ScriptReference Path="~/Resources/startbootstrap-sb-admin-2-1.0.5/dist/js/sb-admin-2.js" />
+
+            <%--Selectize--%>
+            <asp:ScriptReference Path="~/Resources/selectize.js-master/dist/js/standalone/selectize.min.js" />
+
+            <%--Bootstrap Date Picker--%>
+            <asp:ScriptReference Path="~/Resources/moment-develop/min/moment.min.js" />
+            <asp:ScriptReference Path="~/Resources/moment-develop/locale/pt.js" />
+            <asp:ScriptReference Path="~/Resources/bootstrap-datetimepicker-master/build/js/bootstrap-datetimepicker.min.js" />
+
+            <%--UTIL--%>
+            <asp:ScriptReference Path="~/Site.Master.js" />
+            <asp:ScriptReference Path="~/Pages/AjaxUtil.js" />
+            <asp:ScriptReference Path="~/Pages/TableUtil.js" />
+            <asp:ScriptReference Path="~/Pages/Message.js" />
+            <asp:ScriptReference Path="~/Pages/MsgBoxUtil.js" />
+            <asp:ScriptReference Path="~/Pages/DateUtil.js" />
+        </Scripts>
+        <Services>
+            <asp:ServiceReference Path="SiteMaster.asmx" />
+        </Services>
+    </asp:ScriptManager>
+
+    <div id="wrapper">
+
+        <!-- T O P   A N D   L E F T   A R E A  -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+
+            <!-- L O G O -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="<%= ResolveUrl("~/Default.aspx")%>">PWM</a>
+            </div>
+
+            <!-- T O P   L E V E L   B U T T O N S -->
+            <ul class="nav navbar-top-links navbar-right">
+
+                <% if (Page.User.Identity.IsAuthenticated) { %>
+                <!-- MESSAGES -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-messages">
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                                </div>
+                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                                </div>
+                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                                </div>
+                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>Read All Messages</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- TASKS -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-tasks fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-tasks">
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 1</strong>
+                                        <span class="pull-right text-muted">40% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                            <span class="sr-only">40% Complete (success)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 2</strong>
+                                        <span class="pull-right text-muted">20% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+                                            <span class="sr-only">20% Complete</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 3</strong>
+                                        <span class="pull-right text-muted">60% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+                                            <span class="sr-only">60% Complete (warning)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 4</strong>
+                                        <span class="pull-right text-muted">80% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
+                                            <span class="sr-only">80% Complete (danger)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>See All Tasks</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- ALERTS -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-comment fa-fw"></i> New Comment
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                    <span class="pull-right text-muted small">12 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-envelope fa-fw"></i> Message Sent
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-tasks fa-fw"></i> New Task
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>See All Alerts</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <% } %>
+
+                <!-- AUTHENTICATION -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i> <asp:LoginName ID="HeadLoginName" runat="server" /> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <asp:LoginView ID="LoginView1" runat="server" EnableViewState="false">
+                            <AnonymousTemplate>
+                                <li><a href="~/Login.aspx" id="HeadLoginStatus" runat="server"><i class="fa fa-sign-in fa-fw"></i> Entrar</a>
+                                </li>
+                            </AnonymousTemplate>
+                            <LoggedInTemplate>
+                                <%--<li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                                </li>--%>
+                                <%--<li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                                </li>--%>
+                                <li><a href="#mdlChangePassword"><i class="fa fa-asterisk fa-fw"></i> Mudar Senha</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li><asp:LoginStatus ID="HeadLoginStatus" runat="server" LogoutAction="Redirect" LogoutText="<i class='fa fa-sign-out fa-fw'></i> Sair" LogoutPageUrl="~/" />
+                                </li>
+                            </LoggedInTemplate>
+                        </asp:LoginView>
+                    </ul>
+                </li>
+                
+            </ul>
+
+            <!-- L E F T   M E N U -->
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <% if (Page.User.Identity.IsAuthenticated) { %>
+                        <li class="sidebar-search">
+                            <select id="ddlSearch" placeholder="Pesquisar ...">
+                            </select>
+
+                            <!-- /input-group -->
+                        </li>
+                        <% } %>
+                        <li>
+                            <a href="<%= ResolveUrl("~/Default.aspx")%>"><i class="fa fa-home fa-fw"></i> Inicio</a>
+                        </li>
+                        <% if (Page.User.Identity.IsAuthenticated) { %>
+                        <li>
+                            <a href="<%= ResolveUrl("~/Pages/Projects.aspx")%>"><i class="fa fa-book fa-fw"></i> Projectos</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-gear fa-fw"></i> Administração<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="<%= ResolveUrl("~/Pages/Management/Resources.aspx")%>"><i class="fa fa-male fa-fw"></i> Recursos</a>
+                                </li>
+                                <li>
+                                    <a href="<%= ResolveUrl("~/Pages/Management/Statuses.aspx")%>"><i class="fa fa-flag fa-fw"></i> Estados</a>
+                                </li>
+                                <li>
+                                    <a href="<%= ResolveUrl("~/Pages/Management/Parameters.aspx")%>"><i class="fa fa-table fa-fw"></i> Parâmetros</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <% } %>
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+
+        </nav>
+
+        <!-- M A I N   A R E A -->
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <%--Label da mensagem geral--%>
+                    <p></p>
+                    <div id="divMainMessage" runat="server" style="display: none">
+                        <div class="row">
+                            <div class="col-sm-1">
+                                <img id="imgMainMessageIcon" src="" />
+                            </div>
+                            <div class="col-sm-11">
+                                <a href="#" class="close" onclick="$('#divMainMessage').hide();">&times;</a>
+                                <strong><span id="lblMainMessageText" runat="server"></span></strong>
+                                <span id="lnkMainStackTrace" runat="server" style="float: right">
+                                    <a style="text-align: right; color: #AAAAAA" href="#" onclick="$('#lblMainStackTrace').toggle();">StackTrace&nbsp;</a>
+                                </span>
+                                <div id="lblMainStackTrace" runat="server" style="display: none">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <%--Questão Sim / Cancelar--%>
+                    <div class="modal fade" id="mdlQuestion" tabindex="-1" role="dialog" aria-labelledby="mdlQuestionLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="mdlQuestionLabel">
+                                    </h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p class="text-danger text-center" id="mdlQuestionText">
+                                    </p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="btnQuestionCancelled" type="button" class="btn btn-default">
+                                        Cancelar</button>
+                                    <button id="btnQuestionConfirmed" type="button" class="btn btn-danger danger">
+                                        Sim</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+                </div>
+            </div>
+        </div>
+
+
+        
+        <!-- Modal Change Password-->
+        <div class="modal fade" id="mdlChangePassword" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Alterar Senha</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="divModalMessage" style="display: none">
+                        </div>
+                        <form>
+                            <input type="hidden" id="txtId">
+                            <div class="form-group">
+                                <label class="control-label" for="txtOldPassword">Senha actual: </label>
+                                <input type="text" class="form-control" id="txtOldPassword" placeholder="Senha actual">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="txtNewPassword">Senha nova: </label>
+                                <input type="text" class="form-control" id="txtNewPassword" placeholder="Senha nova">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="txtConfirmPassword">Corfirmar Senha: </label>
+                                <input type="text" class="form-control" id="txtConfirmPassword" placeholder="Confirmar senha">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                            Cancelar</button>
+                        <button id="btnActionConfirmed" type="button" class="btn btn-primary">
+                            Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+    </form>
+
+    <script type="text/javascript">
+        setupMainPage();
+    </script>
+
+</body>
+</html>
