@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TimersDBModel.Store" Alias="Self" Provider="System.Data.SQLite" ProviderManifestToken="ISO8601" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityContainer Name="TimersDBModelStoreContainer">
+    <EntitySet Name="Timer" EntityType="TimersDBModel.Store.Timer" store:Type="Tables" />
+    <EntitySet Name="TimerSession" EntityType="TimersDBModel.Store.TimerSession" store:Type="Tables" />
+    <AssociationSet Name="FK_TimerSession_0_0" Association="TimersDBModel.Store.FK_TimerSession_0_0">
+      <End Role="Timer" EntitySet="Timer" />
+      <End Role="TimerSession" EntitySet="TimerSession" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Timer">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="200" />
+    <Property Name="Description" Type="nvarchar" MaxLength="1000" />
+  </EntityType>
+  <EntityType Name="TimerSession">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="StartDate" Type="datetime" Nullable="false" />
+    <Property Name="EndDate" Type="datetime" Nullable="false" />
+    <Property Name="TotalSeconds" Type="integer" Nullable="false" />
+    <Property Name="IdTimer" Type="integer" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_TimerSession_0_0">
+    <End Role="Timer" Type="TimersDBModel.Store.Timer" Multiplicity="1" />
+    <End Role="TimerSession" Type="TimersDBModel.Store.TimerSession" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Timer">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TimerSession">
+        <PropertyRef Name="IdTimer" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

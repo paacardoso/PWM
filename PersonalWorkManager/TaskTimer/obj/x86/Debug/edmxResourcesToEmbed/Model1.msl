@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="TimersDBModelStoreContainer" CdmEntityContainer="TimersDBEntities">
+    <EntitySetMapping Name="Timer">
+      <EntityTypeMapping TypeName="TimersDBModel.Timer">
+        <MappingFragment StoreEntitySet="Timer">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TimerSession">
+      <EntityTypeMapping TypeName="TimersDBModel.TimerSession">
+        <MappingFragment StoreEntitySet="TimerSession">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="TotalSeconds" ColumnName="TotalSeconds" />
+          <ScalarProperty Name="IdTimer" ColumnName="IdTimer" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

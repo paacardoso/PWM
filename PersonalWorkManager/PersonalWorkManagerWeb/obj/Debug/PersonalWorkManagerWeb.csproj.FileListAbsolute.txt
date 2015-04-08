@@ -1,0 +1,11 @@
+C:\Personal\Projects\PWM\PersonalWorkManager\PersonalWorkManagerWeb\bin\PersonalWorkManagerWeb.dll
+C:\Personal\Projects\PWM\PersonalWorkManager\PersonalWorkManagerWeb\bin\PersonalWorkManagerWeb.pdb
+C:\Personal\Projects\PWM\PersonalWorkManager\PersonalWorkManagerWeb\bin\EntityFramework.dll
+C:\Personal\Projects\PWM\PersonalWorkManager\PersonalWorkManagerWeb\bin\EntityFramework.SqlServer.dll
+C:\Personal\Projects\PWM\PersonalWorkManager\PersonalWorkManagerWeb\bin\Newtonsoft.Json.dll
+C:\Personal\Projects\PWM\PersonalWorkManager\PersonalWorkManagerWeb\bin\EntityFramework.xml
+C:\Personal\Projects\PWM\PersonalWorkManager\PersonalWorkManagerWeb\bin\EntityFramework.SqlServer.xml
+C:\Personal\Projects\PWM\PersonalWorkManager\PersonalWorkManagerWeb\bin\Newtonsoft.Json.xml
+C:\Personal\Projects\PWM\PersonalWorkManager\PersonalWorkManagerWeb\obj\Debug\ResolveAssemblyReference.cache
+C:\Personal\Projects\PWM\PersonalWorkManager\PersonalWorkManagerWeb\obj\Debug\PersonalWorkManagerWeb.dll
+C:\Personal\Projects\PWM\PersonalWorkManager\PersonalWorkManagerWeb\obj\Debug\PersonalWorkManagerWeb.pdb

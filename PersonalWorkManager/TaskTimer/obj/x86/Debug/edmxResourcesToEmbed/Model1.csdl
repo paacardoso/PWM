@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TimersDBModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+  <EntityContainer Name="TimersDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Timer" EntityType="TimersDBModel.Timer" />
+    <EntitySet Name="TimerSession" EntityType="TimersDBModel.TimerSession" />
+    <AssociationSet Name="FK_TimerSession_0_0" Association="TimersDBModel.FK_TimerSession_0_0">
+      <End Role="Timer" EntitySet="Timer" />
+      <End Role="TimerSession" EntitySet="TimerSession" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Timer">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="200" Unicode="true" FixedLength="false" />
+    <Property Name="Description" Type="String" MaxLength="1000" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="TimerSession" Relationship="TimersDBModel.FK_TimerSession_0_0" FromRole="Timer" ToRole="TimerSession" />
+  </EntityType>
+  <EntityType Name="TimerSession">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="StartDate" Type="DateTime" Nullable="false" />
+    <Property Name="EndDate" Type="DateTime" Nullable="false" />
+    <Property Name="TotalSeconds" Type="Int64" Nullable="false" />
+    <Property Name="IdTimer" Type="Int64" Nullable="false" />
+    <NavigationProperty Name="Timer" Relationship="TimersDBModel.FK_TimerSession_0_0" FromRole="TimerSession" ToRole="Timer" />
+  </EntityType>
+  <Association Name="FK_TimerSession_0_0">
+    <End Role="Timer" Type="TimersDBModel.Timer" Multiplicity="1" />
+    <End Role="TimerSession" Type="TimersDBModel.TimerSession" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Timer">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TimerSession">
+        <PropertyRef Name="IdTimer" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
