@@ -98,7 +98,7 @@ function getParametersCallbackOk(result) {
 function validateRequired() {
     var msg = '';
     if ($('#txtName').val() == '')
-        msg += "O campo 'Name' é obrigatório."
+        msg += "O campo 'Nome' é obrigatório."
     if (msg.length > 0) {
         ModalMessage.Info(msg);
         return false;

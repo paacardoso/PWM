@@ -113,7 +113,7 @@ function getStatusStatusTypesCallbackOk(result) {
 function validateRequired() {
     var msg = '';
     if ($('#txtName').val() == '')
-        msg += "O campo 'Name' é obrigatório."
+        msg += "O campo 'Nome' é obrigatório."
     if ($('#ddlStatusType').val() == -1) {
         if (msg.length > 0) msg += "<br>";
         msg += "O campo 'Tipo de Estado' é obrigatório."

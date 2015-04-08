@@ -300,7 +300,7 @@
                                 </li>--%>
                                 <%--<li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                                 </li>--%>
-                                <li><a href="~/Pages/Account/ChangePassword.aspx"><i class="fa fa-asterisk fa-fw"></i> Mudar Senha</a>
+                                <li><a href="<%= ResolveUrl("~/Pages/Account/ChangePassword.aspx")%>"><i class="fa fa-asterisk fa-fw"></i> Mudar Senha</a>
                                 </li>
                                 <li class="divider"></li>
                                 <li><asp:LoginStatus ID="HeadLoginStatus" runat="server" LogoutAction="Redirect" LogoutText="<i class='fa fa-sign-out fa-fw'></i> Sair" LogoutPageUrl="~/" />
@@ -320,8 +320,6 @@
                         <li class="sidebar-search">
                             <select id="ddlSearch" placeholder="Pesquisar ...">
                             </select>
-
-                            <!-- /input-group -->
                         </li>
                         <% } %>
                         <li>
@@ -344,12 +342,10 @@
                                     <a href="<%= ResolveUrl("~/Pages/Management/Parameters.aspx")%>"><i class="fa fa-table fa-fw"></i> Parâmetros</a>
                                 </li>
                             </ul>
-                            <!-- /.nav-second-level -->
                         </li>
                         <% } %>
                     </ul>
                 </div>
-                <!-- /.sidebar-collapse -->
             </div>
 
         </nav>
@@ -364,11 +360,11 @@
                     <div id="divMainMessage" runat="server" style="display: none">
                         <div class="row">
                             <div class="col-sm-1">
-                                <img id="imgMainMessageIcon" src="" />
+                                <span id="imgMainMessageIcon" style="font-size: 2.5em;" class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                             </div>
                             <div class="col-sm-11">
-                                <a href="#" class="close" onclick="$('#divMainMessage').hide();">&times;</a>
                                 <strong><span id="lblMainMessageText" runat="server"></span></strong>
+                                <a href="#" class="close" onclick="$('#divMainMessage').hide();">&times;</a>
                                 <span id="lnkMainStackTrace" runat="server" style="float: right">
                                     <a style="text-align: right; color: #AAAAAA" href="#" onclick="$('#lblMainStackTrace').toggle();">StackTrace&nbsp;</a>
                                 </span>

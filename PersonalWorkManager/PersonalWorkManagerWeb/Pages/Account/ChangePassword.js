@@ -43,7 +43,7 @@ function validatePassword() {
         msg += "A nova senha não é igual à senha de confirmação."
     }
     if (msg.length > 0) {
-        ModalMessage.Info(msg);
+        MainMessage.Info(msg);
         return false;
     }
     else
@@ -51,6 +51,7 @@ function validatePassword() {
 }
 function updatePassword() {
     if (validatePassword() === true) {
+        alert('changing ... ');
         ajaxCall("ChangePassword.aspx/UpdatePasswordJSON",
                   "{'Id':'" + $('#txtId').val() + "', " +
                    "'NewPassword':'" + $('#txtNewPassword').val() + "'}",
@@ -63,7 +64,7 @@ function updatePasswordCallbackOk(result) {
 }
 function updatePasswordCallbackFailed(msg) {
     var ex = jQuery.parseJSON(msg.responseText);
-    ModalMessage.Exception(ex.Message, ex.StackTrace);
+    MainMessage.Exception(ex.Message, ex.StackTrace);
 }
 
 function cancelChange() {
