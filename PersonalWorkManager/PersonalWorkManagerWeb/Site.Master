@@ -300,7 +300,7 @@
                                 </li>--%>
                                 <%--<li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                                 </li>--%>
-                                <li><a href="#mdlChangePassword"><i class="fa fa-asterisk fa-fw"></i> Mudar Senha</a>
+                                <li><a href="~/Pages/Account/ChangePassword.aspx"><i class="fa fa-asterisk fa-fw"></i> Mudar Senha</a>
                                 </li>
                                 <li class="divider"></li>
                                 <li><asp:LoginStatus ID="HeadLoginStatus" runat="server" LogoutAction="Redirect" LogoutText="<i class='fa fa-sign-out fa-fw'></i> Sair" LogoutPageUrl="~/" />
@@ -405,47 +405,6 @@
                 </div>
             </div>
         </div>
-
-
-        
-        <!-- Modal Change Password-->
-        <div class="modal fade" id="mdlChangePassword" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Alterar Senha</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div id="divModalMessage" style="display: none">
-                        </div>
-                        <form>
-                            <input type="hidden" id="txtId">
-                            <div class="form-group">
-                                <label class="control-label" for="txtOldPassword">Senha actual: </label>
-                                <input type="text" class="form-control" id="txtOldPassword" placeholder="Senha actual">
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label" for="txtNewPassword">Senha nova: </label>
-                                <input type="text" class="form-control" id="txtNewPassword" placeholder="Senha nova">
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label" for="txtConfirmPassword">Corfirmar Senha: </label>
-                                <input type="text" class="form-control" id="txtConfirmPassword" placeholder="Confirmar senha">
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">
-                            Cancelar</button>
-                        <button id="btnActionConfirmed" type="button" class="btn btn-primary">
-                            Guardar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
 
 
     </div>

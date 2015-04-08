@@ -67,6 +67,8 @@
     <Content Include="About.aspx" />
     <Content Include="Login.aspx" />
     <Content Include="Default.aspx" />
+    <Content Include="Pages\Account\ChangePassword.aspx" />
+    <Content Include="Pages\Account\ChangePassword.js" />
     <Content Include="Pages\AjaxUtil.js" />
     <Content Include="Pages\DateUtil.js" />
     <Content Include="Pages\Management\Resources.aspx" />
@@ -174,6 +176,13 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Account\ChangePassword.aspx.cs">
+      <DependentUpon>ChangePassword.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Account\ChangePassword.aspx.designer.cs">
+      <DependentUpon>ChangePassword.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\Management\Resources.aspx.cs">
       <DependentUpon>Resources.aspx</DependentUpon>

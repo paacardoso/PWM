@@ -109,18 +109,5 @@ namespace PersonalWorkManagerWeb.Pages.Management
             }
             return true;
         }
-
-        [WebMethod]
-        public static bool ChangePasswordJSON(int Id, string NewPassword)
-        {
-            Resource Resource;
-            using (var objCtx = new PWMEntities())
-            {
-                Resource = objCtx.Resource.SingleOrDefault(x => x.Id == Id);
-                Resource.Password = NewPassword;
-                objCtx.SaveChanges();
-            }
-            return true;
-        }
     }
 }
