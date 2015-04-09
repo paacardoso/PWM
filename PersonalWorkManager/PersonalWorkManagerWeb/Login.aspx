@@ -2,6 +2,7 @@
     CodeBehind="Login.aspx.cs" Inherits="PersonalWorkManagerWeb.Login" %>
 
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
+    <script src="Login.js" type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="MainContent">
     <div class="row">
@@ -18,15 +19,21 @@
             <div class="form-group">
                 <label for="email">Login:</label>
                 <input type="text" runat="server" class="form-control" id="txtLogin" />
+                <input type="text" class="form-control" id="txtLogin2" placeholder="Login">
             </div>
             <div class="form-group">
                 <label for="pwd">Senha:</label>
                 <input type="password" runat="server" class="form-control" id="txtPassword" />
+                <input type="text" class="form-control" id="txtPassword2" placeholder="Senha">
             </div>
             <div class="checkbox">
                 <label><input type="checkbox" runat="server" id="chkPersistLoginCookie" />Manter sessão activa</label>
+                <label><input type="checkbox" id="chkPersistLoginCookie2" />Manter sessão activa (2)</label>
             </div>
             <asp:Button ID="btnLogin" runat="server" Text="Entrar" OnClick="btnLogin_Click" />
+
+            <button id="btnLoginByAJAX" type="button" class="btn btn-primary" onclick="login();">Entrar (By AJAX)</button>
+
         </div>
         <div class="col-lg-3">
         </div>

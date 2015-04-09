@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Web.Services;
 using System.Web.Security;
-using System.Web.Script.Services;
-using System.Web.UI.HtmlControls;
+using System.Web.Services;
+using Newtonsoft.Json;
 
 namespace PersonalWorkManagerWeb
 {
@@ -19,7 +14,6 @@ namespace PersonalWorkManagerWeb
 
         protected void btnLogin_Click(object sender, EventArgs e)
         {
-            
             using (var objctx = new PWMEntities())
             {
                 var login = this.txtLogin.Value;
@@ -39,6 +33,31 @@ namespace PersonalWorkManagerWeb
                     FormsAuthentication.RedirectFromLoginPage(login, persistable);
                 }
             }
-        } 
+        }
+
+        [WebMethod]
+        public static string LoginJSON(string Login, string Password, bool Persistable) {
+            using (var objctx = new PWMEntities()) {
+                var resource = (from u in objctx.Resource
+                                where (u.Login.ToLower() == Login.ToLower()) && (u.Password == Password)
+                                select new {
+                                    Id = u.Id,
+                                    Login = u.Login,
+                                    Name = u.Name,
+                                    IdStatus = u.IdStatus
+                                });
+                string json = null;
+                if (resource.ToList().Count() > 0) {
+                    //let us now set the authentication cookie so that we can use that later.
+                    FormsAuthentication.SetAuthCookie(Login, Persistable);
+                    //FormsAuthentication.RedirectFromLoginPage(Login, Persistable);
+                    json = JsonConvert.SerializeObject(resource.ToList()[0]);
+                }
+
+                return json;
+
+            }
+        }
+
     }
 }

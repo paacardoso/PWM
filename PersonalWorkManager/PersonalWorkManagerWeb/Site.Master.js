@@ -110,3 +110,10 @@ function openItem(value) {
             break;
     }
 }
+
+
+////////   G E N E R A L   F U N C T I O N S   //////////
+function resolveURL(url) {
+    var site = window.location.pathname.substring(1, window.location.pathname.indexOf('/', 1));
+    return window.location.protocol + "//" + window.location.host + "/" + site + url;
+}

@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="About.aspx" />
+    <Content Include="Login.js" />
     <Content Include="Login.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="Pages\Account\ChangePassword.aspx" />
