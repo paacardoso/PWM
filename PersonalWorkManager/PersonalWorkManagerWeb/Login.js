@@ -42,6 +42,7 @@ function loginCallbackOk(result) {
     if (currentUser === null) {
         MainMessage.Info('O Login e/ou a senha estão incorrectos. Tente novamente.');
     } else {
+    alert('login ok');
         sessionStorage.setItem('current_resource', currentUser);
         redirectToProjects();
     }

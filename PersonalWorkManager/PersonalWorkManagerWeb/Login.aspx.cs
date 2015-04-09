@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Security;
 using System.Web.Services;
 using Newtonsoft.Json;
+using System.Web;
 
 namespace PersonalWorkManagerWeb
 {
@@ -48,9 +49,18 @@ namespace PersonalWorkManagerWeb
                                 });
                 string json = null;
                 if (resource.ToList().Count() > 0) {
-                    //let us now set the authentication cookie so that we can use that later.
-                    FormsAuthentication.SetAuthCookie(Login, Persistable);
-                    //FormsAuthentication.RedirectFromLoginPage(Login, Persistable);
+                    
+                    ////let us now set the authentication cookie so that we can use that later.
+                    //FormsAuthentication.SetAuthCookie(Login, Persistable);
+                    ////FormsAuthentication.RedirectFromLoginPage(Login, Persistable);
+
+                    //Dim ticket As New FormsAuthenticationTicket(1, username, DateTime.Now, DateTime.Now.AddMinutes(3), False, "member")
+                    FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, Login, DateTime.Now, DateTime.Now.AddMinutes(3), false, "member");
+                    //Dim cookie As New HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(ticket))
+                    HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(ticket));
+                    //HttpContext.Current.Request.Cookies.Add(cookie)
+                    HttpContext.Current.Request.Cookies.Add(cookie);
+
                     json = JsonConvert.SerializeObject(resource.ToList()[0]);
                 }
 
