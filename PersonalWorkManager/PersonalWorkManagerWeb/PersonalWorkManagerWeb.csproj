@@ -131,7 +131,6 @@
     <Content Include="Resources\startbootstrap-sb-admin-2-1.0.5\bower_components\metisMenu\dist\metisMenu.min.js" />
     <Content Include="Resources\startbootstrap-sb-admin-2-1.0.5\dist\css\sb-admin-2.css" />
     <Content Include="Resources\startbootstrap-sb-admin-2-1.0.5\dist\js\sb-admin-2.js" />
-    <Content Include="Resources\Styles\Site.css" />
     <Content Include="Resources\Styles\SiteEx.css" />
     <Content Include="Global.asax" />
     <Content Include="SiteMaster.asmx" />

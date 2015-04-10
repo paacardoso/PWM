@@ -18,22 +18,16 @@
             <form class="form-inline" role="form">
             <div class="form-group">
                 <label for="email">Login:</label>
-                <input type="text" runat="server" class="form-control" id="txtLogin" />
-                <input type="text" class="form-control" id="txtLogin2" placeholder="Login">
+                <input type="text" class="form-control" id="txtLogin" placeholder="Login">
             </div>
             <div class="form-group">
                 <label for="pwd">Senha:</label>
-                <input type="password" runat="server" class="form-control" id="txtPassword" />
-                <input type="text" class="form-control" id="txtPassword2" placeholder="Senha">
+                <input type="password" class="form-control" id="txtPassword" placeholder="Senha">
             </div>
             <div class="checkbox">
                 <label><input type="checkbox" runat="server" id="chkPersistLoginCookie" />Manter sessão activa</label>
-                <label><input type="checkbox" id="chkPersistLoginCookie2" />Manter sessão activa (2)</label>
             </div>
-            <asp:Button ID="btnLogin" runat="server" Text="Entrar" OnClick="btnLogin_Click" />
-
-            <button id="btnLoginByAJAX" type="button" class="btn btn-primary" onclick="login();">Entrar (By AJAX)</button>
-
+            <button id="btnLogin" type="button" class="btn btn-primary" onclick="login();">Entrar</button>
         </div>
         <div class="col-lg-3">
         </div>

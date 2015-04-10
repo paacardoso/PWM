@@ -27,5 +27,5 @@
 
 function defaultFailFunc(msg) {
     var ex = jQuery.parseJSON(msg.responseText);
-    MainMessage.Exception(ex.Message, ex.StackTrace);
+    MessageBox.Exception(ex.Message, ex.StackTrace);
 }

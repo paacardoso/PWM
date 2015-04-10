@@ -122,7 +122,7 @@ function validateRequired() {
         msg += "O campo 'Estado' é obrigatório."
     }
     if (msg.length > 0) {
-        ModalMessage.Info(msg);
+        MessageBox.Info(msg);
         return false;
     }
     else
@@ -133,7 +133,7 @@ function validateRequired() {
 ////////////////   A D D   //////////////////
 function showAddDialog() {
     $('#mdlLabel').text('Adicionar Novo Recurso');
-    ModalMessage.Clear();
+    MessageBox.Clear();
     $('#txtId').val('');
     $('#txtLogin').val('');
     $('#txtName').val('');
@@ -164,7 +164,7 @@ function insertCallbackOk(result) {
 }
 function insertCallbackFailed(msg) {
     var ex = jQuery.parseJSON(msg.responseText);
-    ModalMessage.Exception(ex.Message, ex.StackTrace);
+    MessageBox.Exception(ex.Message, ex.StackTrace);
 }
 
 
@@ -175,7 +175,7 @@ function showEditDialog(row) {
         param = $('#tblResources').bootstrapTable('getSelections')[0];
     else
         param = row;
-    ModalMessage.Clear();
+    MessageBox.Clear();
     $('#mdlLabel').text('Editar Recurso');
     $("#txtId").val(param.Id);
     $("#txtLogin").val(param.Login);
@@ -212,19 +212,19 @@ function updateCallbackOk(result) {
 }
 function updateCallbackFailed(msg) {
     var ex = jQuery.parseJSON(msg.responseText);
-    ModalMessage.Exception(ex.Message, ex.StackTrace);
+    MessageBox.Exception(ex.Message, ex.StackTrace);
 }
 
 
 ////////////////   R E M O V E   //////////////////
 function showRemoveDialog(param) {
     if (typeof param != 'undefined')
-        MsgBox.Ask('Remover Recurso', "Confirma a remoção do Recurso '" + param.Name + "' ?", removeCancelled, function () { removeConfirmed(param); });
+        MessageBox.Ask('Remover Recurso', "Confirma a remoção do Recurso '" + param.Name + "' ?", removeCancelled, function () { removeConfirmed(param); });
     else
-        MsgBox.Ask('Remover Recurso', "Confirma a remoção dos Recursos seleccionados ?", removeCancelled, function () { removeConfirmed(undefined); });
+        MessageBox.Ask('Remover Recurso', "Confirma a remoção dos Recursos seleccionados ?", removeCancelled, function () { removeConfirmed(undefined); });
 }
 function removeCancelled() {
-    MsgBox.Hide();
+    MessageBox.Hide();
 }
 function removeConfirmed(param) {
     var params = [];
@@ -252,10 +252,10 @@ function removeConfirmed(param) {
 }
 function removeCallbackOk(result, ids) {
     $('#tblResources').bootstrapTable('remove', eval(ids));
-    MsgBox.Hide();
+    MessageBox.Hide();
 }
 function removeCallbackFailed(msg) {
-    MsgBox.Hide();
+    MessageBox.Hide();
     var ex = jQuery.parseJSON(msg.responseText);
-    MainMessage.Exception(ex.Message, ex.StackTrace);
+    MessageBox.Exception(ex.Message, ex.StackTrace);
 }

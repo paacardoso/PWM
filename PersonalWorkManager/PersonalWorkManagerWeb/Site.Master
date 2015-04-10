@@ -3,14 +3,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head runat="server">
-    <title>PWM - Personnal Work Manager</title>
-
-    <%--<meta http-equiv="Page-Exit" content="Alpha(opacity=100)" />--%>
-    <%--<meta http-equiv="Page-Enter" content="blendTrans(Duration=0)" />
-    <meta http-equiv="Page-Exit" content="blendTrans(Duration=0)" />--%>
+    <title>PWM - Personal Work Manager</title>
 
     <%--Site--%>
-    <%--<link href="~/Resources/Styles/Site.css" rel="stylesheet" type="text/css" />--%>
     <link href="~/Resources/Styles/SiteEx.css" rel="stylesheet" type="text/css" />
     <%--Bootstrap--%>
     <meta charset="utf-8" />
@@ -290,7 +285,7 @@
                         <i class="fa fa-user fa-fw"></i> <asp:LoginName ID="HeadLoginName" runat="server" /> <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <asp:LoginView ID="LoginView1" runat="server" EnableViewState="false">
+                        <asp:LoginView ID="HeadLoginView" runat="server" EnableViewState="false">
                             <AnonymousTemplate>
                                 <li><a href="~/Login.aspx" id="HeadLoginStatus" runat="server"><i class="fa fa-sign-in fa-fw"></i> Entrar</a>
                                 </li>
@@ -358,7 +353,7 @@
                     <%--Label da mensagem geral--%>
                     <p></p>
                     <div id="divMainMessage" runat="server" style="display: none">
-                        <div class="row">
+                        <%--<div class="row">
                             <div class="col-sm-1">
                                 <span id="imgMainMessageIcon" style="font-size: 2.5em;" class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                             </div>
@@ -371,7 +366,7 @@
                                 <div id="lblMainStackTrace" runat="server" style="display: none">
                                 </div>
                             </div>
-                        </div>
+                        </div>--%>
                     </div>
 
                     <%--Questão Sim / Cancelar--%>
@@ -405,10 +400,6 @@
 
     </div>
     </form>
-
-    <script type="text/javascript">
-        setupMainPage();
-    </script>
 
 </body>
 </html>

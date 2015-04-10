@@ -43,7 +43,7 @@ function validatePassword() {
         msg += "A nova senha não é igual à senha de confirmação."
     }
     if (msg.length > 0) {
-        MainMessage.Info(msg);
+        MessageBox.Info(msg);
         return false;
     }
     else
@@ -53,10 +53,10 @@ function updatePassword() {
     if (validatePassword() === true) {
         alert('changing ... ');
         ajaxCall("ChangePassword.aspx/UpdatePasswordJSON",
-                  "{'Id':'" + $('#txtId').val() + "', " +
-                   "'NewPassword':'" + $('#txtNewPassword').val() + "'}",
-                  updatePasswordCallbackOk,
-                  updatePasswordCallbackFailed);
+                 "{'Id':'" + $('#txtId').val() + "', " +
+                 "'NewPassword':'" + $('#txtNewPassword').val() + "'}",
+                 updatePasswordCallbackOk,
+                 updatePasswordCallbackFailed);
     }
 }
 function updatePasswordCallbackOk(result) {
@@ -64,7 +64,7 @@ function updatePasswordCallbackOk(result) {
 }
 function updatePasswordCallbackFailed(msg) {
     var ex = jQuery.parseJSON(msg.responseText);
-    MainMessage.Exception(ex.Message, ex.StackTrace);
+    MessageBox.Exception(ex.Message, ex.StackTrace);
 }
 
 function cancelChange() {
@@ -72,6 +72,5 @@ function cancelChange() {
 }
 
 function redirectToProjects() {
-    var site = window.location.pathname.substring(1, window.location.pathname.indexOf('/', 1));
-    window.location.href = window.location.protocol + "//" + window.location.host + "/" + site + "/Pages/Projects.aspx";
+    window.location.href = resolveURL("/Pages/Projects.aspx");
 }

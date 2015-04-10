@@ -1,8 +1,32 @@
-﻿////////////////   S E T U P   //////////////////
-function setupMainPage() {
-    setupMainForm();
+﻿/////  S E S S I O N   S T O R A G E   I T E M S   /////
+//
+// --> Authenticated User (JSON string)
+// sessionStorage.setItem('current_resource', JSON.stringify(currentUser));
+// var currentUser = jQuery.parseJSON(sessionStorage.getItem('current_resource'))
+//
+// --> Type and Id of the selected item of the 'search all' select box
+// sessionStorage.setItem('search_all_selected_id', id)
+// var id = sessionStorage.getItem('search_all_selected_id')
+
+var mainPageHasLoaded = false;
+
+$(function () {
+    mainPageLoad();
+});
+
+function mainPageLoad() {
+    // Page load safety check
+    if (mainPageHasLoaded) {
+        return;
+    }
+    mainPageHasLoaded = true;
+
+    setupMainPage();
 }
-function setupMainForm() {
+
+////////////////   S E T U P   //////////////////
+function setupMainPage() {
+    // Set main search select box
     $('#ddlSearch').selectize({
         valueField: 'Id',
         labelField: 'Name',
@@ -46,17 +70,15 @@ function setupMainForm() {
         },
         load: function (query, callback) {
             if (!query.length) return callback();
-            var site = window.location.pathname.substring(1, window.location.pathname.indexOf('/', 1));
-            //alert(window.location.protocol + "//" + window.location.host + "/" + site + "/SiteMaster.asmx/SearchAllJSON");
             $.ajax({
                 type: 'POST',
-                url: window.location.protocol + "//" + window.location.host + "/" + site + "/SiteMaster.asmx/SearchAllJSON",
+                url: resolveURL("/SiteMaster.asmx/SearchAllJSON"),
                 data: "{'Text':'" + query + "'}",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 error: function (msg) {
                     var ex = jQuery.parseJSON(msg.responseText);
-                    MainMessage.Exception(ex.Message, ex.StackTrace);
+                    MessageBox.Exception(ex.Message, ex.StackTrace);
                     callback();
                 },
                 success: function (res) {
@@ -77,6 +99,10 @@ function setupMainForm() {
         onChange: function (value) { openItem(value); },
         dropdownParent: null
     });
+
+    // Set logged in user full name
+    var currentUser = jQuery.parseJSON(sessionStorage.getItem('current_resource'));
+    $("#HeadLoginName").text(currentUser.Name);
 }
 
 
@@ -88,22 +114,19 @@ function openItem(value) {
     //alert('Type: ' + type + '; Id: ' + id);
 
     sessionStorage.setItem('search_all_selected_id', id)
-    var site = window.location.pathname.substring(1, window.location.pathname.indexOf('/', 1));
-
-    //alert(window.location.protocol + "//" + window.location.host + "/" + site + "/(...)");
 
     switch (type) {
         case 'Parametro':
-            window.location.href = window.location.protocol + "//" + window.location.host + "/" + site + "/Pages/Management/Parameters.aspx";
+            window.location.href = resolveURL("/Pages/Management/Parameters.aspx");
             break;
         case 'Recurso':
-            window.location.href = window.location.protocol + "//" + window.location.host + "/" + site + "/Pages/Management/Resources.aspx";
+            window.location.href = resolveURL("/Pages/Management/Resources.aspx");
             break;
         case 'Estado':
-            window.location.href = window.location.protocol + "//" + window.location.host + "/" + site + "/Pages/Management/Statuses.aspx";
+            window.location.href = resolveURL("/Pages/Management/Statuses.aspx");
             break;
         case 'Projecto':
-            window.location.href = window.location.protocol + "//" + window.location.host + "/" + site + "/Pages/Projects.aspx";
+            window.location.href = resolveURL("/Pages/Projects.aspx");
             break;
 
         default:

@@ -123,7 +123,7 @@ function validateRequired() {
         msg += "O campo 'Ordem' é obrigatório."
     }
     if (msg.length > 0) {
-        ModalMessage.Info(msg);
+        MessageBox.Info(msg);
         return false;
     }
     else
@@ -134,7 +134,7 @@ function validateRequired() {
 ////////////////   A D D   //////////////////
 function showAddDialog() {
     $('#mdlLabel').text('Adicionar Novo Estado');
-    ModalMessage.Clear();
+    MessageBox.Clear();
     $('#txtId').val('');
     $('#txtName').val('');
     $('#txtDescription').val('');
@@ -167,7 +167,7 @@ function insertCallbackOk(result) {
 }
 function insertCallbackFailed(msg) {
     var ex = jQuery.parseJSON(msg.responseText);
-    ModalMessage.Exception(ex.Message, ex.StackTrace);
+    MessageBox.Exception(ex.Message, ex.StackTrace);
 }
 
 
@@ -178,7 +178,7 @@ function showEditDialog(row) {
         param = $('#tblStatuses').bootstrapTable('getSelections')[0];
     else
         param = row;
-    ModalMessage.Clear();
+    MessageBox.Clear();
     $('#mdlLabel').text('Editar Estado');
     $("#txtId").val(param.Id);
     $("#txtName").val(param.Name);
@@ -217,19 +217,19 @@ function updateCallbackOk(result) {
 }
 function updateCallbackFailed(msg) {
     var ex = jQuery.parseJSON(msg.responseText);
-    ModalMessage.Exception(ex.Message, ex.StackTrace);
+    MessageBox.Exception(ex.Message, ex.StackTrace);
 }
 
 
 ////////////////   R E M O V E   //////////////////
 function showRemoveDialog(param) {
     if (typeof param != 'undefined')
-        MsgBox.Ask('Remover Estado', "Confirma a remoção do Estado '" + param.Name + "' ?", removeCancelled, function () { removeConfirmed(param); });
+        MessageBox.Ask('Remover Estado', "Confirma a remoção do Estado '" + param.Name + "' ?", removeCancelled, function () { removeConfirmed(param); });
     else
-        MsgBox.Ask('Remover Estado', "Confirma a remoção dos Statuses seleccionados ?", removeCancelled, function () { removeConfirmed(undefined); });
+        MessageBox.Ask('Remover Estado', "Confirma a remoção dos Statuses seleccionados ?", removeCancelled, function () { removeConfirmed(undefined); });
 }
 function removeCancelled() {
-    MsgBox.Hide();
+    MessageBox.Hide();
 }
 function removeConfirmed(param) {
     var params = [];
@@ -257,10 +257,10 @@ function removeConfirmed(param) {
 }
 function removeCallbackOk(result, ids) {
     $('#tblStatuses').bootstrapTable('remove', eval(ids));
-    MsgBox.Hide();
+    MessageBox.Hide();
 }
 function removeCallbackFailed(msg) {
-    MsgBox.Hide();
+    MessageBox.Hide();
     var ex = jQuery.parseJSON(msg.responseText);
-    MainMessage.Exception(ex.Message, ex.StackTrace);
+    MessageBox.Exception(ex.Message, ex.StackTrace);
 }

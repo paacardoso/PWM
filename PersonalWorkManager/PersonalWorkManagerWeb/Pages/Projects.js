@@ -208,11 +208,11 @@ function validateRequired() {
         msg += "O campo 'Estado' é obrigatório."
     }
     if (msg.length > 0) {
-        MainMessage.Info(msg);
+        MessageBox.Info(msg);
         return false;
     }
     else {
-        MainMessage.Clear();
+        MessageBox.Clear();
         return true;
     }
 }
@@ -238,7 +238,7 @@ function insertCallbackOk(result) {
 }
 function insertCallbackFailed(msg) {
     var ex = jQuery.parseJSON(msg.responseText);
-    MainMessage.Exception(ex.Message, ex.StackTrace);
+    MessageBox.Exception(ex.Message, ex.StackTrace);
 }
 
 
@@ -268,7 +268,7 @@ function updateCallbackOk(result) {
 }
 function updateCallbackFailed(msg) {
     var ex = jQuery.parseJSON(msg.responseText);
-    MainMessage.Exception(ex.Message, ex.StackTrace);
+    MessageBox.Exception(ex.Message, ex.StackTrace);
 }
 
 
@@ -277,10 +277,10 @@ function showRemoveDialog() {
     var ddl = $("#ddlProject");
     var selectize = ddl[0].selectize;
     var proj = selectize.getItem(selectize.getValue());
-    MsgBox.Ask('Remover Projecto', "Confirma a remoção do projecto '" + proj.text() + "' ?", removeCancelled, function () { removeConfirmed(selectize.getValue()); });
+    MessageBox.Ask('Remover Projecto', "Confirma a remoção do projecto '" + proj.text() + "' ?", removeCancelled, function () { removeConfirmed(selectize.getValue()); });
 }
 function removeCancelled() {
-    MsgBox.Hide();
+    MessageBox.Hide();
 }
 function removeConfirmed(id) {
     ajaxCall("Projects.aspx/DeleteProjectJSON",
@@ -291,12 +291,12 @@ function removeConfirmed(id) {
 function removeCallbackOk(result, id) {
     $("#ddlProject")[0].selectize.clear(true);
     $("#ddlProject")[0].selectize.removeOption(id);
-    MsgBox.Hide();
+    MessageBox.Hide();
     clearForm();
     setupToolbar('');
 }
 function removeCallbackFailed(msg) {
-    MsgBox.Hide();
+    MessageBox.Hide();
     var ex = jQuery.parseJSON(msg.responseText);
-    MainMessage.Exception(ex.Message, ex.StackTrace);
+    MessageBox.Exception(ex.Message, ex.StackTrace);
 }

@@ -49,13 +49,13 @@ namespace PersonalWorkManagerWeb {
         protected global::System.Web.UI.WebControls.LoginName HeadLoginName;
         
         /// <summary>
-        /// LoginView1 control.
+        /// HeadLoginView control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LoginView LoginView1;
+        protected global::System.Web.UI.WebControls.LoginView HeadLoginView;
         
         /// <summary>
         /// divMainMessage control.
@@ -65,33 +65,6 @@ namespace PersonalWorkManagerWeb {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divMainMessage;
-        
-        /// <summary>
-        /// lblMainMessageText control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblMainMessageText;
-        
-        /// <summary>
-        /// lnkMainStackTrace control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lnkMainStackTrace;
-        
-        /// <summary>
-        /// lblMainStackTrace control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblMainStackTrace;
         
         /// <summary>
         /// MainContent control.
