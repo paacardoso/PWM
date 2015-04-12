@@ -76,10 +76,9 @@
     <Content Include="Pages\Management\Resources.js" />
     <Content Include="Pages\Management\Statuses.js" />
     <Content Include="Pages\Management\Statuses.aspx" />
-    <Content Include="Pages\Message.js" />
     <Content Include="Pages\Management\Parameters.aspx" />
     <Content Include="Pages\Management\Parameters.js" />
-    <Content Include="Pages\MsgBoxUtil.js" />
+    <Content Include="Pages\MessageBox.js" />
     <Content Include="Pages\Projects.aspx" />
     <Content Include="Pages\Projects.js" />
     <Content Include="Pages\TableUtil.js" />

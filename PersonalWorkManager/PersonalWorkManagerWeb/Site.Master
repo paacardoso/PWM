@@ -59,8 +59,7 @@
             <asp:ScriptReference Path="~/Site.Master.js" />
             <asp:ScriptReference Path="~/Pages/AjaxUtil.js" />
             <asp:ScriptReference Path="~/Pages/TableUtil.js" />
-            <asp:ScriptReference Path="~/Pages/Message.js" />
-            <asp:ScriptReference Path="~/Pages/MsgBoxUtil.js" />
+            <asp:ScriptReference Path="~/Pages/MessageBox.js" />
             <asp:ScriptReference Path="~/Pages/DateUtil.js" />
         </Scripts>
         <Services>
