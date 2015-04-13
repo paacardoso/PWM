@@ -39,9 +39,12 @@ function loginCallbackOk(result) {
     if (currentUser === null) {
         MessageBox.Info('O Login e/ou a senha estão incorrectos. Tente novamente.');
     } else {
-        //alert('login ok, «' + currentUser.Name + '» is logged in !!!!');
         sessionStorage.setItem('current_resource', JSON.stringify(currentUser));
-        window.location.href = resolveURL("/Pages/Projects.aspx");
+        var vars = getUrlVars();
+        if (vars['ReturnUrl'] == undefined)
+            window.location.href = resolveURL("/Pages/Projects.aspx");
+        else
+            window.location.href = decodeURIComponent(vars['ReturnUrl']);
     }
 }
 function loginCallbackFailed(msg) {

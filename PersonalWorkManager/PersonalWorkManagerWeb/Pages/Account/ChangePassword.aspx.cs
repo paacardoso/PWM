@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Services;
+using Newtonsoft.Json;
 
 namespace PersonalWorkManagerWeb
 {
@@ -11,16 +12,26 @@ namespace PersonalWorkManagerWeb
         }
 
         [WebMethod]
-        public static bool ChangePasswordJSON(int Id, string NewPassword)
+        public static string ChangePasswordJSON(int Id, string OldPassword, string NewPassword)
         {
-            Resource Resource;
+            AjaxReturnMessage res = new AjaxReturnMessage();
             using (var objCtx = new PWMEntities())
             {
-                Resource = objCtx.Resource.SingleOrDefault(x => x.Id == Id);
-                Resource.Password = NewPassword;
-                objCtx.SaveChanges();
+                var resource = objCtx.Resource.SingleOrDefault(x => x.Id == Id);
+                if (resource.Password != OldPassword)
+                {
+                    res.result = false;
+                    res.message = "A senha actual está incorrecta.";
+                }
+                else
+                {
+                    resource.Password = NewPassword;
+                    objCtx.SaveChanges();
+                    res.result = true;
+                }
             }
-            return true;
+            string json = JsonConvert.SerializeObject(res);
+            return json;
         }
 
     }

@@ -12,6 +12,7 @@ namespace PersonalWorkManagerWeb.Pages
         {
         }
 
+#region "Project"
         [WebMethod]
         public static string GetProjectsJSON()
         {
@@ -128,5 +129,32 @@ namespace PersonalWorkManagerWeb.Pages
             }
             return true;
         }
+#endregion
+
+#region "Task"
+        [WebMethod]
+        public static string GetTasksJSON(long IdProject)
+        {
+            using (var objCtx = new PWMEntities())
+            {
+                var records = from t in objCtx.Task
+                              join e in objCtx.Status on t.IdStatus equals e.Id
+                              where t.IdProject == IdProject
+                              select new
+                              {
+                                  Id = t.Id,
+                                  Name = t.Name,
+                                  Description = t.Description,
+                                  Order = t.Order,
+                                  Status = e.Name
+
+                              };
+                string json = JsonConvert.SerializeObject(records);
+                return json;
+            }
+        }
+#endregion
     }
+
+
 }

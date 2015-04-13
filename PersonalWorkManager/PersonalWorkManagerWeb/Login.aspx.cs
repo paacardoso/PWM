@@ -16,8 +16,8 @@ namespace PersonalWorkManagerWeb
 
         [WebMethod]
         public static string LoginJSON(string Login, string Password, bool Persistable) {
-            using (var objctx = new PWMEntities()) {
-                var resource = (from u in objctx.Resource
+            using (var objCtx = new PWMEntities()) {
+                var resource = (from u in objCtx.Resource
                                 where (u.Login.ToLower() == Login.ToLower()) && (u.Password == Password)
                                 select new {
                                     Id = u.Id,
@@ -35,6 +35,20 @@ namespace PersonalWorkManagerWeb
                 return json;
             }
         }
+
+        //[WebMethod]
+        //public static string LogoutJSON()
+        //{
+        //    AjaxReturnMessage res = new AjaxReturnMessage();
+
+        //    FormsAuthentication.SignOut();
+        //    HttpContext.Current.Response.Cookies.Remove(FormsAuthentication.FormsCookieName);
+
+        //    res.result = true;
+
+        //    string json = JsonConvert.SerializeObject(res);
+        //    return json;
+        //}
 
     }
 }

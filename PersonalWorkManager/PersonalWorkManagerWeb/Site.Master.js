@@ -24,7 +24,7 @@ function mainPageLoad() {
     setupMainPage();
 }
 
-////////////////   S E T U P   //////////////////
+////////////////   S E T U P   //////////////////k
 function setupMainPage() {
     // Set main search select box
     $('#ddlSearch').selectize({
@@ -134,9 +134,37 @@ function openItem(value) {
     }
 }
 
+/////////////    A U T H E N T I C A T I O N   //////////
+//function logout() {
+//    alert('logging out ...');
+//    ajaxCall("Login.aspx/LogoutJSON",
+//             "",
+//             logoutCallbackOk,
+//             logoutCallbackFailed);
+//}
+//function logoutCallbackOk(result) {
+//    alert('success !!!');
+//    sessionStorage.setItem('current_resource', null);
+//    window.location.href = resolveURL("/Default.aspx");
+//}
+//function logoutCallbackFailed(msg) {
+//    alert('failed !!!');
+//    var ex = jQuery.parseJSON(msg.responseText);
+//    MessageBox.Exception(ex.Message, ex.StackTrace);
+//}
 
 ////////   G E N E R A L   F U N C T I O N S   //////////
 function resolveURL(url) {
     var site = window.location.pathname.substring(1, window.location.pathname.indexOf('/', 1));
     return window.location.protocol + "//" + window.location.host + "/" + site + url;
+}
+function getUrlVars() {
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for (var i = 0; i < hashes.length; i++) {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+    }
+    return vars;
 }

@@ -39,7 +39,7 @@ function validatePassword() {
     //        if (msg.length > 0) msg += "<br>";
     //        msg += "O campo 'Confirmar senha' é obrigatório."
     //    }
-    if ($('#txtNewPassword').val() !== $('#txtConfirmPassword').val()) {
+    if ($('#txtNewPassword').val() != $('#txtConfirmPassword').val()) {
         msg += "A nova senha não é igual à senha de confirmação."
     }
     if (msg.length > 0) {
@@ -51,26 +51,30 @@ function validatePassword() {
 }
 function updatePassword() {
     if (validatePassword() === true) {
-        alert('changing ... ');
-        ajaxCall("ChangePassword.aspx/UpdatePasswordJSON",
-                 "{'Id':'" + $('#txtId').val() + "', " +
+        var currentUser = jQuery.parseJSON(sessionStorage.getItem('current_resource'));
+        //alert('changing id: ' + currentUser.Id);
+        ajaxCall("ChangePassword.aspx/ChangePasswordJSON",
+                 "{'Id':" + currentUser.Id + ", " +
+                 "'OldPassword':'" + $('#txtOldPassword').val() + "', " +
                  "'NewPassword':'" + $('#txtNewPassword').val() + "'}",
                  updatePasswordCallbackOk,
                  updatePasswordCallbackFailed);
     }
 }
 function updatePasswordCallbackOk(result) {
-    redirectToProjects();
+    //alert('success ... ');
+    var msg = jQuery.parseJSON(result.d);
+    if (msg.result == true)
+        window.location.href = resolveURL("/Pages/Projects.aspx");
+    else
+        MessageBox.Info(msg.message);
 }
 function updatePasswordCallbackFailed(msg) {
+    //alert('failed ... ');
     var ex = jQuery.parseJSON(msg.responseText);
     MessageBox.Exception(ex.Message, ex.StackTrace);
 }
 
 function cancelChange() {
     redirectToProjects();
-}
-
-function redirectToProjects() {
-    window.location.href = resolveURL("/Pages/Projects.aspx");
 }

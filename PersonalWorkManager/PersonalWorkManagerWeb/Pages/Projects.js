@@ -1,5 +1,5 @@
 ﻿var pageHasLoaded = false;
-var pageMode = '';
+var tabProjectMode = '';
 
 $(function () {
     pageLoad();
@@ -12,6 +12,7 @@ function pageLoad() {
     }
     pageHasLoaded = true;
 
+    switchTab('project');
     setupPage();
     getProjects();
 }
@@ -27,35 +28,35 @@ function afterProjectsLoad() {
     }
 }
 
+////////////////   M A I N   S E T U P   //////////////////
+function switchTab(tab) {
+    switch (tab) {
+        case 'project':
+            $('#tlbProject').show();
+            $('#tlbTasks').hide();
+            $('#tlbAlerts').hide();
+            $('#tlbNotes').hide();
+            $('#tlbSessions').hide();
+            break;
+        case 'tasks':
+            $('#tlbProject').hide();
+            $('#tlbTasks').show();
+            $('#tlbAlerts').hide();
+            $('#tlbNotes').hide();
+            $('#tlbSessions').hide();
+            tabTasksLoad();  // <-- ProjectTaks.js
+            break;
+
+        default:
+
+    }
+}
+
 
 ////////////////   S E T U P   //////////////////
 function setupPage() {
     setupToolbar('');
     setupForm();
-}
-function setupToolbar(mode) {
-    pageMode = mode;
-    switch (pageMode) {
-        case '':
-            $('#btnNew').show();
-            $('#btnSave').hide();
-            $('#btnRemove').hide();
-            $('#btnCancel').hide();
-            break;
-        case 'new':
-            $('#btnNew').hide();
-            $('#btnSave').show();
-            $('#btnRemove').hide();
-            $('#btnCancel').show();
-            break;
-        case 'edit':
-            $('#btnNew').show();
-            $('#btnSave').show();
-            $('#btnRemove').show();
-            $('#btnCancel').hide();
-            break;
-        default:
-    }
 }
 function setupForm() {
     $('#ddlProject').selectize({
@@ -104,6 +105,30 @@ function setupForm() {
     });
     getProjectStatuses();
 }
+function setupToolbar(mode) {
+    tabProjectMode = mode;
+    switch (tabProjectMode) {
+        case '':
+            $('#btnProjectNew').show();
+            $('#btnProjectSave').hide();
+            $('#btnProjectRemove').hide();
+            $('#btnProjectCancel').hide();
+            break;
+        case 'new':
+            $('#btnProjectNew').hide();
+            $('#btnProjectSave').show();
+            $('#btnProjectRemove').hide();
+            $('#btnProjectCancel').show();
+            break;
+        case 'edit':
+            $('#btnProjectNew').show();
+            $('#btnProjectSave').show();
+            $('#btnProjectRemove').show();
+            $('#btnProjectCancel').hide();
+            break;
+        default:
+    }
+}
 function clearForm() {
     $("#txtId").val('');
     $("#txtCode").val('');
@@ -113,7 +138,6 @@ function clearForm() {
     $("#txtEndDate").datetimepicker().children('input').val('');
     $("#ddlStatus").val(-1);
 }
-
 
 ////////////////   L O A D   //////////////////
 function getProjects() {
@@ -177,16 +201,16 @@ function newProject() {
     setupToolbar('new');
 }
 function saveProject() {
-    if (pageMode === 'new') {
+    if (tabProjectMode === 'new') {
         insert();
-    } else if (pageMode === 'edit') {
+    } else if (tabProjectMode === 'edit') {
         update();
     }
 }
 function removeProject() {
     showRemoveDialog();
 }
-function cancelNew() {
+function cancelNewProject() {
     setupToolbar('');
 }
 

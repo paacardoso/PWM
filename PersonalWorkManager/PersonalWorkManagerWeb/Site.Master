@@ -59,8 +59,7 @@
             <asp:ScriptReference Path="~/Site.Master.js" />
             <asp:ScriptReference Path="~/Pages/AjaxUtil.js" />
             <asp:ScriptReference Path="~/Pages/TableUtil.js" />
-            <asp:ScriptReference Path="~/Pages/Message.js" />
-            <asp:ScriptReference Path="~/Pages/MsgBoxUtil.js" />
+            <asp:ScriptReference Path="~/Pages/MessageBox.js" />
             <asp:ScriptReference Path="~/Pages/DateUtil.js" />
         </Scripts>
         <Services>
@@ -300,6 +299,8 @@
                                 <li class="divider"></li>
                                 <li><asp:LoginStatus ID="HeadLoginStatus" runat="server" LogoutAction="Redirect" LogoutText="<i class='fa fa-sign-out fa-fw'></i> Sair" LogoutPageUrl="~/" />
                                 </li>
+                                <%--<li><a href="#" onclick="logout();"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
+                                </li>--%>
                             </LoggedInTemplate>
                         </asp:LoginView>
                     </ul>
