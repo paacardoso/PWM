@@ -65,13 +65,11 @@ function getTasks(idProject) {
              getTasksCallbackOk);
 }
 function getTasksCallbackOk(result) {
+    alert('a');
     $('#tblTasks').bootstrapTable('destroy');
     $('#tblTasks').bootstrapTable({
         data: jQuery.parseJSON(result.d)
     });
-    //setupTasksToolbar();
-
-    //aqui
     afterTasksLoad();
 }
 //function getTasksCallbackFailed() {
