@@ -15,12 +15,13 @@ function pageLoad() {
     getStatuses();
 }
 function afterTableLoad() {
-    if (sessionStorage.getItem('search_all_selected_id') != null) {
-        var id = sessionStorage.getItem('search_all_selected_id')
-        var index = getTableIndexById('#tblStatuses', id);
+    var id, index;
+    if (sessionStorage.getItem('search_all_selected_id') !== null) {
+        id = sessionStorage.getItem('search_all_selected_id');
+        index = getTableIndexById('#tblStatuses', id);
         $('#tblStatuses').bootstrapTable('check', index);
         showEditDialog();
-        sessionStorage.setItem('search_all_selected_id', null)
+        sessionStorage.setItem('search_all_selected_id', null);
     }
 }
 
@@ -28,12 +29,8 @@ function afterTableLoad() {
 ////////////////   S E T U P   //////////////////
 function setupPage() {
     $('#tblStatuses')
-    .on('check.bs.table', function (e, row) {
-        setupToolbar();
-    })
-    .on('uncheck.bs.table', function (e, row) {
-        setupToolbar();
-    });
+        .on('check.bs.table', function (e, row) { setupToolbar(); })
+        .on('uncheck.bs.table', function (e, row) { setupToolbar(); });
     setupTable();
     setupForm();
 }
@@ -85,7 +82,7 @@ function getStatuses() {
 function getStatusesCallbackOk(result) {
     $('#tblStatuses').bootstrapTable('destroy');
     $('#tblStatuses').bootstrapTable({
-        data: eval(result.d)
+        data: jQuery.parseJSON(result.d)
     });
     setupToolbar();
     afterTableLoad();
@@ -100,7 +97,7 @@ function getStatusStatusTypes() {
 }
 function getStatusStatusTypesCallbackOk(result) {
     var ddl = $("#ddlStatusType");
-    $.each(eval(result.d), function () {
+    $.each(jQuery.parseJSON(result.d), function () {
         ddl.append($("<option />").val(this.Id).text(this.Name));
     });
 }
@@ -112,22 +109,22 @@ function getStatusStatusTypesCallbackOk(result) {
 /////////   V A L I D A T I O N   ///////////
 function validateRequired() {
     var msg = '';
-    if ($('#txtName').val() == '')
-        msg += "O campo 'Nome' é obrigatório."
-    if ($('#ddlStatusType').val() == -1) {
-        if (msg.length > 0) msg += "<br>";
-        msg += "O campo 'Tipo de Estado' é obrigatório."
+    if ($('#txtName').val() === '') {
+        msg += "O campo 'Nome' é obrigatório.";
     }
-    if ($('#txtOrder').val() == '') {
-        if (msg.length > 0) msg += "<br>";
-        msg += "O campo 'Ordem' é obrigatório."
+    if ($('#ddlStatusType').val() === '-1') {
+        if (msg.length > 0) { msg += "<br>"; }
+        msg += "O campo 'Tipo de Estado' é obrigatório.";
+    }
+    if ($('#txtOrder').val() === '') {
+        if (msg.length > 0) { msg += "<br>"; }
+        msg += "O campo 'Ordem' é obrigatório.";
     }
     if (msg.length > 0) {
         MessageBox.Info(msg);
         return false;
     }
-    else
-        return true;
+    return true;
 }
 
 
@@ -149,7 +146,7 @@ function insert() {
     if (validateRequired() === true) {
         ajaxCall("Statuses.aspx/InsertStatusJSON",
                  "{'Name':'" + $('#txtName').val() + "', " +
-                  "'Description':'" + $('#txtDescription').val() + "', " + 
+                  "'Description':'" + $('#txtDescription').val() + "', " +
                   "'IdStatusType':" + $('#ddlStatusType').val() + ", " +
                   "'Order':" + $('#txtOrder').val() + "}",
                  insertCallbackOk,
@@ -163,7 +160,7 @@ function insertCallbackOk(result) {
                   "'Description':'" + $('#txtDescription').val() + "', " +
                   "'StatusTypeName':'" + $('#ddlStatusType option:selected').text() + "', " +
                   "'Order':" + $('#txtOrder').val() + "}]";
-    $('#tblStatuses').bootstrapTable('append', eval(data));
+    $('#tblStatuses').bootstrapTable('append', jQuery.parseJSON(data));
 }
 function insertCallbackFailed(msg) {
     var ex = jQuery.parseJSON(msg.responseText);
@@ -172,36 +169,6 @@ function insertCallbackFailed(msg) {
 
 
 ////////////////   E D I T   //////////////////
-function showEditDialog(row) {
-    var param;
-    if (typeof row == 'undefined')
-        param = $('#tblStatuses').bootstrapTable('getSelections')[0];
-    else
-        param = row;
-    MessageBox.Clear();
-    $('#mdlLabel').text('Editar Estado');
-    $("#txtId").val(param.Id);
-    $("#txtName").val(param.Name);
-    $("#txtDescription").val(param.Description);
-    //$("#ddlStatusType").val(param.IdStatusType);
-    $("#ddlStatusType option:contains('" + param.StatusTypeName + "')").attr('selected', true);
-    $("#txtOrder").val(param.Order);
-    $('#btnActionConfirmed').unbind('click');
-    $('#btnActionConfirmed').on('click', update);
-    $('#mdlStatus').modal('show');
-}
-function update() {
-    if (validateRequired() === true) {
-        ajaxCall("Statuses.aspx/UpdateStatusJSON",
-                  "{'Id':'" + $('#txtId').val() + "', " +
-                   "'Name':'" + $('#txtName').val() + "', " +
-                   "'Description':'" + $('#txtDescription').val() + "', " +
-                   "'IdStatusType':" + $('#ddlStatusType').val() + ", " +
-                   "'Order':" + $('#txtOrder').val() + "}",
-                  updateCallbackOk,
-                  updateCallbackFailed);
-    }
-}
 function updateCallbackOk(result) {
     $('#mdlStatus').modal('hide');
     $('#tblStatuses').bootstrapTable('updateRow', {
@@ -219,33 +186,71 @@ function updateCallbackFailed(msg) {
     var ex = jQuery.parseJSON(msg.responseText);
     MessageBox.Exception(ex.Message, ex.StackTrace);
 }
+function update() {
+    if (validateRequired() === true) {
+        ajaxCall("Statuses.aspx/UpdateStatusJSON",
+                  "{'Id':'" + $('#txtId').val() + "', " +
+                   "'Name':'" + $('#txtName').val() + "', " +
+                   "'Description':'" + $('#txtDescription').val() + "', " +
+                   "'IdStatusType':" + $('#ddlStatusType').val() + ", " +
+                   "'Order':" + $('#txtOrder').val() + "}",
+                  updateCallbackOk,
+                  updateCallbackFailed);
+    }
+}
+function showEditDialog(row) {
+    var param;
+    if (row === undefined) {
+        param = $('#tblStatuses').bootstrapTable('getSelections')[0];
+    } else {
+        param = row;
+    }
+    MessageBox.Clear();
+    $('#mdlLabel').text('Editar Estado');
+    $("#txtId").val(param.Id);
+    $("#txtName").val(param.Name);
+    $("#txtDescription").val(param.Description);
+    //$("#ddlStatusType").val(param.IdStatusType);
+    $("#ddlStatusType option:contains('" + param.StatusTypeName + "')").attr('selected', true);
+    $("#txtOrder").val(param.Order);
+    $('#btnActionConfirmed').unbind('click');
+    $('#btnActionConfirmed').on('click', update);
+    $('#mdlStatus').modal('show');
+}
 
 
 ////////////////   R E M O V E   //////////////////
 function showRemoveDialog(param) {
-    if (typeof param != 'undefined')
-        MessageBox.Ask('Remover Estado', "Confirma a remoção do Estado '" + param.Name + "' ?", removeCancelled, function () { removeConfirmed(param); });
-    else
-        MessageBox.Ask('Remover Estado', "Confirma a remoção dos Statuses seleccionados ?", removeCancelled, function () { removeConfirmed(undefined); });
+    if (param !== undefined) {
+        MessageBox.Ask("Remover Estado",
+                       "Confirma a remoção do Estado '" + param.Name + "' ?",
+                       removeCancelled,
+                       function () { removeConfirmed(param); });
+    } else {
+        MessageBox.Ask("Remover Estado",
+                       "Confirma a remoção dos Statuses seleccionados ?",
+                       removeCancelled,
+                       function () { removeConfirmed(undefined); });
+    }
 }
 function removeCancelled() {
     MessageBox.Hide();
 }
 function removeConfirmed(param) {
-    var params = [];
+    var params = [],
+        ids = {
+            field: 'Id',
+            values: []
+        },
+        index;
+
     if (param !== undefined) {
         params[0] = param;
-    }
-    else {
+    } else {
         params = $('#tblStatuses').bootstrapTable('getSelections');
     }
 
-    var ids = {
-        field: 'Id',
-        values: new Array()
-    };
-
-    for (var index = 0; index < params.length; ++index) {
+    for (index = 0; index < params.length; index += 1) {
         ids.values[index] = params[index].Id;
     }
 
@@ -256,7 +261,7 @@ function removeConfirmed(param) {
 
 }
 function removeCallbackOk(result, ids) {
-    $('#tblStatuses').bootstrapTable('remove', eval(ids));
+    $('#tblStatuses').bootstrapTable('remove', jQuery.parseJSON(ids));
     MessageBox.Hide();
 }
 function removeCallbackFailed(msg) {

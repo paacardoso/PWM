@@ -7,54 +7,24 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-sm-12">
             <h1 class="page-header">Projectos</h1>
         </div>
     </div>
-    <div class="panel panel-default container-fluid">
-        <div class="panel-body">
-            <form class="form-horizontal">
-            <div class="form-group">
-                <label class="control-label col-sm-1" for="ddlProject">Projecto: </label>
-                <div class="col-sm-11">
-                    <select id="ddlProject" placeholder="Escolha um projecto ...">
-                    </select>
-                </div>
+
+    <div class="row">
+        <form class="form-horizontal" role="form">
+            <label class="control-label col-sm-1" for="ddlProject">Projecto: </label>
+            <div class="col-sm-11">
+                <select id="ddlProject" placeholder="Escolha um projecto ...">
+                </select>
             </div>
-            </form>
-        </div>
+        </form>
+    </div>
 
-        <div id="tlbProject" class="btn-group btn-group-md" style="display: none">
-            <button id="btnProjectNew" type="button" class="btn btn-default" onclick="newProject();">
-                <i class="glyphicon glyphicon-plus"></i>&nbsp;Novo
-            </button>
-            <button id="btnProjectSave" type="button" class="btn btn-default" onclick="saveProject();">
-                <i class="glyphicon glyphicon-floppy-save"></i>&nbsp;Guardar
-            </button>
-            <button id="btnProjectRemove" type="button" class="btn btn-default" onclick="removeProject();">
-                <i class="glyphicon glyphicon-remove"></i>&nbsp;Remover
-            </button>
-            <button id="btnProjectCancel" type="button" class="btn btn-default" onclick="cancelNewProject();">
-                <i class="glyphicon glyphicon-arrow-left"></i>&nbsp;Cancelar
-            </button>
-        </div>
-        <div id="tlbTasks" class="btn-group btn-group-md" style="display: none">
-            <button id="btnTaskNew" type="button" class="btn btn-default" onclick="newTask();">
-                <i class="glyphicon glyphicon-plus"></i>&nbsp;Nova
-            </button>
-            <button id="btnTaskSave" type="button" class="btn btn-default" onclick="saveTask();">
-                <i class="glyphicon glyphicon-floppy-save"></i>&nbsp;Guardar
-            </button>
-            <button id="btnTaskRemove" type="button" class="btn btn-default" onclick="removeTask();">
-                <i class="glyphicon glyphicon-remove"></i>&nbsp;Remover
-            </button>
-            <button id="btnTaskCancel" type="button" class="btn btn-default" onclick="cancelNewTask();">
-                <i class="glyphicon glyphicon-arrow-left"></i>&nbsp;Cancelar
-            </button>
-        </div>
+    <div class="panel panel-default container-fluid">
         <p></p>
-
-        <ul class="nav nav-tabs">
+        <ul class="nav nav-tabs" id="tabProject">
             <li class="active"><a href="#tabMain" onclick="switchTab('project');" data-toggle="tab">Projecto</a></li>
             <li><a href="#tabTasks" onclick="switchTab('tasks');" data-toggle="tab">Tarefas</a></li>
             <li><a href="#tabAlerts" onclick="switchTab('alerts');" data-toggle="tab">Alertas</a></li>
@@ -63,60 +33,85 @@
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="tabMain">
-                <div class="container-fluid">
-                    <p>
-                    </p>
-                    <form class="form-horizontal">
-                        <input type="hidden" id="txtId"/>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="txtCode">Código: </label>
-                            <div class="col-md-2">
-                                <input type="text" class="form-control" id="txtCode" placeholder="Código">
-                            </div>
-                            <label class="control-label col-sm-1" for="txtName">Nome: </label>
-                            <div class="col-sm-7">
-                                <input type="text" class="form-control" id="txtName" placeholder="Nome">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="txtDescription">Descrição: </label>
-                            <div class="col-sm-10">
-                                <textarea class="form-control" rows="5" id="txtDescription" placeholder="Descrição"></textarea>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="txtStartDate">Data Inicio: </label>
-                            <div class="col-md-4">
-                                <div class="input-group" id="txtStartDate">
-                                    <input type="text" class="form-control" placeholder="Data Início">
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                            <label class="control-label col-sm-2" for="txtEndDate">Data Fim: </label>
-                            <div class="col-md-4">
-                                <div class="input-group" id="txtEndDate">
-                                    <input type="text" class="form-control" placeholder="Data Fim">
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="ddlStatus">Estado: </label>
-                            <div class="col-sm-10">
-                                <select class="form-control" id="ddlStatus">
-                                </select>
-                            </div>
-                        </div>
-                    </form>
+                <p></p>
+                <div id="tlbProject" class="btn-group btn-group-md" style="display: none">
+                    <button id="btnProjectNew" type="button" class="btn btn-default" onclick="newProject();">
+                        <i class="glyphicon glyphicon-plus"></i>&nbsp;Novo
+                    </button>
+                    <button id="btnProjectSave" type="button" class="btn btn-default" onclick="saveProject();">
+                        <i class="glyphicon glyphicon-floppy-save"></i>&nbsp;Guardar
+                    </button>
+                    <button id="btnProjectRemove" type="button" class="btn btn-default" onclick="removeProject();">
+                        <i class="glyphicon glyphicon-remove"></i>&nbsp;Remover
+                    </button>
+                    <button id="btnProjectCancel" type="button" class="btn btn-default" onclick="cancelNewProject();">
+                        <i class="glyphicon glyphicon-arrow-left"></i>&nbsp;Cancelar
+                    </button>
                 </div>
+                <p></p>
+                <form class="form-horizontal">
+                    <input type="hidden" id="txtId"/>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="txtCode">Código: </label>
+                        <div class="col-md-2">
+                            <input type="text" class="form-control" id="txtCode" placeholder="Código">
+                        </div>
+                        <label class="control-label col-sm-1" for="txtName">Nome: </label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="txtName" placeholder="Nome">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="txtDescription">Descrição: </label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" rows="5" id="txtDescription" placeholder="Descrição"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="txtStartDate">Data Inicio: </label>
+                        <div class="col-md-4">
+                            <div class="input-group" id="txtStartDate">
+                                <input type="text" class="form-control" placeholder="Data Início">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <label class="control-label col-sm-2" for="txtEndDate">Data Fim: </label>
+                        <div class="col-md-4">
+                            <div class="input-group" id="txtEndDate">
+                                <input type="text" class="form-control" placeholder="Data Fim">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="ddlStatus">Estado: </label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="ddlStatus">
+                            </select>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="tab-pane" id="tabTasks">
-                <p>
-                </p>
+                <p></p>
+                <div id="tlbTasks" class="btn-group btn-group-md">
+                    <button id="btnTaskNew" type="button" class="btn btn-default" onclick="newTask();">
+                        <i class="glyphicon glyphicon-plus"></i>&nbsp;Nova
+                    </button>
+                    <button id="btnTaskSave" type="button" class="btn btn-default" onclick="saveTask();">
+                        <i class="glyphicon glyphicon-floppy-save"></i>&nbsp;Guardar
+                    </button>
+                    <button id="btnTaskRemove" type="button" class="btn btn-default" onclick="removeTask();">
+                        <i class="glyphicon glyphicon-remove"></i>&nbsp;Remover
+                    </button>
+                    <button id="btnTaskCancel" type="button" class="btn btn-default" onclick="cancelNewTask();">
+                        <i class="glyphicon glyphicon-arrow-left"></i>&nbsp;Cancelar
+                    </button>
+                </div>
                 <table id="tblTasks" 
                    class="table table-striped table-bordered table-condensed"
                    data-search="true"
@@ -125,7 +120,7 @@
                    data-show-columns="true"
                    data-sort-name="Id"
                    data-sort-order="asc"
-                   data-toolbar="#toolbar"
+                   data-toolbar="#tlbTasks"
                    data-click-to-select="true">
                 <thead>
                 <tr>

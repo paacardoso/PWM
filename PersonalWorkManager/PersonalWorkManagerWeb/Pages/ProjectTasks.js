@@ -60,12 +60,13 @@ function clearTasksForm() {
 
 ////////////////   L O A D   //////////////////
 function getTasks(idProject) {
+    //alert('idProject: ' + idProject);
     ajaxCall("Projects.aspx/GetTasksJSON",
-             "{'IdProject':'" + idProject + "'}",
+             "{'IdProject':" + idProject + "}",
              getTasksCallbackOk);
 }
 function getTasksCallbackOk(result) {
-    alert('a');
+    //alert('b');
     $('#tblTasks').bootstrapTable('destroy');
     $('#tblTasks').bootstrapTable({
         data: jQuery.parseJSON(result.d)

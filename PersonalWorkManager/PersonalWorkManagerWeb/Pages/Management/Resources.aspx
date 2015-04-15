@@ -12,16 +12,16 @@
     </div>
     <div class="panel panel-default container-fluid">
         <div id="toolbar" class="btn-group btn-group-md">
-            <button id="btnRefresh" type="button" class="btn btn-default" onclick="getResources();">
+            <button id="btnRefresh" type="button" class="btn btn-default" onclick="Resources.getResources();">
                 <i class="glyphicon glyphicon-refresh"></i>&nbsp;Actualizar
             </button>
-            <button id="btnAdd" type="button" class="btn btn-default" onclick="showAddDialog();">
+            <button id="btnAdd" type="button" class="btn btn-default" onclick="Resources.showAddDialog();">
                 <i class="glyphicon glyphicon-plus"></i>&nbsp;Novo
             </button>
-            <button id="btnEdit" type="button" class="btn btn-default" onclick="showEditDialog();">
+            <button id="btnEdit" type="button" class="btn btn-default" onclick="Resources.showEditDialog();">
                 <i class="glyphicon glyphicon-edit"></i>&nbsp;Editar
             </button>
-            <button id="btnRemove" type="button" class="btn btn-default" onclick="showRemoveDialog();">
+            <button id="btnRemove" type="button" class="btn btn-default" onclick="Resources.showRemoveDialog();">
                 <i class="glyphicon glyphicon-remove"></i>&nbsp;Remover
             </button>
         </div>

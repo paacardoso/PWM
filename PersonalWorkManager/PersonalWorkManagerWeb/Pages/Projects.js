@@ -44,7 +44,7 @@ function switchTab(tab) {
             $('#tlbAlerts').hide();
             $('#tlbNotes').hide();
             $('#tlbSessions').hide();
-            tabTasksLoad();  // <-- ProjectTaks.js
+            tabTasksLoad();  // <-- ProjectTasks.js
             break;
 
         default:
@@ -187,6 +187,11 @@ function getProjectCallbackOk(result) {
     $('#txtStartDate').datetimepicker().children('input').val(DateUtil.Format(proj.StartDate));
     $("#txtEndDate").datetimepicker().children('input').val(DateUtil.Format(proj.EndDate));
     $("#ddlStatus").val(proj.IdStatus);
+
+    tabTasksHasLoaded = false;  // <-- ProjectTasks.js
+
+    $('#tabProject a[href="#tabMain"]').tab('show');
+    switchTab('project');
     setupToolbar('edit');
 }
 //function getProjectCallbackFailed() {

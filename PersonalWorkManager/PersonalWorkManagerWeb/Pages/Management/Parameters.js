@@ -211,7 +211,7 @@ function removeConfirmed(param) {
 
     var ids = {
         field: 'Id',
-        values: new Array()
+        values: []
     };
 
     for (var index = 0; index < params.length; ++index) {

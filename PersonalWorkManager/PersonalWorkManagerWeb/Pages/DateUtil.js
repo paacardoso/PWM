@@ -17,7 +17,7 @@ var DateUtil = (function () {
     }
 
     return {
-        Format: function (date) { return getFormattedDate(date) }
+        Format: function (date) { return getFormattedDate(date); }
     }
 
 })();
