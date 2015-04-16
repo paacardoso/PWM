@@ -2,10 +2,14 @@
     CodeBehind="Projects.aspx.cs" Inherits="PersonalWorkManagerWeb.Pages.Projects" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
-    <script src="Projects.js" type="text/javascript"></script>
-    <script src="ProjectTasks.js" type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+    <asp:ScriptManagerProxy ID="ScriptManagerProxy1" runat="server">
+        <Scripts>
+            <asp:ScriptReference Path="Projects.js" />
+            <asp:ScriptReference Path="ProjectTasks.js" />
+        </Scripts>
+    </asp:ScriptManagerProxy>
     <div class="row">
         <div class="col-sm-12">
             <h1 class="page-header">Projectos</h1>
@@ -175,7 +179,7 @@
                             <input type="text" class="form-control" id="txtTaskOrder" placeholder="Ordem" />
                         </div>
                         <div class="form-group">
-                            <label class="control-label" for="ddlStatus">Estado: </label>
+                            <label class="control-label" for="ddlTaskStatus">Estado: </label>
                             <select class="form-control" id="ddlTaskStatus">
                             </select>
                         </div>

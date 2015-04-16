@@ -2,9 +2,13 @@
     CodeBehind="Login.aspx.cs" Inherits="PersonalWorkManagerWeb.Login" %>
 
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
-    <script src="Login.js" type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="MainContent">
+    <asp:ScriptManagerProxy ID="ScriptManagerProxy1" runat="server">
+        <Scripts>
+            <asp:ScriptReference Path="~/Login.js" />
+        </Scripts>
+    </asp:ScriptManagerProxy>
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">Entrar</h1>
@@ -27,7 +31,7 @@
             <div class="checkbox">
                 <label><input type="checkbox" runat="server" id="chkPersistLoginCookie" />Manter sessão activa</label>
             </div>
-            <button id="btnLogin" type="button" class="btn btn-primary" onclick="login();">Entrar</button>
+            <button id="btnLogin" type="button" class="btn btn-primary" onclick="Login.login();">Entrar</button>
         </div>
         <div class="col-lg-3">
         </div>

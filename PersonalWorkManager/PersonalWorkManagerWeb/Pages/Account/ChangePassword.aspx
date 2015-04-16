@@ -2,9 +2,13 @@
     CodeBehind="ChangePassword.aspx.cs" Inherits="PersonalWorkManagerWeb.ChangePassword" %>
 
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
-    <script src="ChangePassword.js" type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="MainContent">
+    <asp:ScriptManagerProxy ID="ScriptManagerProxy1" runat="server">
+        <Scripts>
+            <asp:ScriptReference Path="ChangePassword.js" />
+        </Scripts>
+    </asp:ScriptManagerProxy>
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">Alterar Senha</h1>

@@ -2,9 +2,13 @@
     CodeBehind="Statuses.aspx.cs" Inherits="PersonalWorkManagerWeb.Pages.Management.Statuses" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
-    <script src="Statuses.js" type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+    <asp:ScriptManagerProxy ID="ScriptManagerProxy1" runat="server">
+        <Scripts>
+            <asp:ScriptReference Path="Statuses.js" />
+        </Scripts>
+    </asp:ScriptManagerProxy>
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">Estados</h1>

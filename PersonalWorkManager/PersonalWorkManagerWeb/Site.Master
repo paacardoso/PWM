@@ -57,10 +57,11 @@
 
             <%--UTIL--%>
             <asp:ScriptReference Path="~/Site.Master.js" />
-            <asp:ScriptReference Path="~/Pages/AjaxUtil.js" />
-            <asp:ScriptReference Path="~/Pages/TableUtil.js" />
-            <asp:ScriptReference Path="~/Pages/MessageBox.js" />
-            <asp:ScriptReference Path="~/Pages/DateUtil.js" />
+            <asp:ScriptReference Path="~/Pages/Util/UrlUtil.js" />
+            <asp:ScriptReference Path="~/Pages/Util/AjaxUtil.js" />
+            <asp:ScriptReference Path="~/Pages/Util/TableUtil.js" />
+            <asp:ScriptReference Path="~/Pages/Util/MessageBox.js" />
+            <asp:ScriptReference Path="~/Pages/Util/DateUtil.js" />
         </Scripts>
         <Services>
             <asp:ServiceReference Path="SiteMaster.asmx" />
