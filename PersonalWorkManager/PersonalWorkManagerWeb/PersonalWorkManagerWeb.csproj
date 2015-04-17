@@ -251,6 +251,7 @@
     <None Include="Resources\startbootstrap-sb-admin-2-1.0.5\bower_components\font-awesome\fonts\fontawesome-webfont.ttf" />
     <None Include="Resources\startbootstrap-sb-admin-2-1.0.5\bower_components\font-awesome\fonts\fontawesome-webfont.woff" />
     <None Include="Resources\startbootstrap-sb-admin-2-1.0.5\bower_components\font-awesome\fonts\FontAwesome.otf" />
+    <None Include="Settings.StyleCop" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

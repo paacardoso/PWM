@@ -72,7 +72,7 @@ var Master = (function () {
     /*---   S E T U P   ---*/
     function setupMainPage() {
         // Set main search select box
-        $('#ddlSearch').selectize({
+        $("#ddlSearch").selectize({
             valueField: 'Id',
             labelField: 'Name',
             searchField: ['Name', 'Description'],

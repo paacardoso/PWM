@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Security;
-using System.Web.SessionState;
-
-namespace PersonalWorkManagerWeb
+﻿namespace PersonalWorkManagerWeb
 {
+
+    using System.Linq;
+
     public class DBUtil
     {
 
@@ -16,9 +12,9 @@ namespace PersonalWorkManagerWeb
             Task,
             Alert,
             Resource
-        };
+        }
 
-        public void initDataBase()
+        public void InitDataBase()
         {
 
             // Iniciar a base de dados com os dados minimos
@@ -27,8 +23,8 @@ namespace PersonalWorkManagerWeb
                 // Statuss:
                 Status Status = null;
 
-                var Statuss = (from t in objCtx.Status
-                               select t);
+                var Statuss = from t in objCtx.Status
+                               select t;
                 if (Statuss.Count<Status>() == 0)
                 {
                     Status = new Status() { Name = "Activo", Description = "Activo", IdStatusType = (long)StatusTypes.Project };
@@ -45,11 +41,11 @@ namespace PersonalWorkManagerWeb
                 // Utilizadores
                 Resource Resource = null;
 
-                var Resources = (from t in objCtx.Resource
-                                select t);
+                var Resources = from t in objCtx.Resource
+                                select t;
                 if (Resources.Count<Resource>() == 0)
                 {
-                    Resource = new Resource() { Login = "Admin", Name = "Admin", Password = "", IdStatus = (long)StatusTypes.Resource };
+                    Resource = new Resource() { Login = "Admin", Name = "Admin", Password = string.Empty, IdStatus = (long)StatusTypes.Resource };
                     objCtx.Resource.AddObject(Resource);
                     objCtx.SaveChanges();
                 }

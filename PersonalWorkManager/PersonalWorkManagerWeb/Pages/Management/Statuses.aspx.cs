@@ -1,27 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Web.Services;
-using System.Runtime.Serialization.Json;
-using System.IO;
-using System.Text;
-using Newtonsoft.Json;
-
-namespace PersonalWorkManagerWeb.Pages.Management
+﻿namespace PersonalWorkManagerWeb.Pages.Management
 {
+
+    using System;
+    using System.Linq;
+    using System.Web.Services;
+    using Newtonsoft.Json;
+
     public partial class Statuses : System.Web.UI.Page
     {
-        protected void Page_Load(object sender, EventArgs e)
-        {
-        }
 
         [WebMethod]
         public static string GetStatusesJSON()
         {
-            //throw new Exception("erro a obter todos os registos.");
             using (var objCtx = new PWMEntities())
             {
                 var records = from e in objCtx.Status
@@ -60,7 +50,6 @@ namespace PersonalWorkManagerWeb.Pages.Management
         [WebMethod]
         public static long InsertStatusJSON(string Name, string Description, int IdStatusType, int Order)
         {
-            //throw new Exception("erro a inserir um novo registo.");
             Status Status = new Status() { Name = Name, Description = Description, IdStatusType = IdStatusType, Order = Order };
             using (var objCtx = new PWMEntities())
             {
@@ -73,7 +62,6 @@ namespace PersonalWorkManagerWeb.Pages.Management
         [WebMethod]
         public static bool UpdateStatusJSON(int Id, string Name, string Description, int IdStatusType, int Order)
         {
-            //throw new Exception("erro a actualizar o registo.");
             Status Status;
             using (var objCtx = new PWMEntities())
             {
@@ -110,5 +98,10 @@ namespace PersonalWorkManagerWeb.Pages.Management
             }
             return true;
         }
+        
+        protected void Page_Load(object sender, EventArgs e)
+        {
+        }
+
     }
 }

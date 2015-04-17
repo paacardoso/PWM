@@ -5,17 +5,17 @@
     /*---   A F T E R   L O A D   ---*/
     function validatePassword() {
         var msg = '';
-        //if ($('#txtOldPassword').val() == '')
+        //if ($("#txtOldPassword").val() == '')
         //    msg += "O campo 'Senha actual' é obrigatório."
-        //    if ($('#txtNewPassword').val() == '') {
+        //    if ($("#txtNewPassword").val() == '') {
         //        if (msg.length > 0) msg += "<br>";
         //        msg += "O campo 'Nova senha' é obrigatório."
         //    }
-        //    if ($('#txtConfirmPassword').val() == '') {
+        //    if ($("#txtConfirmPassword").val() == '') {
         //        if (msg.length > 0) msg += "<br>";
         //        msg += "O campo 'Confirmar senha' é obrigatório."
         //    }
-        if ($('#txtNewPassword').val() !== $('#txtConfirmPassword').val()) {
+        if ($("#txtNewPassword").val() !== $("#txtConfirmPassword").val()) {
             msg += "A nova senha não é igual à senha de confirmação.";
         }
         if (msg.length > 0) {
@@ -48,8 +48,8 @@
             //alert('changing id: ' + currentUser.Id);
             AjaxUtil.Call("ChangePassword.aspx/ChangePasswordJSON",
                           "{'Id':" + currentUser.Id + ", " +
-                          "'OldPassword':'" + $('#txtOldPassword').val() + "', " +
-                          "'NewPassword':'" + $('#txtNewPassword').val() + "'}",
+                          "'OldPassword':'" + $("#txtOldPassword").val() + "', " +
+                          "'NewPassword':'" + $("#txtNewPassword").val() + "'}",
                           updatePasswordCallbackOk,
                           updatePasswordCallbackFailed);
         }

@@ -5,14 +5,14 @@
     /*---   A F T E R   L O A D   ---*/
     function validateRequired() {
         var msg = '';
-        if ($('#txtName').val() === '') {
+        if ($("#txtName").val() === '') {
             msg += "O campo 'Nome' é obrigatório.";
         }
-        if ($('#ddlStatusType').val() === '-1') {
+        if ($("#ddlStatusType").val() === '-1') {
             if (msg.length > 0) { msg += "<br>"; }
             msg += "O campo 'Tipo de Estado' é obrigatório.";
         }
-        if ($('#txtOrder').val() === '') {
+        if ($("#txtOrder").val() === '') {
             if (msg.length > 0) { msg += "<br>"; }
             msg += "O campo 'Ordem' é obrigatório.";
         }
@@ -26,14 +26,14 @@
 
     /*---   A D D   ---*/
     function insertCallbackOk(result) {
-        $('#mdlStatus').modal('hide');
+        $("#mdlStatus").modal('hide');
         var data = "[{'Id':" + result.d + ", " +
-                   "'Name':'" + $('#txtName').val() + "', " +
-                   "'Description':'" + $('#txtDescription').val() + "', " +
+                   "'Name':'" + $("#txtName").val() + "', " +
+                   "'Description':'" + $("#txtDescription").val() + "', " +
                    "'StatusTypeName':'" +
-                        $('#ddlStatusType option:selected').text() + "', " +
-                   "'Order':" + $('#txtOrder').val() + "}]";
-        $('#tblStatuses').bootstrapTable('append', jQuery.parseJSON(data));
+                        $("#ddlStatusType option:selected").text() + "', " +
+                   "'Order':" + $("#txtOrder").val() + "}]";
+        $("#tblStatuses").bootstrapTable('append', jQuery.parseJSON(data));
     }
     function insertCallbackFailed(msg) {
         var ex = jQuery.parseJSON(msg.responseText);
@@ -42,40 +42,40 @@
     function insert() {
         if (validateRequired() === true) {
             AjaxUtil.Call("Statuses.aspx/InsertStatusJSON",
-                          "{'Name':'" + $('#txtName').val() + "', " +
-                          "'Description':'" + $('#txtDescription').val() + "', " +
-                          "'IdStatusType':" + $('#ddlStatusType').val() + ", " +
-                          "'Order':" + $('#txtOrder').val() + "}",
+                          "{'Name':'" + $("#txtName").val() + "', " +
+                          "'Description':'" + $("#txtDescription").val() + "', " +
+                          "'IdStatusType':" + $("#ddlStatusType").val() + ", " +
+                          "'Order':" + $("#txtOrder").val() + "}",
                           insertCallbackOk,
                           insertCallbackFailed);
         }
     }
     function showAddDialog() {
-        $('#mdlLabel').text('Adicionar Novo Estado');
+        $("#mdlLabel").text('Adicionar Novo Estado');
         MessageBox.Clear();
-        $('#txtId').val('');
-        $('#txtName').val('');
-        $('#txtDescription').val('');
-        $('#ddlStatusType').val('');
-        $('#txtOrder').val('');
-        $('#btnActionConfirmed').unbind('click');
-        $('#btnActionConfirmed').on('click', insert);
-        $('#mdlStatus').on('shown.bs.modal', function () { $('#txtName').focus(); });
-        $('#mdlStatus').modal('show');
+        $("#txtId").val('');
+        $("#txtName").val('');
+        $("#txtDescription").val('');
+        $("#ddlStatusType").val('');
+        $("#txtOrder").val('');
+        $("#btnActionConfirmed").unbind('click');
+        $("#btnActionConfirmed").on('click', insert);
+        $("#mdlStatus").on('shown.bs.modal', function () { $("#txtName").focus(); });
+        $("#mdlStatus").modal('show');
     }
 
 
     /*---   E D I T   ---*/
     function updateCallbackOk(result) {
-        $('#mdlStatus').modal('hide');
-        $('#tblStatuses').bootstrapTable('updateRow', {
+        $("#mdlStatus").modal('hide');
+        $("#tblStatuses").bootstrapTable('updateRow', {
             index: TableUtil.getTableIndexById('#tblStatuses', $("#txtId").val()),
             row: {
                 Id: $("#txtId").val(),
-                Name: $('#txtName').val(),
-                Description: $('#txtDescription').val(),
-                StatusTypeName: $('#ddlStatusType option:selected').text(),
-                Order: $('#txtOrder').val()
+                Name: $("#txtName").val(),
+                Description: $("#txtDescription").val(),
+                StatusTypeName: $("#ddlStatusType option:selected").text(),
+                Order: $("#txtOrder").val()
             }
         });
     }
@@ -86,11 +86,11 @@
     function update() {
         if (validateRequired() === true) {
             AjaxUtil.Call("Statuses.aspx/UpdateStatusJSON",
-                          "{'Id':'" + $('#txtId').val() + "', " +
-                          "'Name':'" + $('#txtName').val() + "', " +
-                          "'Description':'" + $('#txtDescription').val() + "', " +
-                          "'IdStatusType':" + $('#ddlStatusType').val() + ", " +
-                          "'Order':" + $('#txtOrder').val() + "}",
+                          "{'Id':'" + $("#txtId").val() + "', " +
+                          "'Name':'" + $("#txtName").val() + "', " +
+                          "'Description':'" + $("#txtDescription").val() + "', " +
+                          "'IdStatusType':" + $("#ddlStatusType").val() + ", " +
+                          "'Order':" + $("#txtOrder").val() + "}",
                           updateCallbackOk,
                           updateCallbackFailed);
         }
@@ -98,12 +98,12 @@
     function showEditDialog(row) {
         var param;
         if (row === undefined) {
-            param = $('#tblStatuses').bootstrapTable('getSelections')[0];
+            param = $("#tblStatuses").bootstrapTable('getSelections')[0];
         } else {
             param = row;
         }
         MessageBox.Clear();
-        $('#mdlLabel').text('Editar Estado');
+        $("#mdlLabel").text('Editar Estado');
         $("#txtId").val(param.Id);
         $("#txtName").val(param.Name);
         $("#txtDescription").val(param.Description);
@@ -111,15 +111,15 @@
         $("#ddlStatusType option:contains('" + param.StatusTypeName + "')")
             .attr('selected', true);
         $("#txtOrder").val(param.Order);
-        $('#btnActionConfirmed').unbind('click');
-        $('#btnActionConfirmed').on('click', update);
-        $('#mdlStatus').modal('show');
+        $("#btnActionConfirmed").unbind('click');
+        $("#btnActionConfirmed").on('click', update);
+        $("#mdlStatus").modal('show');
     }
 
 
     /*---   R E M O V E   ---*/
     function removeCallbackOk(result, ids) {
-        $('#tblStatuses').bootstrapTable('remove', jQuery.parseJSON(ids));
+        $("#tblStatuses").bootstrapTable('remove', jQuery.parseJSON(ids));
         MessageBox.Hide();
     }
     function removeCallbackFailed(msg) {
@@ -141,7 +141,7 @@
         if (param !== undefined) {
             params[0] = param;
         } else {
-            params = $('#tblStatuses').bootstrapTable('getSelections');
+            params = $("#tblStatuses").bootstrapTable('getSelections');
         }
 
         for (index = 0; index < params.length; index += 1) {
@@ -171,17 +171,17 @@
 
     /*---   S E T U P   ---*/
     function setupToolbar() {
-        var selectedRows = $('#tblStatuses').bootstrapTable('getSelections');
+        var selectedRows = $("#tblStatuses").bootstrapTable('getSelections');
         if (selectedRows.length === 0) {
-            $('#btnEdit').prop('disabled', true);
-            $('#btnRemove').prop('disabled', true);
+            $("#btnEdit").prop('disabled', true);
+            $("#btnRemove").prop('disabled', true);
         } else {
             if (selectedRows.length === 1) {
-                $('#btnEdit').prop('disabled', false);
-                $('#btnRemove').prop('disabled', false);
+                $("#btnEdit").prop('disabled', false);
+                $("#btnRemove").prop('disabled', false);
             } else {
-                $('#btnEdit').prop('disabled', true);
-                $('#btnRemove').prop('disabled', false);
+                $("#btnEdit").prop('disabled', true);
+                $("#btnRemove").prop('disabled', false);
             }
         }
     }
@@ -198,7 +198,7 @@
     function setupForm() {
         $("#txtName").attr('maxlength', '200');
         $("#txtDescription").attr('maxlength', '1000');
-        $('#txtOrder').inputmask('9[9]');
+        $("#txtOrder").inputmask('9[9]');
     }
     function actionFormatter(value, row, index) {
         return [
@@ -207,7 +207,7 @@
         ].join('');
     }
     function setupPage() {
-        $('#tblStatuses')
+        $("#tblStatuses')
             .on('check.bs.table', function (e, row) { setupToolbar(); })
             .on('uncheck.bs.table', function (e, row) { setupToolbar(); });
         setupTable();
@@ -221,7 +221,7 @@
         if (sessionStorage.getItem('search_all_selected_id') !== null) {
             id = sessionStorage.getItem('search_all_selected_id');
             index = TableUtil.getTableIndexById('#tblStatuses', id);
-            $('#tblStatuses').bootstrapTable('check', index);
+            $("#tblStatuses").bootstrapTable('check', index);
             showEditDialog();
             sessionStorage.setItem('search_all_selected_id', null);
         }
@@ -241,8 +241,8 @@
                       getStatusStatusTypesCallbackOk);
     }
     function getStatusesCallbackOk(result) {
-        $('#tblStatuses').bootstrapTable('destroy');
-        $('#tblStatuses').bootstrapTable({
+        $("#tblStatuses").bootstrapTable('destroy');
+        $("#tblStatuses").bootstrapTable({
             data: jQuery.parseJSON(result.d)
         });
         setupToolbar();

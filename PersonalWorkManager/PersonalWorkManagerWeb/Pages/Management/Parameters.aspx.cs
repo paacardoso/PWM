@@ -1,27 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Web.Services;
-using System.Runtime.Serialization.Json;
-using System.IO;
-using System.Text;
-using Newtonsoft.Json;
-
-namespace PersonalWorkManagerWeb.Pages.Management
+﻿namespace PersonalWorkManagerWeb.Pages.Management
 {
+
+    using System;
+    using System.Linq;
+    using System.Web.Services;
+    using Newtonsoft.Json;
+
     public partial class Parameters : System.Web.UI.Page
     {
-        protected void Page_Load(object sender, EventArgs e)
-        {
-        }
 
         [WebMethod]
         public static string GetParametersJSON()
         {
-            //throw new Exception("erro a obter todos os registos.");
             using (var objCtx = new PWMEntities())
             {
                 var records = from p in objCtx.Parameter
@@ -40,7 +30,6 @@ namespace PersonalWorkManagerWeb.Pages.Management
         [WebMethod]
         public static long InsertParameterJSON(string Name, string Value, string Description)
         {
-            //throw new Exception("erro a inserir um novo registo.");
             Parameter parameter = new Parameter() { Name = Name, Value = Value, Description = Description };
             using (var objCtx = new PWMEntities())
             {
@@ -53,7 +42,6 @@ namespace PersonalWorkManagerWeb.Pages.Management
         [WebMethod]
         public static bool UpdateParameterJSON(int Id, string Name, string Value, string Description)
         {
-            //throw new Exception("erro a actualizar o registo.");
             Parameter parameter;
             using (var objCtx = new PWMEntities())
             {
@@ -82,7 +70,6 @@ namespace PersonalWorkManagerWeb.Pages.Management
         [WebMethod]
         public static bool DeleteParametersJSON(string Ids)
         {
-            //throw new Exception("erro a apagar os registos selecionados.");
             using (var objCtx = new PWMEntities())
             {
                 objCtx.ExecuteStoreCommand("DELETE FROM Parameter WHERE Id IN (" + Ids + ")");
@@ -90,5 +77,10 @@ namespace PersonalWorkManagerWeb.Pages.Management
             }
             return true;
         }
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+        }
+    
     }
 }

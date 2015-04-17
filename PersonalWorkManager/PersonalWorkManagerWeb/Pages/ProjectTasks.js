@@ -6,14 +6,14 @@
     /*---   A F T E R   L O A D   ---*/
     function validateInputFields() {
         var msg = '';
-        if ($('#txtTaskName').val() === '') {
+        if ($("#txtTaskName").val() === '') {
             msg += "O campo 'Nome' é obrigatório.";
         }
-        if ($('#txtTaskDescription').val() === '') {
+        if ($("#txtTaskDescription").val() === '') {
             if (msg.length > 0) { msg += "<br>"; }
             msg += "O campo 'Nome' é obrigatório.";
         }
-        if ($('#txtTaskOrder').val() === '') {
+        if ($("#txtTaskOrder").val() === '') {
             if (msg.length > 0) { msg += "<br>"; }
             msg += "O campo 'Ordem' é obrigatório.";
         }
@@ -32,22 +32,22 @@
         tabMode = mode;
         switch (tabMode) {
         case '':
-            $('#btnTaskNew').show();
-            $('#btnTaskSave').hide();
-            $('#btnTaskRemove').hide();
-            $('#btnTaskCancel').hide();
+            $("#btnTaskNew").show();
+            $("#btnTaskSave").hide();
+            $("#btnTaskRemove").hide();
+            $("#btnTaskCancel").hide();
             break;
         case 'new':
-            $('#btnTaskNew').hide();
-            $('#btnTaskSave').show();
-            $('#btnTaskRemove').hide();
-            $('#btnTaskCancel').show();
+            $("#btnTaskNew").hide();
+            $("#btnTaskSave").show();
+            $("#btnTaskRemove").hide();
+            $("#btnTaskCancel").show();
             break;
         case 'edit':
-            $('#btnTaskNew').show();
-            $('#btnTaskSave').show();
-            $('#btnTaskRemove').show();
-            $('#btnTaskCancel').hide();
+            $("#btnTaskNew").show();
+            $("#btnTaskSave").show();
+            $("#btnTaskRemove").show();
+            $("#btnTaskCancel").hide();
             break;
         default:
         }
@@ -69,10 +69,10 @@
     function insertTask() {
         if (validateInputFields() === true) {
             AjaxUtil.Call("Projects.aspx/InsertTaskJSON",
-                          "{'Name':'" + $('#txtTaskName').val() + "', " +
-                          "'Description':'" + $('#txtDescription').val() + "', " +
-                          "'Order':" + $('#txtTaskorder').val() + ", " +
-                          "'IdStatus':" + $('#ddlStatus').val() + "}",
+                          "{'Name':'" + $("#txtTaskName").val() + "', " +
+                          "'Description':'" + $("#txtDescription").val() + "', " +
+                          "'Order':" + $("#txtTaskorder").val() + ", " +
+                          "'IdStatus':" + $("#ddlStatus").val() + "}",
                           insertCallbackOk,
                           insertCallbackFailed);
         }
@@ -91,11 +91,11 @@
     function update() {
         if (validateInputFields() === true) {
             AjaxUtil.Call("Projects.aspx/updateJSON",
-                          "{'Id':'" + $('#txtTaskId').val() + "', " +
-                          "'Name':'" + $('#txtTaskName').val() + "', " +
-                          "'Description':'" + $('#txtTaskDescription').val() + "', " +
-                          "'Order:'" + $('#txtTaskOrder').val() + ", " +
-                          "'IdStatus':" + $('#ddlTaskStatus').val() + "}",
+                          "{'Id':'" + $("#txtTaskId").val() + "', " +
+                          "'Name':'" + $("#txtTaskName").val() + "', " +
+                          "'Description':'" + $("#txtTaskDescription").val() + "', " +
+                          "'Order:'" + $("#txtTaskOrder").val() + ", " +
+                          "'IdStatus':" + $("#ddlTaskStatus").val() + "}",
                           updateCallbackOk,
                           updateCallbackFailed);
         }
@@ -103,21 +103,21 @@
     function showEditDialog(row) {
         var param;
         if (row === undefined) {
-            param = $('#tblTasks').bootstrapTable('getSelections')[0];
+            param = $("#tblTasks").bootstrapTable('getSelections')[0];
         } else {
             param = row;
         }
         MessageBox.Clear();
-        $('#mdlLabel').text('Editar Tarefa');
+        $("#mdlLabel").text('Editar Tarefa');
         $("#txtTaskId").val(param.Id);
         $("#txtName").val(param.Name);
         $("#txtDescription").val(param.Description);
         $("#txtOrder").val(param.Order);
         $("#ddlTaskStatus option:contains('" + param.StatusName + "')")
             .attr('selected', true);
-        $('#btnActionConfirmed').unbind('click');
-        $('#btnActionConfirmed').on('click', update);
-        $('#mdlTask').modal('show');
+        $("#btnActionConfirmed").unbind('click');
+        $("#btnActionConfirmed").on('click', update);
+        $("#mdlTask").modal('show');
     }
 
 
@@ -180,7 +180,7 @@
             id = sessionStorage.getItem('search_all_selected_id');
 
             index = TableUtil.getTableIndexById('#tblTasks', id);
-            $('#tblTasks').bootstrapTable('check', index);
+            $("#tblTasks").bootstrapTable('check', index);
             showEditDialog();
 
             sessionStorage.setItem('search_all_selected_id', null);
@@ -188,8 +188,8 @@
     }
     function getTasksCallbackOk(result) {
         //alert('b');
-        $('#tblTasks').bootstrapTable('destroy');
-        $('#tblTasks').bootstrapTable({
+        $("#tblTasks").bootstrapTable('destroy');
+        $("#tblTasks").bootstrapTable({
             data: jQuery.parseJSON(result.d)
         });
         afterTasksLoad();
