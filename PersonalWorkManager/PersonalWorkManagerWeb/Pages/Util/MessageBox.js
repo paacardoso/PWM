@@ -18,7 +18,7 @@ var MessageBox = (function () {
         if (optional !== undefined) {
             html += "<span style='float: right'>" +
                             "<a style='text-align: right; color: #AAAAAA' href='#'" +
-                            " onclick=\"$('#lblMainStackTrace").toggle();\">" +
+                            " onclick=\"$('#lblMainStackTrace').toggle();\">" +
                             "StackTrace&nbsp;</a>" +
                         "</span>" +
                         "<div style='display: none'>" +
@@ -46,35 +46,35 @@ var MessageBox = (function () {
     function msgBoxAsk(title, message, cancelledFunc, confirmedFunc) {
         $("#mdlQuestionLabel").text(title);
         $("#mdlQuestionText").text(message);
-        $("#btnQuestionCancelled").unbind('click');
-        $("#btnQuestionCancelled").on('click', cancelledFunc);
-        $("#btnQuestionConfirmed").unbind('click');
-        $("#btnQuestionConfirmed").on('click', confirmedFunc);
-        $("#mdlQuestion").modal('show');
+        $("#btnQuestionCancelled").unbind("click");
+        $("#btnQuestionCancelled").on("click", cancelledFunc);
+        $("#btnQuestionConfirmed").unbind("click");
+        $("#btnQuestionConfirmed").on("click", confirmedFunc);
+        $("#mdlQuestion").modal("show");
     }
     function msgBoxHide() {
-        $("#mdlQuestion").modal('hide');
+        $("#mdlQuestion").modal("hide");
     }
 
     return {
         // Message Methods
         Success: function (msg, optional) {
-            showMainMessage(msg, 'success', 'ok', optional);
+            showMainMessage(msg, "success", "ok", optional);
         },
         Info: function (msg, optional) {
-            showMainMessage(msg, 'info', 'exclamation-sign', optional);
+            showMainMessage(msg, "info", "exclamation-sign", optional);
         },
         Warning: function (msg, optional) {
-            showMainMessage(msg, 'warning', 'warning-sign', optional);
+            showMainMessage(msg, "warning", "warning-sign", optional);
         },
         Danger: function (msg, optional) {
-            showMainMessage(msg, 'danger', 'remove', optional);
+            showMainMessage(msg, "danger", "remove", optional);
         },
         Error: function (msg, optional) {
-            showMainMessage(msg, 'danger', 'remove', optional);
+            showMainMessage(msg, "danger", "remove", optional);
         },
         Exception: function (msg, optional) {
-            showMainMessage(msg, 'danger', 'remove', optional);
+            showMainMessage(msg, "danger", "remove", optional);
         },
         Clear: function () {
             clearMain();

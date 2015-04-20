@@ -30,14 +30,14 @@
     }
     function switchTab(tab) {
         switch (tab) {
-        case 'project':
+        case "project":
             $("#tlbProject").show();
             $("#tlbTasks").hide();
             $("#tlbAlerts").hide();
             $("#tlbNotes").hide();
             $("#tlbSessions").hide();
             break;
-        case 'tasks':
+        case "tasks":
             $("#tlbProject").hide();
             $("#tlbTasks").show();
             $("#tlbAlerts").hide();
@@ -57,13 +57,13 @@
             $("#btnProjectRemove").hide();
             $("#btnProjectCancel").hide();
             break;
-        case 'new':
+        case "new":
             $("#btnProjectNew").hide();
             $("#btnProjectSave").show();
             $("#btnProjectRemove").hide();
             $("#btnProjectCancel").show();
             break;
-        case 'edit':
+        case "edit":
             $("#btnProjectNew").show();
             $("#btnProjectSave").show();
             $("#btnProjectRemove").show();
@@ -87,17 +87,17 @@
         $("#txtCode").val(proj.Code);
         $("#txtName").val(proj.Name);
         $("#txtDescription").val(proj.Description);
-        $("#txtStartDate").datetimepicker().children('input')
-                .val(DateUtil.Format(proj.StartDate));
-        $("#txtEndDate").datetimepicker().children('input')
-                .val(DateUtil.Format(proj.EndDate));
+        $("#txtStartDate").datetimepicker().children("input")
+            .val(DateUtil.Format(proj.StartDate));
+        $("#txtEndDate").datetimepicker().children("input")
+            .val(DateUtil.Format(proj.EndDate));
         $("#ddlStatus").val(proj.IdStatus);
 
         ProjectTasks.tabTasksHasLoaded = false;
 
-        $("#tabProject a[href="#tabMain"]").tab('show');
-        switchTab('project');
-        setupToolbar('edit');
+        $("#tabProject a[href='#tabMain']").tab("show");
+        switchTab("project");
+        setupToolbar("edit");
     }
     //function getProjectCallbackFailed() {
     // handled by the default ajax function (AjaxUtil.js\defaultFailFunc)
@@ -105,8 +105,8 @@
     function getProject(id) {
         if (id !== '') {
             AjaxUtil.Call("Projects.aspx/GetProjectJSON",
-                              "{'Id':'" + id + "'}",
-                              getProjectCallbackOk);
+                          '{Id:' + id + '}',
+                          getProjectCallbackOk);
         }
     }
 
@@ -119,23 +119,23 @@
                          text: $("#txtName").val(),
                          description: $("#txtDescription").val()
                        });
-        setupToolbar('edit');
+        setupToolbar("edit");
     }
     function insertCallbackFailed(msg) {
-        var ex = jQuery.parseJSON(msg.responseText);
+        var ex = JSON.parse(msg.responseText);
         MessageBox.Exception(ex.Message, ex.StackTrace);
     }
     function insert() {
         if (validateInputFields() === true) {
             AjaxUtil.Call("Projects.aspx/InsertProjectJSON",
-                          "{'Code':'" + $("#txtCode").val() + "', " +
-                          "'Name':'" + $("#txtName").val() + "', " +
-                          "'Description':'" + $("#txtDescription").val() + "', " +
-                          "'StartDate':'" + $("#txtStartDate").datetimepicker()
-                            .children("input").val() + "', " +
-                          "'EndDate':'" + $("#txtEndDate").datetimepicker()
-                            .children("input").val() + "', " +
-                          "'IdStatus':" + $("#ddlStatus").val() + "}",
+                          '{Code:"' + $("#txtCode").val() + '", ' +
+                          'Name:"' + $("#txtName").val() + '", ' +
+                          'Description:"' + $("#txtDescription").val() + '", ' +
+                          'StartDate:"' + $("#txtStartDate").datetimepicker()
+                            .children("input").val() + '", ' +
+                          'EndDate:"' + $("#txtEndDate").datetimepicker()
+                            .children("input").val() + '", ' +
+                          'IdStatus:' + $("#ddlStatus").val() + '}',
                           insertCallbackOk,
                           insertCallbackFailed);
         }
@@ -151,24 +151,24 @@
                               text: $("#txtName").val(),
                               description: $("#txtDescription").val()
                           });
-        setupToolbar('edit');
+        setupToolbar("edit");
     }
     function updateCallbackFailed(msg) {
-        var ex = jQuery.parseJSON(msg.responseText);
+        var ex = JSON.parse(msg.responseText);
         MessageBox.Exception(ex.Message, ex.StackTrace);
     }
     function update() {
         if (validateInputFields() === true) {
             AjaxUtil.Call("Projects.aspx/UpdateProjectJSON",
-                          "{'Id':'" + $("#txtId").val() + "', " +
-                          "'Code':'" + $("#txtCode").val() + "', " +
-                          "'Name':'" + $("#txtName").val() + "', " +
-                          "'Description':'" + $("#txtDescription").val() + "', " +
-                          "'StartDate':'" + $("#txtStartDate").datetimepicker()
-                            .children("input").val() + "', " +
-                          "'EndDate':'" + $("#txtEndDate").datetimepicker()
-                            .children("input").val() + "', " +
-                          "'IdStatus':" + $("#ddlStatus").val() + "}",
+                          '{Id:' + $("#txtId").val() + ', ' +
+                          'Code:"' + $("#txtCode").val() + '", ' +
+                          'Name:"' + $("#txtName").val() + '", ' +
+                          'Description:"' + $("#txtDescription").val() + '", ' +
+                          'StartDate:"' + $("#txtStartDate").datetimepicker()
+                            .children("input").val() + '", ' +
+                          'EndDate:"' + $("#txtEndDate").datetimepicker()
+                            .children("input").val() + '", ' +
+                          'IdStatus:' + $("#ddlStatus").val() + '}',
                           updateCallbackOk,
                           updateCallbackFailed);
         }
@@ -185,7 +185,7 @@
     }
     function removeCallbackFailed(msg) {
         MessageBox.Hide();
-        var ex = jQuery.parseJSON(msg.responseText);
+        var ex = JSON.parse(msg.responseText);
         MessageBox.Exception(ex.Message, ex.StackTrace);
     }
     function removeCancelled() {
@@ -193,7 +193,7 @@
     }
     function removeConfirmed(id) {
         AjaxUtil.Call("Projects.aspx/DeleteProjectJSON",
-                      "{'Id':" + id + "}",
+                      '{Id:' + id + '}',
                       function (result) { removeCallbackOk(result, id); },
                       removeCallbackFailed);
     }
@@ -201,7 +201,7 @@
         var ddl = $("#ddlProject"),
             selectize = ddl[0].selectize,
             proj = selectize.getItem(selectize.getValue());
-        MessageBox.Ask('Remover Projecto',
+        MessageBox.Ask("Remover Projecto",
                        "Confirma a remoção do projecto '" + proj.text() + "' ?",
                        removeCancelled,
                        function () { removeConfirmed(selectize.getValue()); });
@@ -212,12 +212,12 @@
     function setupForm() {
         $("#ddlProject").selectize({
             create: false,
-            valueField: 'Id',
-            labelField: 'Name',
-            searchField: ['Code', 'Name', 'Description'],
+            valueField: "Id",
+            labelField: "Name",
+            searchField: ["Code", "Name", "Description"],
             sortField: {
-                field: 'Name',
-                direction: 'asc'
+                field: "Name",
+                direction: "asc"
             },
             render: {
                 option: function (item, escape) {
@@ -250,10 +250,10 @@
                 }
             },
             onChange: function (value) { getProject(value); },
-            dropdownParent: 'body'
+            dropdownParent: "body"
         });
-        $("#txtName").attr('maxlength', '200');
-        $("#txtDescription").attr('maxlength', '1000');
+        $("#txtName").attr("maxlength", "200");
+        $("#txtDescription").attr("maxlength", "1000");
         $("#txtStartDate").datetimepicker({
             format: "DD-MM-YYYY"
         });
@@ -275,20 +275,20 @@
 
     /*---   L O A D   ---*/
     function afterProjectsLoad() {
-        if (sessionStorage.getItem('search_all_selected_id') !== null) {
+        if (sessionStorage.getItem("search_all_selected_id") !== null) {
             /*
-            var id = sessionStorage.getItem('search_all_selected_id'),
+            var id = sessionStorage.getItem("search_all_selected_id"),
                 ddl = $("#ddlProject"),
                 selectize = ddl[0].selectize,
                 proj = selectize.getItem(selectize.setValue(id, false));
             */
-            sessionStorage.setItem('search_all_selected_id', null);
+            sessionStorage.setItem("search_all_selected_id", null);
         }
     }
     function getProjectsCallbackOk(result) {
         var ddl = $("#ddlProject"),
             selectize = ddl[0].selectize;
-        $.each(jQuery.parseJSON(result.d), function () {
+        $.each(JSON.parse(result.d), function () {
             //alert('a' + JSON.stringify(this));
             selectize.addOption(
                 {   Id: this.Id,
@@ -310,7 +310,7 @@
     }
     function getProjectStatusesCallbackOk(result) {
         var ddl = $("#ddlStatus");
-        $.each(jQuery.parseJSON(result.d), function () {
+        $.each(JSON.parse(result.d), function () {
             ddl.append($("<option />").val(this.Id).text(this.Name));
         });
     }
@@ -328,15 +328,15 @@
     function newProject() {
         $("#ddlProject")[0].selectize.clear(true);
         clearForm();
-        setupToolbar('new');
+        setupToolbar("new");
     }
     function cancelNewProject() {
         setupToolbar('');
     }
     function saveProject() {
-        if (tabProjectMode === 'new') {
+        if (tabProjectMode === "new") {
             insert();
-        } else if (tabProjectMode === 'edit') {
+        } else if (tabProjectMode === "edit") {
             update();
         }
     }
@@ -350,7 +350,7 @@
         }
         pageHasLoaded = true;
 
-        switchTab('project');
+        switchTab("project");
 
         setupPage();
 

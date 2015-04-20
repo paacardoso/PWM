@@ -16,16 +16,16 @@
     </div>
     <div class="panel panel-default container-fluid">
         <div id="toolbar" class="btn-group btn-group-md">
-            <button id="btnRefresh" type="button" class="btn btn-default" onclick="getParameters();">
+            <button id="btnRefresh" type="button" class="btn btn-default" onclick="Parameters.getParameters();">
                 <i class="glyphicon glyphicon-refresh"></i>&nbsp;Actualizar
             </button>
-            <button id="btnAdd" type="button" class="btn btn-default" onclick="showAddDialog();">
+            <button id="btnAdd" type="button" class="btn btn-default" onclick="Parameters.showAddDialog();">
                 <i class="glyphicon glyphicon-plus"></i>&nbsp;Novo
             </button>
-            <button id="btnEdit" type="button" class="btn btn-default" onclick="showEditDialog();">
+            <button id="btnEdit" type="button" class="btn btn-default" onclick="Parameters.showEditDialog();">
                 <i class="glyphicon glyphicon-edit"></i>&nbsp;Editar
             </button>
-            <button id="btnRemove" type="button" class="btn btn-default" onclick="showRemoveDialog();">
+            <button id="btnRemove" type="button" class="btn btn-default" onclick="Parameters.showRemoveDialog();">
                 <i class="glyphicon glyphicon-remove"></i>&nbsp;Remover
             </button>
         </div>
@@ -46,7 +46,7 @@
                 <th data-field="Name" data-sortable="true">Nome</th>
                 <th data-field="Value" data-sortable="true">Valor</th>
                 <th data-field="Description" data-sortable="true">Descrição</th>
-                <th data-field="action" data-formatter="actionFormatter" data-events="actionEvents">Acção</th>
+                <th data-field="action" data-formatter="Parameters.actionFormatter" data-events="actionEvents">Acção</th>
             </tr>
             </thead>
         </table>
@@ -55,6 +55,7 @@
     <!-- Modal -->
     <div class="modal fade" id="mdlParameter" tabindex="-1" role="dialog" aria-labelledby="mdlLabel"
         aria-hidden="true">
+        <%--<div class="modal-dialog" style="width: 90%; margin-left:5%;">--%>
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

@@ -8,9 +8,9 @@
         var currentUser = JSON.parse(result.d),
             vars;
         if (currentUser === null) {
-            MessageBox.Info('O Login e/ou a senha estão incorrectos. Tente novamente.');
+            MessageBox.Info("O Login e/ou a senha estão incorrectos. Tente novamente.");
         } else {
-            sessionStorage.setItem('current_resource', JSON.stringify(currentUser));
+            sessionStorage.setItem("current_resource", JSON.stringify(currentUser));
             vars = UrlUtil.getUrlVars();
             if (vars.ReturnUrl === undefined) {
                 window.location.href = UrlUtil.resolveURL("/Pages/Projects.aspx");
@@ -20,14 +20,14 @@
         }
     }
     function loginCallbackFailed(msg) {
-        var ex = jQuery.parseJSON(msg.responseText);
+        var ex = JSON.parse(msg.responseText);
         MessageBox.Exception(ex.Message, ex.StackTrace);
     }
     function login() {
         AjaxUtil.Call("Login.aspx/LoginJSON",
-                      "{'Login':'" + $("#txtLogin").val() + "', " +
-                      "'Password':'" + $("#txtPassword").val() + "', " +
-                      "'Persistable':" + $("#chkPersistLoginCookie").is(":checked") + "}",
+                      '{Login:"' + $("#txtLogin").val() + '", ' +
+                      'Password:"' + $("#txtPassword").val() + '", ' +
+                      'Persistable:' + $("#chkPersistLoginCookie").is(":checked") + '}',
                       loginCallbackOk,
                       loginCallbackFailed);
     }
@@ -35,8 +35,8 @@
 
     /*---   S E T U P   ---*/
     function setupForm() {
-        $("#txtLogin").attr('maxlength', '100');
-        $("#txtPassword").attr('maxlength', '1000');
+        $("#txtLogin").attr("maxlength", "100");
+        $("#txtPassword").attr("maxlength", "1000");
     }
     function setupPage() {
         setupForm();

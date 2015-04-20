@@ -33,9 +33,9 @@
                 <input type="password" class="form-control" id="txtConfirmPassword" placeholder="Confirmar senha">
             </div>
             <div class="modal-footer">
-            <button id="btnCancel" type="button" class="btn btn-default" onclick="cancelChange();">
+            <button id="btnCancel" type="button" class="btn btn-default" onclick="ChangePassword.cancelChange();">
                 Cancelar</button>
-            <button id="btnSave" type="button" class="btn btn-primary" onclick="updatePassword();">
+            <button id="btnSave" type="button" class="btn btn-primary" onclick="ChangePassword.updatePassword();">
                 Guardar</button>
             </div>
         </div>

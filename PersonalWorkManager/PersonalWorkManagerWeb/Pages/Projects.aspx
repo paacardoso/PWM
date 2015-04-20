@@ -29,26 +29,26 @@
     <div class="panel panel-default container-fluid">
         <p></p>
         <ul class="nav nav-tabs" id="tabProject">
-            <li class="active"><a href="#tabMain" onclick="switchTab('project');" data-toggle="tab">Projecto</a></li>
-            <li><a href="#tabTasks" onclick="switchTab('tasks');" data-toggle="tab">Tarefas</a></li>
-            <li><a href="#tabAlerts" onclick="switchTab('alerts');" data-toggle="tab">Alertas</a></li>
-            <li><a href="#tabNotes" onclick="switchTab('notes');" data-toggle="tab">Notas</a></li>
-            <li><a href="#tabSessions" onclick="switchTab('sessions');" data-toggle="tab">Sessões</a></li>
+            <li class="active"><a href="#tabMain" onclick="Projects.switchTab('project');" data-toggle="tab">Projecto</a></li>
+            <li><a href="#tabTasks" onclick="Projects.switchTab('tasks');" data-toggle="tab">Tarefas</a></li>
+            <li><a href="#tabAlerts" onclick="Projects.switchTab('alerts');" data-toggle="tab">Alertas</a></li>
+            <li><a href="#tabNotes" onclick="Projects.switchTab('notes');" data-toggle="tab">Notas</a></li>
+            <li><a href="#tabSessions" onclick="Projects.switchTab('sessions');" data-toggle="tab">Sessões</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="tabMain">
                 <p></p>
                 <div id="tlbProject" class="btn-group btn-group-md" style="display: none">
-                    <button id="btnProjectNew" type="button" class="btn btn-default" onclick="newProject();">
+                    <button id="btnProjectNew" type="button" class="btn btn-default" onclick="Projects.newProject();">
                         <i class="glyphicon glyphicon-plus"></i>&nbsp;Novo
                     </button>
-                    <button id="btnProjectSave" type="button" class="btn btn-default" onclick="saveProject();">
+                    <button id="btnProjectSave" type="button" class="btn btn-default" onclick="Projects.saveProject();">
                         <i class="glyphicon glyphicon-floppy-save"></i>&nbsp;Guardar
                     </button>
-                    <button id="btnProjectRemove" type="button" class="btn btn-default" onclick="removeProject();">
+                    <button id="btnProjectRemove" type="button" class="btn btn-default" onclick="Projects.removeProject();">
                         <i class="glyphicon glyphicon-remove"></i>&nbsp;Remover
                     </button>
-                    <button id="btnProjectCancel" type="button" class="btn btn-default" onclick="cancelNewProject();">
+                    <button id="btnProjectCancel" type="button" class="btn btn-default" onclick="Projects.cancelNewProject();">
                         <i class="glyphicon glyphicon-arrow-left"></i>&nbsp;Cancelar
                     </button>
                 </div>
@@ -103,16 +103,16 @@
             <div class="tab-pane" id="tabTasks">
                 <p></p>
                 <div id="tlbTasks" class="btn-group btn-group-md">
-                    <button id="btnTaskNew" type="button" class="btn btn-default" onclick="newTask();">
+                    <button id="btnTaskNew" type="button" class="btn btn-default" onclick="ProjectTasks.newTask();">
                         <i class="glyphicon glyphicon-plus"></i>&nbsp;Nova
                     </button>
-                    <button id="btnTaskSave" type="button" class="btn btn-default" onclick="saveTask();">
+                    <button id="btnTaskSave" type="button" class="btn btn-default" onclick="ProjectTasks.saveTask();">
                         <i class="glyphicon glyphicon-floppy-save"></i>&nbsp;Guardar
                     </button>
-                    <button id="btnTaskRemove" type="button" class="btn btn-default" onclick="removeTask();">
+                    <button id="btnTaskRemove" type="button" class="btn btn-default" onclick="ProjectTasks.removeTask();">
                         <i class="glyphicon glyphicon-remove"></i>&nbsp;Remover
                     </button>
-                    <button id="btnTaskCancel" type="button" class="btn btn-default" onclick="cancelNewTask();">
+                    <button id="btnTaskCancel" type="button" class="btn btn-default" onclick="ProjectTasks.cancelNewTask();">
                         <i class="glyphicon glyphicon-arrow-left"></i>&nbsp;Cancelar
                     </button>
                 </div>
@@ -134,7 +134,7 @@
                     <th data-field="Description" data-sortable="true">Descrição</th>
                     <th data-field="Order" data-sortable="true">Ordem</th>
                     <th data-field="Status" data-sortable="true">Estado</th>
-                    <th data-field="action" data-formatter="actionFormatter" data-events="actionEvents">Acção</th>
+                    <th data-field="action" data-formatter="ProjectTasks.actionFormatter" data-events="actionEvents">Acção</th>
                 </tr>
                 </thead>
             </table>

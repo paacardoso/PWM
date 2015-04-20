@@ -5,6 +5,8 @@
 <head runat="server">
     <title>PWM - Personal Work Manager</title>
 
+    <link rel="shortcut icon" href="~/Resources/favicon.ico" type="image/x-icon">
+
     <%--Site--%>
     <link href="~/Resources/Styles/SiteEx.css" rel="stylesheet" type="text/css" />
     <%--Bootstrap--%>

@@ -16,16 +16,16 @@
     </div>
     <div class="panel panel-default container-fluid">
         <div id="toolbar" class="btn-group btn-group-md">
-            <button id="btnRefresh" type="button" class="btn btn-default" onclick="getStatuses();">
+            <button id="btnRefresh" type="button" class="btn btn-default" onclick="Statuses.getStatuses();">
                 <i class="glyphicon glyphicon-refresh"></i>&nbsp;Actualizar
             </button>
-            <button id="btnAdd" type="button" class="btn btn-default" onclick="showAddDialog();">
+            <button id="btnAdd" type="button" class="btn btn-default" onclick="Statuses.showAddDialog();">
                 <i class="glyphicon glyphicon-plus"></i>&nbsp;Novo
             </button>
-            <button id="btnEdit" type="button" class="btn btn-default" onclick="showEditDialog();">
+            <button id="btnEdit" type="button" class="btn btn-default" onclick="Statuses.showEditDialog();">
                 <i class="glyphicon glyphicon-edit"></i>&nbsp;Editar
             </button>
-            <button id="btnRemove" type="button" class="btn btn-default" onclick="showRemoveDialog();">
+            <button id="btnRemove" type="button" class="btn btn-default" onclick="Statuses.showRemoveDialog();">
                 <i class="glyphicon glyphicon-remove"></i>&nbsp;Remover
             </button>
         </div>
@@ -47,7 +47,7 @@
                 <th data-field="Description" data-sortable="true">Descrição</th>
                 <th data-field="StatusTypeName" data-sortable="true">Tipo</th>
                 <th data-field="Order" data-sortable="true">Ordem</th>
-                <th data-field="action" data-formatter="actionFormatter" data-events="actionEvents">Acção</th>
+                <th data-field="action" data-formatter="Statuses.actionFormatter" data-events="actionEvents">Acção</th>
             </tr>
             </thead>
         </table>

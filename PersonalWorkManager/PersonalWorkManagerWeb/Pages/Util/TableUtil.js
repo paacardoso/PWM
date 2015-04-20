@@ -2,15 +2,18 @@
 var TableUtil = (function () {
 
     function getTableIndexById(tableName, id) {
-        var rows = $(tableName).bootstrapTable('getData'),
+        var rows = $(tableName).bootstrapTable("getData"),
             index,
             row;
         for (index = 0; index < rows.length; index += 1) {
             row = rows[index];
-            if (row.Id === id) {
+            //console.log("typeof row.Id: " + typeof row.Id + "; typeof id: " + typeof id);
+            if (row.Id.toString() === id) {
+                //console.log("table: " + tableName + "; id: " + id + "; index: " + index);
                 return index;
             }
         }
+        console.log("No index found for id: '" + id + "' in table: '" + tableName + "'");
     }
 
     return {

@@ -85,7 +85,9 @@
     <Content Include="Pages\Projects.aspx" />
     <Content Include="Pages\Projects.js" />
     <Content Include="Pages\Util\TableUtil.js" />
+    <Content Include="PersonalWorkManagerWeb.Publish.xml" />
     <Content Include="Resources\startbootstrap-sb-admin-2-1.0.5\bower_components\font-awesome\css\font-awesome.min.css" />
+    <Content Include="Settings.JSLint.xml" />
     <Content Include="Site.Master.js" />
     <Content Include="Resources\bootstrap-3.3.2-dist\css\bootstrap-theme.css" />
     <Content Include="Resources\bootstrap-3.3.2-dist\css\bootstrap-theme.min.css" />

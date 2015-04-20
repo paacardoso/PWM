@@ -12,7 +12,7 @@
             if (msg.length > 0) { msg += "<br>"; }
             msg += "O campo 'Nome' é obrigatório.";
         }
-        if ($("#ddlStatus option:selected").val() === undefined) {
+        if ($("#ddlStatus").val() === null) {
             if (msg.length > 0) { msg += "<br>"; }
             msg += "O campo 'Estado' é obrigatório.";
         }
@@ -26,48 +26,48 @@
 
     /*---   A D D   ---*/
     function insertCallbackOk(result) {
-        $("#mdlResource").modal('hide');
-        var data = "[{Id:" + result.d + ", " +
-                   "Login:\"" + $("#txtLogin").val() + "\", " +
-                   "Name:\"" + $("#txtName").val() + "\", " +
-                   "Status:\"" + $("#ddlStatus option:selected").text() + "\"}]";
-        $("#tblResources").bootstrapTable('append', JSON.parse(data));
+        $("#mdlResource").modal("hide");
+        var data = '[{"Id":' + result.d + ', ' +
+                   '"Login":"' + $("#txtLogin").val() + '", ' +
+                   '"Name":"' + $("#txtName").val() + '", ' +
+                   '"Status":"' + $("#ddlStatus option:selected").text() + '"}]';
+        $("#tblResources").bootstrapTable("append", JSON.parse(data));
     }
     function insertCallbackFailed(msg) {
-        var ex = jQuery.parseJSON(msg.responseText);
+        var ex = JSON.parse(msg.responseText);
         MessageBox.Exception(ex.Message, ex.StackTrace);
     }
     function insert() {
         if (validateRequired() === true) {
             AjaxUtil.Call("Resources.aspx/InsertResourceJSON",
-                          "{'Login':'" + $("#txtLogin").val() + "', " +
-                          "'Name':'" + $("#txtName").val() + "', " +
-                          "'Password':'" + $("#txtPassword").val() + "', " +
-                          "'IdStatus':" + $("#ddlStatus").val() + "}",
+                          '{Login:"' + $("#txtLogin").val() + '", ' +
+                          'Name:"' + $("#txtName").val() + '", ' +
+                          'Password:"' + $("#txtPassword").val() + '", ' +
+                          'IdStatus:' + $("#ddlStatus").val() + '}',
                           insertCallbackOk,
                           insertCallbackFailed);
         }
     }
     function showAddDialog() {
-        $("#mdlLabel").text('Adicionar Novo Recurso');
+        $("#mdlLabel").text("Adicionar Novo Recurso");
         MessageBox.Clear();
-        $("#txtId").val('');
-        $("#txtLogin").val('');
-        $("#txtName").val('');
-        $("#txtPassword").val('');
-        $("#ddlStatus").val('');
-        $("#btnActionConfirmed").unbind('click');
-        $("#btnActionConfirmed").on('click', insert);
-        $("#mdlResource").on('shown.bs.modal', function () { $("#txtLogin").focus(); });
-        $("#mdlResource").modal('show');
+        $("#txtId").val("");
+        $("#txtLogin").val("");
+        $("#txtName").val("");
+        $("#txtPassword").val("");
+        $("#ddlStatus").val("");
+        $("#btnActionConfirmed").unbind("click");
+        $("#btnActionConfirmed").on("click", insert);
+        $("#mdlResource").on("shown.bs.modal", function () { $("#txtLogin").focus(); });
+        $("#mdlResource").modal("show");
     }
 
 
     /*---   E D I T   ---*/
     function updateCallbackOk(result) {
-        $("#mdlResource").modal('hide');
-        $("#tblResources").bootstrapTable('updateRow', {
-            index: TableUtil.getTableIndexById('#tblResources', $("#txtId").val()),
+        $("#mdlResource").modal("hide");
+        $("#tblResources").bootstrapTable("updateRow", {
+            index: TableUtil.getTableIndexById("#tblResources", $("#txtId").val()),
             row: {
                 Id: $("#txtId").val(),
                 Login: $("#txtLogin").val(),
@@ -77,17 +77,17 @@
         });
     }
     function updateCallbackFailed(msg) {
-        var ex = jQuery.parseJSON(msg.responseText);
+        var ex = JSON.parse(msg.responseText);
         MessageBox.Exception(ex.Message, ex.StackTrace);
     }
     function update() {
         if (validateRequired() === true) {
             AjaxUtil.Call("Resources.aspx/UpdateResourceJSON",
-                          "{'Id':'" + $("#txtId").val() + "', " +
-                          "'Login':'" + $("#txtLogin").val() + "', " +
-                          "'Name':'" + $("#txtName").val() + "', " +
-                          "'Password':'" + $("#txtPassword").val() + "', " +
-                          "'IdStatus':" + $("#ddlStatus").val() + "}",
+                          '{Id:' + $("#txtId").val() + ', ' +
+                          'Login:"' + $("#txtLogin").val() + '", ' +
+                          'Name:"' + $("#txtName").val() + '", ' +
+                          'Password:"' + $("#txtPassword").val() + '", ' +
+                          'IdStatus:' + $("#ddlStatus").val() + '}',
                           updateCallbackOk,
                           updateCallbackFailed);
         }
@@ -95,31 +95,31 @@
     function showEditDialog(row) {
         var param;
         if (row === undefined) {
-            param = $("#tblResources").bootstrapTable('getSelections')[0];
+            param = $("#tblResources").bootstrapTable("getSelections")[0];
         } else {
             param = row;
         }
         MessageBox.Clear();
-        $("#mdlLabel").text('Editar Recurso');
+        $("#mdlLabel").text("Editar Recurso");
         $("#txtId").val(param.Id);
         $("#txtLogin").val(param.Login);
         $("#txtName").val(param.Name);
         //$("#txtPassword").val(param.Password);
         $("#ddlStatus option:contains('" + param.StatusName + "')")
             .attr('selected', true);
-        $("#btnActionConfirmed").unbind('click');
-        $("#btnActionConfirmed").on('click', update);
-        $("#mdlResource").modal('show');
+        $("#btnActionConfirmed").unbind("click");
+        $("#btnActionConfirmed").on("click", update);
+        $("#mdlResource").modal("show");
     }
 
 
     /*---   R E M O V E   ---*/
     function removeCallbackOk(result, ids) {
-        $("#tblResources").bootstrapTable('remove', jQuery.parseJSON(ids));
+        $("#tblResources").bootstrapTable("remove", ids);
         MessageBox.Hide();
     }
     function removeCallbackFailed(msg) {
-        var ex = jQuery.parseJSON(msg.responseText);
+        var ex = JSON.parse(msg.responseText);
         MessageBox.Hide();
         MessageBox.Exception(ex.Message, ex.StackTrace);
     }
@@ -129,7 +129,7 @@
     function removeConfirmed(param) {
         var params = [],
             ids = {
-                field: 'Id',
+                field: "Id",
                 values: []
             },
             index;
@@ -137,7 +137,7 @@
         if (param !== undefined) {
             params[0] = param;
         } else {
-            params = $("#tblResources").bootstrapTable('getSelections');
+            params = $("#tblResources").bootstrapTable("getSelections");
         }
 
         for (index = 0; index < params.length; index += 1) {
@@ -145,19 +145,19 @@
         }
 
         AjaxUtil.Call("Resources.aspx/DeleteResourcesJSON",
-                      "{'Ids':'" + ids.values.join() + "'}",
+                      '{Ids:"' + ids.values.join() + '"}',
                       function (result) { removeCallbackOk(result, ids); },
                       removeCallbackFailed);
 
     }
     function showRemoveDialog(param) {
         if (param !== undefined) {
-            MessageBox.Ask('Remover Recurso',
+            MessageBox.Ask("Remover Recurso",
                            "Confirma a remoção do Recurso '" + param.Name + "' ?",
                            removeCancelled,
                            function () { removeConfirmed(param); });
         } else {
-            MessageBox.Ask('Remover Recurso',
+            MessageBox.Ask("Remover Recurso",
                            "Confirma a remoção dos Recursos seleccionados ?",
                            removeCancelled,
                            function () { removeConfirmed(undefined); });
@@ -167,33 +167,33 @@
 
     /*---   S E T U P   ---*/
     function setupToolbar() {
-        var selectedRows = $("#tblResources").bootstrapTable('getSelections');
+        var selectedRows = $("#tblResources").bootstrapTable("getSelections");
         if (selectedRows.length === 0) {
-            $("#btnEdit").prop('disabled', true);
-            $("#btnRemove").prop('disabled', true);
+            $("#btnEdit").prop("disabled", true);
+            $("#btnRemove").prop("disabled", true);
         } else {
             if (selectedRows.length === 1) {
-                $("#btnEdit").prop('disabled', false);
-                $("#btnRemove").prop('disabled', false);
+                $("#btnEdit").prop("disabled", false);
+                $("#btnRemove").prop("disabled", false);
             } else {
-                $("#btnEdit").prop('disabled', true);
-                $("#btnRemove").prop('disabled', false);
+                $("#btnEdit").prop("disabled", true);
+                $("#btnRemove").prop("disabled", false);
             }
         }
     }
     function setupTable() {
         window.actionEvents = {
-            'click .edit': function (e, value, row, index) {
+            "click .edit": function (e, value, row, index) {
                 showEditDialog(row);
             },
-            'click .remove': function (e, value, row, index) {
+            "click .remove": function (e, value, row, index) {
                 showRemoveDialog(row);
             }
         };
     }
     function setupForm() {
-        $("#txtLogin").attr('maxlength', '100');
-        $("#txtName").attr('maxlength', '200');
+        $("#txtLogin").attr("maxlength", "100");
+        $("#txtName").attr("maxlength", "200");
     }
     function actionFormatter(value, row, index) {
         return [
@@ -202,9 +202,9 @@
         ].join('');
     }
     function setupPage() {
-        $("#tblResources')
-            .on('check.bs.table', function (e, row) { setupToolbar(); })
-            .on('uncheck.bs.table', function (e, row) { setupToolbar(); });
+        $("#tblResources")
+            .on("check.bs.table", function (e, row) { setupToolbar(); })
+            .on("uncheck.bs.table", function (e, row) { setupToolbar(); });
         setupTable();
         setupForm();
     }
@@ -213,18 +213,18 @@
     /*---   L O A D   ---*/
     function afterTableLoad() {
         var id, index;
-        if (sessionStorage.getItem('search_all_selected_id') !== 'null') {
-            id = sessionStorage.getItem('search_all_selected_id');
-            index = TableUtil.getTableIndexById('#tblResources', id);
-            $("#tblResources").bootstrapTable('check', index);
+        if (sessionStorage.getItem("search_all_selected_id").toString() !== 'null') {
+            id = sessionStorage.getItem("search_all_selected_id");
+            index = TableUtil.getTableIndexById("#tblResources", id);
+            $("#tblResources").bootstrapTable("check", index);
             showEditDialog();
-            sessionStorage.setItem('search_all_selected_id', null);
+            sessionStorage.setItem("search_all_selected_id", null);
         }
     }
     function getResourcesCallbackOk(result) {
-        $("#tblResources").bootstrapTable('destroy');
+        $("#tblResources").bootstrapTable("destroy");
         $("#tblResources").bootstrapTable({
-            data: jQuery.parseJSON(result.d)
+            data: JSON.parse(result.d)
         });
         setupToolbar();
         afterTableLoad();
@@ -239,7 +239,7 @@
     }
     function getResourceStatusesCallbackOk(result) {
         var ddl = $("#ddlStatus");
-        $.each(jQuery.parseJSON(result.d), function () {
+        $.each(JSON.parse(result.d), function () {
             ddl.append($("<option />").val(this.Id).text(this.Name));
         });
     }

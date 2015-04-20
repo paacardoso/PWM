@@ -18,45 +18,46 @@
 
     /*---   A D D   ---*/
     function insertCallbackOk(result) {
-        $("#mdlParameter").modal('hide');
-        var data = "[{'Id':" + result.d + ", 'Name':'" + $("#txtName").val() + "', " +
-                   "'Value':'" + $("#txtValue").val() + "', " +
-                   "'Description':'" + $("#txtDescription").val() + "'}]";
-        $("#tblParameters").bootstrapTable('append', jQuery.parseJSON(data));
+        $("#mdlParameter").modal("hide");
+        var data = '[{"Id":' + result.d + ', ' +
+                   '"Name":"' + $("#txtName").val() + '", ' +
+                   '"Value":"' + $("#txtValue").val() + '", ' +
+                   '"Description":"' + $("#txtDescription").val() + '"}]';
+        $("#tblParameters").bootstrapTable('append', JSON.parse(data));
     }
     function insertCallbackFailed(msg) {
-        var ex = jQuery.parseJSON(msg.responseText);
+        var ex = JSON.parse(msg.responseText);
         MessageBox.Exception(ex.Message, ex.StackTrace);
     }
     function insert() {
         if (validateRequired() === true) {
             AjaxUtil.Call("Parameters.aspx/InsertParameterJSON",
-                          "{'Name':'" + $("#txtName").val() + "', " +
-                          "'Value':'" + $("#txtValue").val() + "', " +
-                          "'Description':'" + $("#txtDescription").val() + "'}",
+                          '{Name:"' + $("#txtName").val() + '", ' +
+                          'Value:"' + $("#txtValue").val() + '", ' +
+                          'Description:"' + $("#txtDescription").val() + '"}',
                           insertCallbackOk,
                           insertCallbackFailed);
         }
     }
     function showAddDialog() {
-        $("#mdlLabel").text('Adicionar Novo Parâmetro');
+        $("#mdlLabel").text("Adicionar Novo Parâmetro");
         MessageBox.Clear();
-        $("#txtId").val('');
-        $("#txtName").val('');
-        $("#txtValue").val('');
-        $("#txtDescription").val('');
-        $("#btnActionConfirmed").unbind('click');
-        $("#btnActionConfirmed").on('click', insert);
-        $("#mdlParameter").on('shown.bs.modal', function () { $("#txtName").focus(); });
-        $("#mdlParameter").modal('show');
+        $("#txtId").val("");
+        $("#txtName").val("");
+        $("#txtValue").val("");
+        $("#txtDescription").val("");
+        $("#btnActionConfirmed").unbind("click");
+        $("#btnActionConfirmed").on("click", insert);
+        $("#mdlParameter").on("shown.bs.modal", function () { $("#txtName").focus(); });
+        $("#mdlParameter").modal("show");
     }
 
 
     /*---   E D I T   ---*/
     function updateCallbackOk(result) {
-        $("#mdlParameter").modal('hide');
-        $("#tblParameters").bootstrapTable('updateRow', {
-            index: TableUtil.getTableIndexById('#tblParameters', $("#txtId").val()),
+        $("#mdlParameter").modal("hide");
+        $("#tblParameters").bootstrapTable("updateRow", {
+            index: TableUtil.getTableIndexById("#tblParameters", $("#txtId").val()),
             row: {
                 Id: $("#txtId").val(),
                 Name: $("#txtName").val(),
@@ -66,16 +67,16 @@
         });
     }
     function updateCallbackFailed(msg) {
-        var ex = jQuery.parseJSON(msg.responseText);
+        var ex = JSON.parse(msg.responseText);
         MessageBox.Exception(ex.Message, ex.StackTrace);
     }
     function update() {
         if (validateRequired() === true) {
             AjaxUtil.Call("Parameters.aspx/UpdateParameterJSON",
-                          "{'Id':'" + $("#txtId").val() + "', " +
-                          "'Name':'" + $("#txtName").val() + "', " +
-                          "'Value':'" + $("#txtValue").val() + "', " +
-                          "'Description':'" + $("#txtDescription").val() + "'}",
+                          '{Id:' + $("#txtId").val() + ', ' +
+                          'Name:"' + $("#txtName").val() + '", ' +
+                          'Value:"' + $("#txtValue").val() + '", ' +
+                          'Description:"' + $("#txtDescription").val() + '"}',
                           updateCallbackOk,
                           updateCallbackFailed);
         }
@@ -83,29 +84,30 @@
     function showEditDialog(row) {
         var param;
         if (row === undefined) {
-            param = $("#tblParameters").bootstrapTable('getSelections')[0];
+            param = $("#tblParameters").bootstrapTable("getSelections")[0];
         } else {
             param = row;
         }
         MessageBox.Clear();
-        $("#mdlLabel").text('Editar Parâmetro');
+        $("#mdlLabel").text("Editar Parâmetro");
         $("#txtId").val(param.Id);
         $("#txtName").val(param.Name);
         $("#txtValue").val(param.Value);
-        $("#txtDescription").val(param.Value);
-        $("#btnActionConfirmed").unbind('click');
-        $("#btnActionConfirmed").on('click', update);
-        $("#mdlParameter").modal('show');
+        $("#txtDescription").val(param.Description);
+        $("#btnActionConfirmed").unbind("click");
+        $("#btnActionConfirmed").on("click", update);
+        $("#mdlParameter").modal("show");
     }
 
 
     /*---   R E M O V E   ---*/
     function removeCallbackOk(result, ids) {
-        $("#tblParameters").bootstrapTable('remove', jQuery.parseJSON(ids));
+        //console.log("ids: " + JSON.stringify(ids));
+        $("#tblParameters").bootstrapTable("remove", ids);
         MessageBox.Hide();
     }
     function removeCallbackFailed(msg) {
-        var ex = jQuery.parseJSON(msg.responseText);
+        var ex = JSON.parse(msg.responseText);
         MessageBox.Hide();
         MessageBox.Exception(ex.Message, ex.StackTrace);
     }
@@ -115,7 +117,7 @@
     function removeConfirmed(param) {
         var params = [],
             ids = {
-                field: 'Id',
+                field: "Id",
                 values: []
             },
             index;
@@ -123,7 +125,7 @@
         if (param !== undefined) {
             params[0] = param;
         } else {
-            params = $("#tblParameters").bootstrapTable('getSelections');
+            params = $("#tblParameters").bootstrapTable("getSelections");
         }
 
         for (index = 0; index < params.length; index += 1) {
@@ -131,7 +133,7 @@
         }
 
         AjaxUtil.Call("Parameters.aspx/DeleteParametersJSON",
-                      "{'Ids':'" + ids.values.join() + "'}",
+                      '{Ids:"' + ids.values.join() + '"}',
                       function (result) { removeCallbackOk(result, ids); },
                       removeCallbackFailed);
 
@@ -153,34 +155,34 @@
 
     /*---   S E T U P   ---*/
     function setupToolbar() {
-        var selectedRows = $("#tblParameters").bootstrapTable('getSelections');
+        var selectedRows = $("#tblParameters").bootstrapTable("getSelections");
         if (selectedRows.length === 0) {
-            $("#btnEdit").prop('disabled', true);
-            $("#btnRemove").prop('disabled', true);
+            $("#btnEdit").prop("disabled", true);
+            $("#btnRemove").prop("disabled", true);
         } else {
             if (selectedRows.length === 1) {
-                $("#btnEdit").prop('disabled', false);
-                $("#btnRemove").prop('disabled', false);
+                $("#btnEdit").prop("disabled", false);
+                $("#btnRemove").prop("disabled", false);
             } else {
-                $("#btnEdit").prop('disabled', true);
-                $("#btnRemove").prop('disabled', false);
+                $("#btnEdit").prop("disabled", true);
+                $("#btnRemove").prop("disabled", false);
             }
         }
     }
     function setupTable() {
         window.actionEvents = {
-            'click .edit': function (e, value, row, index) {
+            "click .edit": function (e, value, row, index) {
                 showEditDialog(row);
             },
-            'click .remove': function (e, value, row, index) {
+            "click .remove": function (e, value, row, index) {
                 showRemoveDialog(row);
             }
         };
     }
     function setupForm() {
-        $("#txtName").attr('maxlength', '200');
-        $("#txtValue").attr('maxlength', '2000');
-        $("#txtDescription").attr('maxlength', '1000');
+        $("#txtName").attr("maxlength", "200");
+        $("#txtValue").attr("maxlength", '2000');
+        $("#txtDescription").attr("maxlength", "1000");
     }
     function actionFormatter(value, row, index) {
         return [
@@ -189,11 +191,11 @@
         ].join('');
     }
     function setupPage() {
-        $("#tblParameters')
-            .on('check.bs.table', function (e, row) {
+        $("#tblParameters")
+            .on("check.bs.table", function (e, row) {
                 setupToolbar();
             })
-            .on('uncheck.bs.table', function (e, row) {
+            .on("uncheck.bs.table", function (e, row) {
                 setupToolbar();
             });
         setupTable();
@@ -203,18 +205,20 @@
 
     /*---   L O A D   ---*/
     function afterTableLoad() {
-        if (sessionStorage.getItem('search_all_selected_id') !== null) {
-            var id = sessionStorage.getItem('search_all_selected_id'),
+        //console.log("sessionStorage.getItem('search_all_selected_id'): " + sessionStorage.getItem("search_all_selected_id"));
+        //console.log("type of sessionStorage.getItem('search_all_selected_id'): " + typeof sessionStorage.getItem("search_all_selected_id"));
+        if (sessionStorage.getItem("search_all_selected_id").toString() !== 'null') {
+            var id = sessionStorage.getItem("search_all_selected_id"),
                 index = TableUtil.getTableIndexById('#tblParameters', id);
-            $("#tblParameters").bootstrapTable('check', index);
+            $("#tblParameters").bootstrapTable("check", index);
             showEditDialog();
-            sessionStorage.setItem('search_all_selected_id', null);
+            sessionStorage.setItem("search_all_selected_id", null);
         }
     }
     function getParametersCallbackOk(result) {
-        $("#tblParameters").bootstrapTable('destroy');
+        $("#tblParameters").bootstrapTable("destroy");
         $("#tblParameters").bootstrapTable({
-            data: jQuery.parseJSON(result.d)
+            data: JSON.parse(result.d)
         });
         setupToolbar();
         afterTableLoad();

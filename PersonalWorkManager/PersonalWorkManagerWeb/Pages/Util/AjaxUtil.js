@@ -2,7 +2,7 @@
 var AjaxUtil = (function () {
 
     function defaultFailFunc(msg) {
-        var ex = jQuery.parseJSON(msg.responseText);
+        var ex = JSON.parse(msg.responseText);
         MessageBox.Exception(ex.Message, ex.StackTrace);
     }
 

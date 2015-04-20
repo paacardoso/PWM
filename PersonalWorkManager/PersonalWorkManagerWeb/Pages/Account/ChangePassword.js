@@ -28,28 +28,29 @@
 
     /*---   U P D A T E   ---*/
     function updatePasswordCallbackOk(result) {
-        //alert('success ... ');
-        var msg = jQuery.parseJSON(result.d);
-        if (msg.result === true) {
-            window.location.href = Master.resolveURL("/Pages/Projects.aspx");
+        console.log('success ... ');
+        var msg = JSON.parse(result.d);
+        console.log('msg: ' + JSON.stringify(msg));
+        if (msg.Result === true) {
+            window.location.href = UrlUtil.resolveURL("/Pages/Projects.aspx");
         } else {
-            MessageBox.Info(msg.message);
+            MessageBox.Info(msg.Message);
         }
     }
     function updatePasswordCallbackFailed(msg) {
-        //alert('failed ... ');
-        var ex = jQuery.parseJSON(msg.responseText);
+        console.log('failed ... ');
+        var ex = JSON.parse(msg.responseText);
         MessageBox.Exception(ex.Message, ex.StackTrace);
     }
     function updatePassword() {
         var currentUser;
         if (validatePassword() === true) {
-            currentUser = jQuery.parseJSON(sessionStorage.getItem('current_resource'));
-            //alert('changing id: ' + currentUser.Id);
+            currentUser = JSON.parse(sessionStorage.getItem("current_resource"));
+            console.log('changing id: ' + currentUser.Id);
             AjaxUtil.Call("ChangePassword.aspx/ChangePasswordJSON",
-                          "{'Id':" + currentUser.Id + ", " +
-                          "'OldPassword':'" + $("#txtOldPassword").val() + "', " +
-                          "'NewPassword':'" + $("#txtNewPassword").val() + "'}",
+                          '{Id:' + currentUser.Id + ', ' +
+                          'OldPassword:"' + $("#txtOldPassword").val() + '", ' +
+                          'NewPassword:"' + $("#txtNewPassword").val() + '"}',
                           updatePasswordCallbackOk,
                           updatePasswordCallbackFailed);
         }
@@ -61,9 +62,9 @@
 
     /*---   S E T U P   ---*/
     function setupForm() {
-        $("#txtOldPassword").attr('maxlength', '200');
-        $("#txtNewPassword").attr('maxlength', '2000');
-        $("#txtConfirmPassword").attr('maxlength', '1000');
+        $("#txtOldPassword").attr("maxlength", "200");
+        $("#txtNewPassword").attr("maxlength", "2000");
+        $("#txtConfirmPassword").attr("maxlength", "1000");
     }
     function setupPage() {
         setupForm();
