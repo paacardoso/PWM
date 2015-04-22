@@ -16,17 +16,21 @@
         </div>
     </div>
 
-    <div class="row">
-        <form class="form-horizontal" role="form">
-            <label class="control-label col-sm-1" for="ddlProject">Projecto: </label>
-            <div class="col-sm-11">
-                <select id="ddlProject" placeholder="Escolha um projecto ...">
-                </select>
+    <div id="div1" class="container-fluid">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label col-sm-1" for="ddlProject">Projecto: </label>
+                <div class="input-group col-sm-11">
+                    <select id="ddlProject" placeholder="Escolha um projecto ..."></select>
+                    <span class="input-group-addon" onclick="Projects.newProject();">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </span>
+                </div>
             </div>
-        </form>
+        </div>
     </div>
 
-    <div class="panel panel-default container-fluid">
+    <div id="divMain" class="panel panel-default container-fluid">
         <p></p>
         <ul class="nav nav-tabs" id="tabProject">
             <li class="active"><a href="#tabMain" onclick="Projects.switchTab('project');" data-toggle="tab">Projecto</a></li>
@@ -38,10 +42,7 @@
         <div class="tab-content">
             <div class="tab-pane active" id="tabMain">
                 <p></p>
-                <div id="tlbProject" class="btn-group btn-group-md" style="display: none">
-                    <button id="btnProjectNew" type="button" class="btn btn-default" onclick="Projects.newProject();">
-                        <i class="glyphicon glyphicon-plus"></i>&nbsp;Novo
-                    </button>
+                <div id="tlbProject" class="btn-group btn-group-md">
                     <button id="btnProjectSave" type="button" class="btn btn-default" onclick="Projects.saveProject();">
                         <i class="glyphicon glyphicon-floppy-save"></i>&nbsp;Guardar
                     </button>
@@ -53,7 +54,7 @@
                     </button>
                 </div>
                 <p></p>
-                <form class="form-horizontal">
+                <div class="form-horizontal">
                     <input type="hidden" id="txtId"/>
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="txtCode">Código: </label>
@@ -98,7 +99,7 @@
                             </select>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
             <div class="tab-pane" id="tabTasks">
                 <p></p>
@@ -162,8 +163,7 @@
                     <h4 class="modal-title" id="mdlTaskLabel"></h4>
                 </div>
                 <div class="modal-body">
-                    <div id="divModalMessage" style="display: none">
-                    </div>
+                    <div id="divModalMessage"></div>
                     <form>
                         <input type="hidden" id="txtTaskId" />
                         <div class="form-group">

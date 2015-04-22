@@ -1,36 +1,49 @@
 ﻿/*---   M E S S A G E B O X   ---*/
 var MessageBox = (function () {
 
-    function showMainMessage(msg, level, icon, optional) {
+    function showMainMessage(msg, level, icon, options) {
 
         var html,
-            divElement;
+            divElement,
+            defaultOptions = {
+                StackTrace: ""
+            };
+
+        if (options !== undefined) {
+            jQuery.extend(options, defaultOptions);
+        } else {
+            options = defaultOptions;
+        }
 
         html = "<div class='row'>" +
-                    "<div class='col-sm-1'>" +
-                        "<span style='font-size: 2.5em;' class='glyphicon glyphicon-" +
-                        icon + "' aria-hidden='true'></span>" +
-                    "</div>" +
-                    "<div class='col-sm-11'>" +
-                        "<a href='#' class='close' onclick=\"$('#divMainMessage')" +
-                        ".hide();\">&times;</a>" +
-                        "<strong><span>" + msg + "</span></strong>";
-        if (optional !== undefined) {
+                   "<div class='col-sm-1'>" +
+                       "<span style='font-size: 2.5em;' class='glyphicon glyphicon-" +
+                       icon + "' aria-hidden='true'></span>" +
+                   "</div>" +
+                   "<div class='col-sm-11'>" +
+                       "<a href='#' class='close' onclick=\"$('#divMainMessage')" +
+                       ".hide();\">&times;</a>" +
+                       "<strong><span>" + msg + "</span></strong>";
+        if (options.StackTrace !== "") {
             html += "<span style='float: right'>" +
-                            "<a style='text-align: right; color: #AAAAAA' href='#'" +
-                            " onclick=\"$('#lblMainStackTrace').toggle();\">" +
-                            "StackTrace&nbsp;</a>" +
-                        "</span>" +
-                        "<div style='display: none'>" +
-                            "<hr>" +
-                            optional +
-                        "</div>";
+                        "<a style='text-align: right; color: #AAAAAA' href='#'" +
+                        " onclick=\"$('#lblMainStackTrace').toggle();\">" +
+                        "StackTrace&nbsp;</a>" +
+                    "</span>" +
+                    "<div style='display: none'>" +
+                        "<hr>" +
+                        options.StackTrace +
+                    "</div>";
         }
-        html += "</div>" +
-                       "</div>";
+        html +=    "</div>" +
+               "</div>";
 
-        if ($("#divModalMessage").length) {
-            divElement = "#divModalMessage";
+        if ($("#divModalMessage").length > 0) {
+            if ($("#divModalMessage").is(":visible")) {
+                divElement = "#divModalMessage";
+            } else {
+                divElement = "#divMainMessage";
+            }
         } else {
             divElement = "#divMainMessage";
         }
@@ -57,24 +70,23 @@ var MessageBox = (function () {
     }
 
     return {
-        // Message Methods
-        Success: function (msg, optional) {
-            showMainMessage(msg, "success", "ok", optional);
+        Success: function (msg, options) {
+            showMainMessage(msg, "success", "ok", options);
         },
-        Info: function (msg, optional) {
-            showMainMessage(msg, "info", "exclamation-sign", optional);
+        Info: function (msg, options) {
+            showMainMessage(msg, "info", "exclamation-sign", options);
         },
-        Warning: function (msg, optional) {
-            showMainMessage(msg, "warning", "warning-sign", optional);
+        Warning: function (msg, options) {
+            showMainMessage(msg, "warning", "warning-sign", options);
         },
-        Danger: function (msg, optional) {
-            showMainMessage(msg, "danger", "remove", optional);
+        Danger: function (msg, options) {
+            showMainMessage(msg, "danger", "remove", options);
         },
-        Error: function (msg, optional) {
-            showMainMessage(msg, "danger", "remove", optional);
+        Error: function (msg, options) {
+            showMainMessage(msg, "danger", "remove", options);
         },
-        Exception: function (msg, optional) {
-            showMainMessage(msg, "danger", "remove", optional);
+        Exception: function (msg, options) {
+            showMainMessage(msg, "danger", "remove", options);
         },
         Clear: function () {
             clearMain();
@@ -84,7 +96,9 @@ var MessageBox = (function () {
         Ask: function (title, message, cancelledFunc, confirmedFunc) {
             msgBoxAsk(title, message, cancelledFunc, confirmedFunc);
         },
-        Hide: function () { msgBoxHide(); }
+        Hide: function () {
+            msgBoxHide();
+        }
 
     };
 

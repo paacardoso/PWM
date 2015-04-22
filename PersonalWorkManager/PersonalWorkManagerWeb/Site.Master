@@ -1,7 +1,9 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="PersonalWorkManagerWeb.SiteMaster" %>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<%--  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" --%>
+<%-- xmlns="http://www.w3.org/1999/xhtml" --%>
+<!DOCTYPE html>
+<html xml:lang="en">
 <head runat="server">
     <title>PWM - Personal Work Manager</title>
 
@@ -356,22 +358,7 @@
 
                     <%--Label da mensagem geral--%>
                     <p></p>
-                    <div id="divMainMessage" runat="server" style="display: none">
-                        <%--<div class="row">
-                            <div class="col-sm-1">
-                                <span id="imgMainMessageIcon" style="font-size: 2.5em;" class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                            </div>
-                            <div class="col-sm-11">
-                                <strong><span id="lblMainMessageText" runat="server"></span></strong>
-                                <a href="#" class="close" onclick="$('#divMainMessage').hide();">&times;</a>
-                                <span id="lnkMainStackTrace" runat="server" style="float: right">
-                                    <a style="text-align: right; color: #AAAAAA" href="#" onclick="$('#lblMainStackTrace').toggle();">StackTrace&nbsp;</a>
-                                </span>
-                                <div id="lblMainStackTrace" runat="server" style="display: none">
-                                </div>
-                            </div>
-                        </div>--%>
-                    </div>
+                    <div id="divMainMessage"></div>
 
                     <%--Questão Sim / Cancelar--%>
                     <div class="modal fade" id="mdlQuestion" tabindex="-1" role="dialog" aria-labelledby="mdlQuestionLabel"

@@ -64,8 +64,7 @@
                     <h4 class="modal-title" id="mdlLabel"></h4>
                 </div>
                 <div class="modal-body">
-                    <div id="divModalMessage" style="display: none">
-                    </div>
+                    <div id="divModalMessage"></div>
                     <form>
                         <input type="hidden" id="txtId">
                         <div class="form-group">

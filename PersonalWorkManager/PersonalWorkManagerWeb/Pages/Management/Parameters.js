@@ -27,7 +27,7 @@
     }
     function insertCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, ex.StackTrace);
+        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace, Div: "#divModalMessage" });
     }
     function insert() {
         if (validateRequired() === true) {
@@ -68,7 +68,7 @@
     }
     function updateCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, ex.StackTrace);
+        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
     }
     function update() {
         if (validateRequired() === true) {
@@ -109,7 +109,7 @@
     function removeCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
         MessageBox.Hide();
-        MessageBox.Exception(ex.Message, ex.StackTrace);
+        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
     }
     function removeCancelled() {
         MessageBox.Hide();
@@ -205,8 +205,10 @@
 
     /*---   L O A D   ---*/
     function afterTableLoad() {
-        //console.log("sessionStorage.getItem('search_all_selected_id'): " + sessionStorage.getItem("search_all_selected_id"));
-        //console.log("type of sessionStorage.getItem('search_all_selected_id'): " + typeof sessionStorage.getItem("search_all_selected_id"));
+        //console.log("sessionStorage.getItem('search_all_selected_id'): " +
+        //    sessionStorage.getItem("search_all_selected_id"));
+        //console.log("type of sessionStorage.getItem('search_all_selected_id'): " +
+        //    typeof sessionStorage.getItem("search_all_selected_id"));
         if (sessionStorage.getItem("search_all_selected_id").toString() !== 'null') {
             var id = sessionStorage.getItem("search_all_selected_id"),
                 index = TableUtil.getTableIndexById('#tblParameters', id);

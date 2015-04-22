@@ -21,7 +21,7 @@
     }
     function loginCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, ex.StackTrace);
+        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
     }
     function login() {
         AjaxUtil.Call("Login.aspx/LoginJSON",

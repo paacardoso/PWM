@@ -3,7 +3,7 @@ var AjaxUtil = (function () {
 
     function defaultFailFunc(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, ex.StackTrace);
+        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
     }
 
     function ajaxCall(url, data, doneFunc, failFunc) {

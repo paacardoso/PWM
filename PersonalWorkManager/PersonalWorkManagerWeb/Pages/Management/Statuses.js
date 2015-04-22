@@ -38,7 +38,7 @@
     }
     function insertCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, ex.StackTrace);
+        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
     }
     function insert() {
         if (validateRequired() === true) {
@@ -82,7 +82,7 @@
     }
     function updateCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, ex.StackTrace);
+        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
     }
     function update() {
         if (validateRequired() === true) {
@@ -126,7 +126,7 @@
     function removeCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
         MessageBox.Hide();
-        MessageBox.Exception(ex.Message, ex.StackTrace);
+        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
     }
     function removeCancelled() {
         MessageBox.Hide();

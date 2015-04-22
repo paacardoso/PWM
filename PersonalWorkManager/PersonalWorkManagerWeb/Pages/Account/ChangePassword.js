@@ -40,7 +40,7 @@
     function updatePasswordCallbackFailed(msg) {
         console.log('failed ... ');
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, ex.StackTrace);
+        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
     }
     function updatePassword() {
         var currentUser;
