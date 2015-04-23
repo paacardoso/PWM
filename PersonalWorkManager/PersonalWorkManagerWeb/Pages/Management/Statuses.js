@@ -97,21 +97,21 @@
         }
     }
     function showEditDialog(row) {
-        var param;
+        var status;
         if (row === undefined) {
-            param = $("#tblStatuses").bootstrapTable("getSelections")[0];
+            status = $("#tblStatuses").bootstrapTable("getSelections")[0];
         } else {
-            param = row;
+            status = row;
         }
         MessageBox.Clear();
         $("#mdlLabel").text("Editar Estado");
-        $("#txtId").val(param.Id);
-        $("#txtName").val(param.Name);
-        $("#txtDescription").val(param.Description);
-        //$("#ddlStatusType").val(param.IdStatusType);
-        $("#ddlStatusType option:contains('" + param.StatusTypeName + "')")
+        $("#txtId").val(status.Id);
+        $("#txtName").val(status.Name);
+        $("#txtDescription").val(status.Description);
+        //$("#ddlStatusType").val(status.IdStatusType);
+        $("#ddlStatusType option:contains('" + status.StatusTypeName + "')")
             .attr("selected", true);
-        $("#txtOrder").val(param.Order);
+        $("#txtOrder").val(status.Order);
         $("#btnActionConfirmed").unbind("click");
         $("#btnActionConfirmed").on("click", update);
         $("#mdlStatus").modal("show");
@@ -131,22 +131,22 @@
     function removeCancelled() {
         MessageBox.Hide();
     }
-    function removeConfirmed(param) {
-        var params = [],
+    function removeConfirmed(status) {
+        var statuses = [],
             ids = {
                 field: 'Id',
                 values: []
             },
             index;
 
-        if (param !== undefined) {
-            params[0] = param;
+        if (status !== undefined) {
+            statuses[0] = status;
         } else {
-            params = $("#tblStatuses").bootstrapTable("getSelections");
+            statuses = $("#tblStatuses").bootstrapTable("getSelections");
         }
 
-        for (index = 0; index < params.length; index += 1) {
-            ids.values[index] = params[index].Id;
+        for (index = 0; index < statuses.length; index += 1) {
+            ids.values[index] = statuses[index].Id;
         }
 
         AjaxUtil.Call("Statuses.aspx/DeleteStatusesJSON",
@@ -155,12 +155,12 @@
                       removeCallbackFailed);
 
     }
-    function showRemoveDialog(param) {
-        if (param !== undefined) {
+    function showRemoveDialog(status) {
+        if (status !== undefined) {
             MessageBox.Ask("Remover Estado",
-                           "Confirma a remoção do Estado '" + param.Name + "' ?",
+                           "Confirma a remoção do Estado '" + status.Name + "' ?",
                            removeCancelled,
-                           function () { removeConfirmed(param); });
+                           function () { removeConfirmed(status); });
         } else {
             MessageBox.Ask("Remover Estado",
                            "Confirma a remoção dos Estados seleccionados ?",
@@ -285,7 +285,7 @@
         getStatuses: function () { return getStatuses(); },
         showAddDialog: function () { return showAddDialog(); },
         showEditDialog: function (row) { return showEditDialog(row); },
-        showRemoveDialog: function (param) { return showRemoveDialog(param); }
+        showRemoveDialog: function (status) { return showRemoveDialog(status); }
     };
 
 }());

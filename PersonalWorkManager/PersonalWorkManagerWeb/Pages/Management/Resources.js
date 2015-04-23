@@ -93,19 +93,19 @@
         }
     }
     function showEditDialog(row) {
-        var param;
+        var resource;
         if (row === undefined) {
-            param = $("#tblResources").bootstrapTable("getSelections")[0];
+            resource = $("#tblResources").bootstrapTable("getSelections")[0];
         } else {
-            param = row;
+            resource = row;
         }
         MessageBox.Clear();
         $("#mdlLabel").text("Editar Recurso");
-        $("#txtId").val(param.Id);
-        $("#txtLogin").val(param.Login);
-        $("#txtName").val(param.Name);
-        //$("#txtPassword").val(param.Password);
-        $("#ddlStatus option:contains('" + param.StatusName + "')")
+        $("#txtId").val(resource.Id);
+        $("#txtLogin").val(resource.Login);
+        $("#txtName").val(resource.Name);
+        //$("#txtPassword").val(resource.Password);
+        $("#ddlStatus option:contains('" + resource.StatusName + "')")
             .attr('selected', true);
         $("#btnActionConfirmed").unbind("click");
         $("#btnActionConfirmed").on("click", update);
@@ -126,36 +126,35 @@
     function removeCancelled() {
         MessageBox.Hide();
     }
-    function removeConfirmed(param) {
-        var params = [],
+    function removeConfirmed(resource) {
+        var resources = [],
             ids = {
                 field: "Id",
                 values: []
             },
             index;
 
-        if (param !== undefined) {
-            params[0] = param;
+        if (resource !== undefined) {
+            resources[0] = resource;
         } else {
-            params = $("#tblResources").bootstrapTable("getSelections");
+            resources = $("#tblResources").bootstrapTable("getSelections");
         }
 
-        for (index = 0; index < params.length; index += 1) {
-            ids.values[index] = params[index].Id;
+        for (index = 0; index < resources.length; index += 1) {
+            ids.values[index] = resources[index].Id;
         }
 
         AjaxUtil.Call("Resources.aspx/DeleteResourcesJSON",
                       '{Ids:"' + ids.values.join() + '"}',
                       function (result) { removeCallbackOk(result, ids); },
                       removeCallbackFailed);
-
     }
-    function showRemoveDialog(param) {
-        if (param !== undefined) {
+    function showRemoveDialog(resource) {
+        if (resource !== undefined) {
             MessageBox.Ask("Remover Recurso",
-                           "Confirma a remoção do Recurso '" + param.Name + "' ?",
+                           "Confirma a remoção do Recurso '" + resource.Name + "' ?",
                            removeCancelled,
-                           function () { removeConfirmed(param); });
+                           function () { removeConfirmed(resource); });
         } else {
             MessageBox.Ask("Remover Recurso",
                            "Confirma a remoção dos Recursos seleccionados ?",
@@ -279,7 +278,7 @@
         getResources: function () { return getResources(); },
         showAddDialog: function () { return showAddDialog(); },
         showEditDialog: function (row) { return showEditDialog(row); },
-        showRemoveDialog: function (param) { return showRemoveDialog(param); }
+        showRemoveDialog: function (resource) { return showRemoveDialog(resource); }
     };
 
 }());
