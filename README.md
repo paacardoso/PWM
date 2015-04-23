@@ -1,26 +1,17 @@
 # PWM
 Personal Work Manager
 
-## Descrição
-- O PWM (Personal Work Manager), é uma solução que permite gestão de várias informações relacionadas com o dia-a-dia de cada pessoa.
-  Nesta 1ª versão, permite a gestão de projectos pessoais e profissionais.
-  Para cada projecto, é possível atribuir notas, tarefas, alertas um estado (Activo, Pendente, ...).
-  Será contabilizado o tempo em que trabalhou nesse projecto de forma a poder ser efectuado um cálculo sobre o tempo que foi
-  consumido.
+## Description
+- PWM (Personal Work Manager), is a day-to-day management application where one can store several informations about it's own
+  life projects.
+  The main element in this application is the project. The project can relate with tasks, alerts, notes and work sessions.
+  This way, and using this information, one can execute all the necessary work that a project demands.
+  All work is related to one resource, so login is always required. This way PWM can trace all actions made within the project.
+  This include not only changes to the project, but also, logging the time spent within each project's task.
 
 
-## Requisitos Gerais
-- Projectos
-  - Gerir projectos profissionais e pessoais. Onde seja possível guardar a informação do projecto.
-  - Ter um alerta com intervalos muito curtos (10 min) com a indicação de qual o projecto onde estou a trabalhar. Desta forma
-    garante-se que a contagem de tempo do projecto é a correcta.
-- Tarefas
-  - Definição de tarefas gerais ou aplicadas aos projectos
-- Alertas
-  - Defnição de alertas gerais ou aplicados aos projectos/tarefas
-- Estados
-  - Definição de estados para cada tipo de objecto. Sendo que os estados dos projectos são diferentes do estado dos alertas,
-    por exemplo.
-- Recursos
-  - Definição de recursos (pessoas), a quem se entrega a execução dos projectos/tarefas
-  - O recurso deverá efectuar login à aplicação de forma a ser possível contabilizar o seu tempo de trabalho.
+## Future implementations
+- Financial Accounts Management
+  Management of all accounts of a person, including the possibility of home banking lists text parsing.
+- Work Sessions Manager
+  Windows App Agent that will manage all the work made in a persons computer.
