@@ -33,11 +33,11 @@
     <div id="divMain" class="panel panel-default container-fluid">
         <p></p>
         <ul class="nav nav-tabs" id="tabProject">
-            <li class="active"><a href="#tabMain" onclick="Projects.switchTab('project');" data-toggle="tab">Projecto</a></li>
-            <li><a href="#tabTasks" onclick="Projects.switchTab('tasks');" data-toggle="tab">Tarefas</a></li>
-            <li><a href="#tabAlerts" onclick="Projects.switchTab('alerts');" data-toggle="tab">Alertas</a></li>
-            <li><a href="#tabNotes" onclick="Projects.switchTab('notes');" data-toggle="tab">Notas</a></li>
-            <li><a href="#tabSessions" onclick="Projects.switchTab('sessions');" data-toggle="tab">Sessões</a></li>
+            <li class="active"><a href="#tabMain" id="ancMain" data-toggle="tab">Projecto</a></li>
+            <li><a href="#tabTasks" id="ancTasks" data-toggle="tab">Tarefas</a></li>
+            <li><a href="#tabAlerts" id="ancAlerts" data-toggle="tab">Alertas</a></li>
+            <li><a href="#tabNotes" id="ancNotes" data-toggle="tab">Notas</a></li>
+            <li><a href="#tabSessions" id="ancSessions" data-toggle="tab">Sessões</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="tabMain">
@@ -102,19 +102,18 @@
                 </div>
             </div>
             <div class="tab-pane" id="tabTasks">
-                <p></p>
                 <div id="tlbTasks" class="btn-group btn-group-md">
-                    <button id="btnTaskNew" type="button" class="btn btn-default" onclick="ProjectTasks.newTask();">
+                    <button id="btnTaskRefresh" type="button" class="btn btn-default" onclick="ProjectTasks.getTasks();">
+                        <i class="glyphicon glyphicon-refresh"></i>&nbsp;Actualizar
+                    </button>
+                    <button id="btnAdd" type="button" class="btn btn-default" onclick="ProjectTasks.showAddDialog();">
                         <i class="glyphicon glyphicon-plus"></i>&nbsp;Nova
                     </button>
-                    <button id="btnTaskSave" type="button" class="btn btn-default" onclick="ProjectTasks.saveTask();">
-                        <i class="glyphicon glyphicon-floppy-save"></i>&nbsp;Guardar
+                    <button id="btnEdit" type="button" class="btn btn-default" onclick="ProjectTasks.showEditDialog();">
+                        <i class="glyphicon glyphicon-edit"></i>&nbsp;Editar
                     </button>
-                    <button id="btnTaskRemove" type="button" class="btn btn-default" onclick="ProjectTasks.removeTask();">
+                    <button id="btnRemove" type="button" class="btn btn-default" onclick="ProjectTasks.showRemoveDialog();">
                         <i class="glyphicon glyphicon-remove"></i>&nbsp;Remover
-                    </button>
-                    <button id="btnTaskCancel" type="button" class="btn btn-default" onclick="ProjectTasks.cancelNewTask();">
-                        <i class="glyphicon glyphicon-arrow-left"></i>&nbsp;Cancelar
                     </button>
                 </div>
                 <table id="tblTasks" 

@@ -155,6 +155,77 @@
                 return json;
             }
         }
+
+        [WebMethod]
+        public static string GetTaskStatusesJSON()
+        {
+            using (var objCtx = new PWMEntities())
+            {
+                var records = from e in objCtx.Status
+                              where e.IdStatusType.Equals((long)DBUtil.StatusTypes.Task)
+                              select new
+                              {
+                                  Id = e.Id,
+                                  Name = e.Name
+                              };
+                string json = JsonConvert.SerializeObject(records);
+                return json;
+            }
+        }
+
+        [WebMethod]
+        public static long InsertTaskJSON(string Name, string Description, int Order, int IdProject, int IdStatus)
+        {
+            Task Task = new Task() { Name = Name, Description = Description, Order = Order, IdProject = IdProject, IdStatus = IdStatus };
+            using (var objCtx = new PWMEntities())
+            {
+                objCtx.Task.AddObject(Task);
+                objCtx.SaveChanges();
+            }
+            return Task.Id;
+        }
+
+        [WebMethod]
+        public static bool UpdateTaskJSON(int Id, string Name, string Description, int Order, int IdProject, int IdStatus)
+        {
+            Task Task;
+            using (var objCtx = new PWMEntities())
+            {
+                Task = objCtx.Task.SingleOrDefault(x => x.Id == Id);
+                Task.Name = Name;
+                Task.Description = Description;
+                Task.Order = Order;
+                Task.IdProject = IdProject;
+                Task.IdStatus = IdStatus;
+                objCtx.SaveChanges();
+            }
+            return true;
+        }
+
+        [WebMethod]
+        public static bool DeleteTaskJSON(int Id)
+        {
+            Task Task;
+            using (var objCtx = new PWMEntities())
+            {
+                Task = objCtx.Task.SingleOrDefault(x => x.Id == Id);
+                objCtx.Task.DeleteObject(Task);
+                objCtx.SaveChanges();
+            }
+            return true;
+        }
+
+        [WebMethod]
+        public static bool DeleteTasksJSON(string Ids)
+        {
+            using (var objCtx = new PWMEntities())
+            {
+                objCtx.ExecuteStoreCommand("DELETE FROM Task WHERE Id IN (" + Ids + ")");
+                objCtx.SaveChanges();
+            }
+            return true;
+        }
+
 #endregion
 
         protected void Page_Load(object sender, EventArgs e)

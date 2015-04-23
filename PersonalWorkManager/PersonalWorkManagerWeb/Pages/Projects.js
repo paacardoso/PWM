@@ -28,35 +28,6 @@
         MessageBox.Clear();
         return true;
     }
-//    function setupFields(enabled) {
-//        $("#txtId").prop("disabled", enabled);
-//        $("#txtCode").prop("disabled", enabled);
-//        $("#txtName").prop("disabled", enabled);
-//        $("#txtDescription").prop("disabled", enabled);
-//        $("#txtStartDate").prop("disabled", enabled);
-//        $("#txtEndDate").prop("disabled", enabled);
-//        $("#ddlStatus").prop("disabled", enabled);
-//    }
-    function switchTab(tab) {
-        switch (tab) {
-        case "project":
-            $("#tlbProject").show();
-            $("#tlbTasks").hide();
-            $("#tlbAlerts").hide();
-            $("#tlbNotes").hide();
-            $("#tlbSessions").hide();
-            break;
-        case "tasks":
-            $("#tlbProject").hide();
-            $("#tlbTasks").show();
-            $("#tlbAlerts").hide();
-            $("#tlbNotes").hide();
-            $("#tlbSessions").hide();
-            ProjectTasks.tabLoad();
-            break;
-        default:
-        }
-    }
     function setupToolbar() {
         switch (tabProjectMode) {
         case "":
@@ -305,6 +276,32 @@
             onChange: function (value) { getProject(value); },
             dropdownParent: "body"
         });
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            // e.target // newly activated tab
+            // e.relatedTarget // previous active tab
+            var activatedTab = e.target.id.replace("anc", ""),
+                previousTab = e.relatedTarget.id.replace("anc", "");
+            //console.log("activatedTab: " + activatedTab);
+            //console.log("previousTab: " + previousTab);
+            // Switch toolbars
+            $("#tlb" + previousTab).hide();
+            $("#tlb" + activatedTab).show();
+            switch (activatedTab) {
+            case "Main":
+                break;
+            case "Tasks":
+                ProjectTasks.tabLoad();
+                break;
+            case "Alerts":
+                break;
+            case "Notes":
+                break;
+            case "Sessions":
+                break;
+            default:
+                break;
+            }
+        });
         $("#txtName").attr("maxlength", "200");
         $("#txtDescription").attr("maxlength", "1000");
         $("#txtStartDate").datetimepicker({
@@ -402,8 +399,6 @@
         }
         pageHasLoaded = true;
 
-        switchTab("project");
-
         setupPage();
 
         getProjectStatuses();
@@ -419,8 +414,7 @@
         cancelNewProject: function () { return cancelNewProject(); },
         saveProject: function () { return saveProject(); },
         removeProject: function () { return removeProject(); },
-        getProject: function (id) { return getProject(id); },
-        switchTab: function (tab) { return switchTab(tab); }
+        getProject: function (id) { return getProject(id); }
     };
 
 }());

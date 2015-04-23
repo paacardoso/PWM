@@ -27,7 +27,7 @@
     }
     function insertCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace, Div: "#divModalMessage" });
+        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace});
     }
     function insert() {
         if (validateRequired() === true) {
