@@ -77,7 +77,7 @@
                         </div>
                         <div class="form-group">
                             <label class="control-label" for="txtDescription">Descrição: </label>
-                            <input type="text" class="form-control" id="txtDescription" placeholder="Descrição">
+                            <textarea class="form-control" rows="3" id="txtDescription" placeholder="Descrição"></textarea>
                         </div>
                     </form>
                 </div>

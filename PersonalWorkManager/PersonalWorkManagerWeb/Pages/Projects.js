@@ -1,5 +1,5 @@
 ﻿/*jslint browser: true*/
-/*global ProjectTasks, ProjectAlerts*/
+/*global ProjectTasks, ProjectAlerts, ProjectNotes*/
 var Projects = (function () {
 
     var pageHasLoaded = false,
@@ -315,6 +315,7 @@ var Projects = (function () {
                 ProjectAlerts.tabLoad();
                 break;
             case "Notes":
+                ProjectNotes.tabLoad();
                 break;
             case "Sessions":
                 break;
