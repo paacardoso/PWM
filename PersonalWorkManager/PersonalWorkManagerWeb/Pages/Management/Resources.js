@@ -211,13 +211,14 @@
 
     /*---   L O A D   ---*/
     function afterTableLoad() {
-        var id, index;
-        if (sessionStorage.getItem("search_all_selected_id").toString() !== 'null') {
-            id = sessionStorage.getItem("search_all_selected_id");
-            index = TableUtil.getTableIndexById("#tblResources", id);
+        if (sessionStorage.getItem("search_all_selected_obj").toString() !== 'null') {
+            var obj,
+                index;
+            obj = JSON.parse(sessionStorage.getItem("search_all_selected_obj"));
+            index = TableUtil.getTableIndexById('#tblResources', obj.Id);
             $("#tblResources").bootstrapTable("check", index);
             showEditDialog();
-            sessionStorage.setItem("search_all_selected_id", null);
+            sessionStorage.setItem("search_all_selected_obj", null);
         }
     }
     function getResourcesCallbackOk(result) {

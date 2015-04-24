@@ -10,7 +10,7 @@
     public partial class Projects : System.Web.UI.Page
     {
 
-#region "Project"
+        #region "Project"
         [WebMethod]
         public static string GetProjectsJSON()
         {
@@ -131,9 +131,9 @@
             }
             return true;
         }
-#endregion
+        #endregion
 
-#region "Task"
+        #region "Task"
         [WebMethod]
         public static string GetTasksJSON(long IdProject)
         {
@@ -226,11 +226,97 @@
             return true;
         }
 
-#endregion
+        #endregion
 
+        #region "Alert"
+        [WebMethod]
+        public static string GetAlertsJSON(long IdProject)
+        {
+            using (var objCtx = new PWMEntities())
+            {
+                var records = from t in objCtx.Alert
+                              where t.IdProject == IdProject
+                              select new
+                              {
+                                  Id = t.Id,
+                                  Name = t.Name,
+                                  Description = t.Description,
+                                  DueDate = t.DueDate
+
+                              };
+                string json = JsonConvert.SerializeObject(records);
+                return json;
+            }
+        }
+
+        [WebMethod]
+        public static long InsertAlertJSON(string Name, string Description, string DueDate, int IdProject)
+        {
+            // Parse date with custom specifier.
+            CultureInfo provider = CultureInfo.InvariantCulture;
+            DateTime DueDateDT;
+            DueDateDT = DateTime.ParseExact(DueDate, "dd-mm-yyyy", provider);
+
+            Alert Alert = new Alert() { Name = Name, Description = Description, DueDate = DueDateDT, IdProject = IdProject };
+            using (var objCtx = new PWMEntities())
+            {
+                objCtx.Alert.AddObject(Alert);
+                objCtx.SaveChanges();
+            }
+            return Alert.Id;
+        }
+
+        [WebMethod]
+        public static bool UpdateAlertJSON(int Id, string Name, string Description, string DueDate, int IdProject)
+        {
+            // Parse date with custom specifier.
+            CultureInfo provider = CultureInfo.InvariantCulture;
+            DateTime DueDateDT;
+            DueDateDT = DateTime.ParseExact(DueDate, "dd-mm-yyyy", provider);
+
+            Alert Alert;
+            using (var objCtx = new PWMEntities())
+            {
+                Alert = objCtx.Alert.SingleOrDefault(x => x.Id == Id);
+                Alert.Name = Name;
+                Alert.Description = Description;
+                Alert.DueDate = DueDateDT;
+                Alert.IdProject = IdProject;
+                objCtx.SaveChanges();
+            }
+            return true;
+        }
+
+        [WebMethod]
+        public static bool DeleteAlertJSON(int Id)
+        {
+            Alert Alert;
+            using (var objCtx = new PWMEntities())
+            {
+                Alert = objCtx.Alert.SingleOrDefault(x => x.Id == Id);
+                objCtx.Alert.DeleteObject(Alert);
+                objCtx.SaveChanges();
+            }
+            return true;
+        }
+
+        [WebMethod]
+        public static bool DeleteAlertsJSON(string Ids)
+        {
+            using (var objCtx = new PWMEntities())
+            {
+                objCtx.ExecuteStoreCommand("DELETE FROM Alert WHERE Id IN (" + Ids + ")");
+                objCtx.SaveChanges();
+            }
+            return true;
+        }
+        #endregion
+
+        #region "Form Events"
         protected void Page_Load(object sender, EventArgs e)
         {
         }
+        #endregion
 
     }
 

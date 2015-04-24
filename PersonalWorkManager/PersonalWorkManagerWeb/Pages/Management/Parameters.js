@@ -205,16 +205,14 @@
 
     /*---   L O A D   ---*/
     function afterTableLoad() {
-        //console.log("sessionStorage.getItem('search_all_selected_id'): " +
-        //    sessionStorage.getItem("search_all_selected_id"));
-        //console.log("type of sessionStorage.getItem('search_all_selected_id'): " +
-        //    typeof sessionStorage.getItem("search_all_selected_id"));
-        if (sessionStorage.getItem("search_all_selected_id").toString() !== 'null') {
-            var id = sessionStorage.getItem("search_all_selected_id"),
-                index = TableUtil.getTableIndexById('#tblParameters', id);
+        if (sessionStorage.getItem("search_all_selected_obj").toString() !== 'null') {
+            var obj,
+                index;
+            obj = JSON.parse(sessionStorage.getItem("search_all_selected_obj"));
+            index = TableUtil.getTableIndexById('#tblParameters', obj.Id);
             $("#tblParameters").bootstrapTable("check", index);
             showEditDialog();
-            sessionStorage.setItem("search_all_selected_id", null);
+            sessionStorage.setItem("search_all_selected_obj", null);
         }
     }
     function getParametersCallbackOk(result) {
