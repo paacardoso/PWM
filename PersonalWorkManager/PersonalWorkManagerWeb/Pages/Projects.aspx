@@ -8,6 +8,7 @@
         <Scripts>
             <asp:ScriptReference Path="Projects.js" />
             <asp:ScriptReference Path="ProjectTasks.js" />
+            <asp:ScriptReference Path="ProjectAlerts.js" />
         </Scripts>
     </asp:ScriptManagerProxy>
     <div class="row">
@@ -106,13 +107,13 @@
                     <button id="btnTaskRefresh" type="button" class="btn btn-default" onclick="ProjectTasks.getTasks();">
                         <i class="glyphicon glyphicon-refresh"></i>&nbsp;Actualizar
                     </button>
-                    <button id="btnAdd" type="button" class="btn btn-default" onclick="ProjectTasks.showAddDialog();">
+                    <button id="btnTaskAdd" type="button" class="btn btn-default" onclick="ProjectTasks.showAddDialog();">
                         <i class="glyphicon glyphicon-plus"></i>&nbsp;Nova
                     </button>
-                    <button id="btnEdit" type="button" class="btn btn-default" onclick="ProjectTasks.showEditDialog();">
+                    <button id="btnTaskEdit" type="button" class="btn btn-default" onclick="ProjectTasks.showEditDialog();">
                         <i class="glyphicon glyphicon-edit"></i>&nbsp;Editar
                     </button>
-                    <button id="btnRemove" type="button" class="btn btn-default" onclick="ProjectTasks.showRemoveDialog();">
+                    <button id="btnTaskRemove" type="button" class="btn btn-default" onclick="ProjectTasks.showRemoveDialog();">
                         <i class="glyphicon glyphicon-remove"></i>&nbsp;Remover
                     </button>
                 </div>
@@ -140,7 +141,41 @@
             </table>
             </div>
             <div class="tab-pane" id="tabAlerts">
-                ... Alertas ...
+                <div id="tlbAlerts" class="btn-group btn-group-md">
+                    <button id="btnAlertRefresh" type="button" class="btn btn-default" onclick="ProjectAlerts.getAlerts();">
+                        <i class="glyphicon glyphicon-refresh"></i>&nbsp;Actualizar
+                    </button>
+                    <button id="btnAlertAdd" type="button" class="btn btn-default" onclick="ProjectAlerts.showAddDialog();">
+                        <i class="glyphicon glyphicon-plus"></i>&nbsp;Novo
+                    </button>
+                    <button id="btnAlertEdit" type="button" class="btn btn-default" onclick="ProjectAlerts.showEditDialog();">
+                        <i class="glyphicon glyphicon-edit"></i>&nbsp;Editar
+                    </button>
+                    <button id="btnAlertRemove" type="button" class="btn btn-default" onclick="ProjectAlerts.showRemoveDialog();">
+                        <i class="glyphicon glyphicon-remove"></i>&nbsp;Remover
+                    </button>
+                </div>
+                <table id="tblAlerts" 
+                   class="table table-striped table-bordered table-condensed"
+                   data-search="true"
+                   data-pagination="true"
+                   data-show-toggle="true"
+                   data-show-columns="true"
+                   data-sort-name="Id"
+                   data-sort-order="asc"
+                   data-toolbar="#tlbAlerts"
+                   data-click-to-select="true">
+                <thead>
+                <tr>
+                    <th data-field="state" data-checkbox="true"></th>
+                    <th data-field="Id" data-sortable="true">Id</th>
+                    <th data-field="Name" data-sortable="true">Nome</th>
+                    <th data-field="Description" data-sortable="true">Descrição</th>
+                    <th data-field="DueDate" data-sortable="true" data-formatter="ProjectAlerts.dueDateFormatter">Data</th>
+                    <th data-field="action" data-formatter="ProjectAlerts.actionFormatter" data-events="actionEvents">Acção</th>
+                </tr>
+                </thead>
+            </table>
             </div>
             <div class="tab-pane" id="tabNotes">
                 ... Notas ...
@@ -162,7 +197,7 @@
                     <h4 class="modal-title" id="mdlTaskLabel"></h4>
                 </div>
                 <div class="modal-body">
-                    <div id="divModalMessage"></div>
+                    <div id="divTaskModalMessage"></div>
                     <form>
                         <input type="hidden" id="txtTaskId" />
                         <div class="form-group">
@@ -193,5 +228,46 @@
             </div>
         </div>
     </div>
-    
+
+    <!-- Alerts Modal -->
+    <div class="modal fade" id="mdlAlert" tabindex="-1" role="dialog" aria-labelledby="mdlAlertLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="mdlAlertLabel"></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="divAlertModalMessage"></div>
+                    <form>
+                        <input type="hidden" id="txtAlertId" />
+                        <div class="form-group">
+                            <label class="control-label" for="txtAlertName">Nome: </label>
+                            <input type="text" class="form-control" id="txtAlertName" placeholder="Nome" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="txtAlertDescription">Descrição: </label>
+                            <input type="text" class="form-control" id="txtAlertDescription" placeholder="Descrição" />
+                        </div>
+                        <label class="control-label" for="txtAlertDueDate">Data: </label>
+                        <div class="input-group" id="txtAlertDueDate">
+                            <input type="text" class="form-control" placeholder="Data">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        Cancelar</button>
+                    <button id="btnAlertActionConfirmed" type="button" class="btn btn-primary">
+                        Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </asp:Content>

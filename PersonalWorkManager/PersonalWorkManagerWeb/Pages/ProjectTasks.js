@@ -21,7 +21,7 @@
             msg += "O campo 'Estado' é obrigatório.";
         }
         if (msg.length > 0) {
-            MessageBox.Info(msg);
+            MessageBox.Info(msg, { Div: "#divTaskModalMessage" });
             return false;
         }
         MessageBox.Clear();
@@ -42,7 +42,8 @@
     }
     function insertCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
+        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace,
+                                          Div: "#divTaskModalMessage" });
     }
     function insertTask() {
         if (validateInputFields() === true) {
@@ -85,7 +86,8 @@
     }
     function updateCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
+        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace,
+                                          Div: "#divTaskModalMessage" });
     }
     function update() {
         if (validateInputFields() === true) {
@@ -101,19 +103,19 @@
         }
     }
     function showEditDialog(row) {
-        var param;
+        var task;
         if (row === undefined) {
-            param = $("#tblTasks").bootstrapTable("getSelections")[0];
+            task = $("#tblTasks").bootstrapTable("getSelections")[0];
         } else {
-            param = row;
+            task = row;
         }
         MessageBox.Clear();
         $("#mdlTaskLabel").text("Editar Tarefa");
-        $("#txtTaskId").val(param.Id);
-        $("#txtTaskName").val(param.Name);
-        $("#txtTaskDescription").val(param.Description);
-        $("#txtTaskOrder").val(param.Order);
-        $("#ddlTaskStatus option:contains('" + param.StatusName + "')")
+        $("#txtTaskId").val(task.Id);
+        $("#txtTaskName").val(task.Name);
+        $("#txtTaskDescription").val(task.Description);
+        $("#txtTaskOrder").val(task.Order);
+        $("#ddlTaskStatus option:contains('" + task.StatusName + "')")
             .attr("selected", true);
         $("#btnTaskActionConfirmed").unbind("click");
         $("#btnTaskActionConfirmed").on("click", update);
@@ -129,7 +131,8 @@
     function removeCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
         MessageBox.Hide();
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
+        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace,
+                                          Div: "#divTaskModalMessage" });
     }
     function removeCancelled() {
         MessageBox.Hide();
@@ -175,15 +178,15 @@
     function setupToolbar() {
         var selectedRows = $("#tblTasks").bootstrapTable("getSelections");
         if (selectedRows.length === 0) {
-            $("#btnEdit").prop("disabled", true);
-            $("#btnRemove").prop("disabled", true);
+            $("#btnTaskEdit").prop("disabled", true);
+            $("#btnTaskRemove").prop("disabled", true);
         } else {
             if (selectedRows.length === 1) {
-                $("#btnEdit").prop("disabled", false);
-                $("#btnRemove").prop("disabled", false);
+                $("#btnTaskEdit").prop("disabled", false);
+                $("#btnTaskRemove").prop("disabled", false);
             } else {
-                $("#btnEdit").prop("disabled", true);
-                $("#btnRemove").prop("disabled", false);
+                $("#btnTaskEdit").prop("disabled", true);
+                $("#btnTaskRemove").prop("disabled", false);
             }
         }
     }
@@ -219,15 +222,14 @@
 
     /*---   L O A D   ---*/
     function afterTasksLoad() {
-        var id, index;
-        if (sessionStorage.getItem("search_all_selected_id").toString() !== 'null') {
-            id = sessionStorage.getItem("search_all_selected_id");
-
-            index = TableUtil.getTableIndexById('#tblTasks', id);
+        if (sessionStorage.getItem("search_all_selected_obj").toString() !== 'null') {
+            var obj,
+                index;
+            obj = JSON.parse(sessionStorage.getItem("search_all_selected_obj"));
+            index = TableUtil.getTableIndexById('#tblTasks', obj.Id);
             $("#tblTasks").bootstrapTable("check", index);
             showEditDialog();
-
-            sessionStorage.setItem("search_all_selected_id", null);
+            sessionStorage.setItem("search_all_selected_obj", null);
         }
     }
     function getTasksCallbackOk(result) {
@@ -272,7 +274,7 @@
         tabHasLoaded = true;
 
         setupPage();
-        
+
         getTaskStatuses();
         getTasks();
     }

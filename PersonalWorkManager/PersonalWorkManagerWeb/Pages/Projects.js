@@ -1,4 +1,6 @@
-﻿var Projects = (function () {
+﻿/*jslint browser: true*/
+/*global ProjectTasks, ProjectAlerts*/
+var Projects = (function () {
 
     var pageHasLoaded = false,
         tabProjectMode = "";
@@ -104,7 +106,8 @@
         }
     }
     function getProjectCallbackOk(result) {
-        var proj = JSON.parse(result.d)[0];
+        var proj = JSON.parse(result.d)[0],
+            obj;
         $("#txtId").val(proj.Id);
         $("#txtCode").val(proj.Code);
         $("#txtName").val(proj.Name);
@@ -115,10 +118,26 @@
             .val(DateUtil.Format(proj.EndDate));
         $("#ddlStatus").val(proj.IdStatus);
 
-        ProjectTasks.tabTasksHasLoaded = false;
-
-        $("#tabProject a[href='#tabMain']").tab("show");
         setupMode("edit");
+
+        if (sessionStorage.getItem("search_all_selected_obj").toString() !== 'null') {
+            obj = JSON.parse(sessionStorage.getItem("search_all_selected_obj"));
+            switch (obj.Type) {
+            case "task":
+                $('#tabProject a[href="#tabTasks"]').tab('show');
+                break;
+            case "alert":
+                $('#tabProject a[href="#tabAlerts"]').tab('show');
+                break;
+            case "note":
+                $('#tabProject a[href="#tabNotes"]').tab('show');
+                break;
+            default:
+                break;
+            }
+        } else {
+            $("#tabProject a[href='#tabMain']").tab("show");
+        }
     }
     //function getProjectCallbackFailed() {
     // handled by the default ajax function (AjaxUtil.js\defaultFailFunc)
@@ -293,6 +312,7 @@
                 ProjectTasks.tabLoad();
                 break;
             case "Alerts":
+                ProjectAlerts.tabLoad();
                 break;
             case "Notes":
                 break;
@@ -326,14 +346,29 @@
 
     /*---   L O A D   ---*/
     function afterProjectsLoad() {
-        if (sessionStorage.getItem("search_all_selected_id") !== null) {
-            /*
-            var id = sessionStorage.getItem("search_all_selected_id"),
+        if (sessionStorage.getItem("search_all_selected_obj").toString() !== 'null') {
+            var obj,
                 ddl = $("#ddlProject"),
-                selectize = ddl[0].selectize,
-                proj = selectize.getItem(selectize.setValue(id, false));
-            */
-            sessionStorage.setItem("search_all_selected_id", null);
+                selectize = ddl[0].selectize;
+            obj = JSON.parse(sessionStorage.getItem("search_all_selected_obj"));
+
+            switch (obj.Type) {
+            case "project":
+                //console.log("selecting project id: " + obj.Id);
+                selectize.setValue(obj.Id, false);
+                sessionStorage.setItem("search_all_selected_obj", null);
+                break;
+            case "task":
+            case "alert":
+            case "note":
+                //console.log("selecting project id: " + obj.IdProject);
+                selectize.setValue(obj.IdProject, false);
+                // session storage variable should not be cleared here,
+                // because it will be needed in getProjectCallbackOK()
+                break;
+            default:
+                break;
+            }
         }
     }
     function getProjectsCallbackOk(result) {
