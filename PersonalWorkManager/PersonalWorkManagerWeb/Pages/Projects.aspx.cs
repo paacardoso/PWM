@@ -312,6 +312,76 @@
         }
         #endregion
 
+        #region "Note"
+        [WebMethod]
+        public static string GetNotesJSON(long IdProject)
+        {
+            using (var objCtx = new PWMEntities())
+            {
+                var records = from t in objCtx.Note
+                              where t.IdProject == IdProject
+                              select new
+                              {
+                                  Id = t.Id,
+                                  Text = t.Text
+
+                              };
+                string json = JsonConvert.SerializeObject(records);
+                return json;
+            }
+        }
+
+        [WebMethod]
+        public static long InsertNoteJSON(string Text, int IdProject)
+        {
+            Note Note = new Note() { Text = Text, IdProject = IdProject };
+            using (var objCtx = new PWMEntities())
+            {
+                objCtx.Note.AddObject(Note);
+                objCtx.SaveChanges();
+            }
+            return Note.Id;
+        }
+
+        [WebMethod]
+        public static bool UpdateNoteJSON(int Id, string Text, int IdProject)
+        {
+            Note Note;
+            using (var objCtx = new PWMEntities())
+            {
+                Note = objCtx.Note.SingleOrDefault(x => x.Id == Id);
+                Note.Text = Text;
+                Note.IdProject = IdProject;
+                objCtx.SaveChanges();
+            }
+            return true;
+        }
+
+        [WebMethod]
+        public static bool DeleteNoteJSON(int Id)
+        {
+            Note Note;
+            using (var objCtx = new PWMEntities())
+            {
+                Note = objCtx.Note.SingleOrDefault(x => x.Id == Id);
+                objCtx.Note.DeleteObject(Note);
+                objCtx.SaveChanges();
+            }
+            return true;
+        }
+
+        [WebMethod]
+        public static bool DeleteNotesJSON(string Ids)
+        {
+            using (var objCtx = new PWMEntities())
+            {
+                objCtx.ExecuteStoreCommand("DELETE FROM Note WHERE Id IN (" + Ids + ")");
+                objCtx.SaveChanges();
+            }
+            return true;
+        }
+        #endregion
+
         #region "Form Events"
         protected void Page_Load(object sender, EventArgs e)
         {

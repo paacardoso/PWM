@@ -28,9 +28,9 @@
 
     /*---   U P D A T E   ---*/
     function updatePasswordCallbackOk(result) {
-        console.log('success ... ');
+        //console.log('success ... ');
         var msg = JSON.parse(result.d);
-        console.log('msg: ' + JSON.stringify(msg));
+        //console.log('msg: ' + JSON.stringify(msg));
         if (msg.Result === true) {
             window.location.href = UrlUtil.resolveURL("/Pages/Projects.aspx");
         } else {
@@ -38,7 +38,7 @@
         }
     }
     function updatePasswordCallbackFailed(msg) {
-        console.log('failed ... ');
+        //console.log('failed ... ');
         var ex = JSON.parse(msg.responseText);
         MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
     }
@@ -46,7 +46,7 @@
         var currentUser;
         if (validatePassword() === true) {
             currentUser = JSON.parse(sessionStorage.getItem("current_resource"));
-            console.log('changing id: ' + currentUser.Id);
+            //console.log('changing id: ' + currentUser.Id);
             AjaxUtil.Call("ChangePassword.aspx/ChangePasswordJSON",
                           '{Id:' + currentUser.Id + ', ' +
                           'OldPassword:"' + $("#txtOldPassword").val() + '", ' +

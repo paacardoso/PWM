@@ -1,5 +1,4 @@
-﻿/*---   S E S S I O N   S T O R A G E   I T E M S   */
-//
+﻿//
 // --> Authenticated User (JSON string)
 // sessionStorage.setItem("current_resource", JSON.stringify(currentUser));
 // var currentUser = JSON.parse(sessionStorage.getItem("current_resource"))
@@ -21,14 +20,12 @@ var Master = (function () {
     /*---   A F T E R   L O A D   ---*/
     /*---   A U T H E N T I C A T I O N   ---*/
     //function logout() {
-    //    alert('logging out ...');
     //    ajaxCall("Login.aspx/LogoutJSON",
     //             "",
     //             logoutCallbackOk,
     //             logoutCallbackFailed);
     //}
     //function logoutCallbackOk(result) {
-    //    alert('success !!!');
     //    sessionStorage.setItem("current_resource", null);
     //    window.location.href = resolveURL("/Default.aspx");
     //}
@@ -201,5 +198,8 @@ var Master = (function () {
 
 
     /*---   P U B L I C   ---*/
+
+
+    /*---   P R O T O T Y P E S   */
 
 }());

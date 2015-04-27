@@ -72,6 +72,7 @@
     <Content Include="Pages\Account\ChangePassword.aspx" />
     <Content Include="Pages\Account\ChangePassword.js" />
     <Content Include="Pages\ProjectAlerts.js" />
+    <Content Include="Pages\ProjectNotes.js" />
     <Content Include="Pages\Util\AjaxUtil.js" />
     <Content Include="Pages\Util\UrlUtil.js" />
     <Content Include="Pages\ProjectTasks.js" />

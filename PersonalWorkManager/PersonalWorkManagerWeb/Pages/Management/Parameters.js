@@ -19,11 +19,11 @@
     /*---   A D D   ---*/
     function insertCallbackOk(result) {
         $("#mdlParameter").modal("hide");
-        var data = '[{"Id":' + result.d + ', ' +
-                   '"Name":"' + $("#txtName").val() + '", ' +
-                   '"Value":"' + $("#txtValue").val() + '", ' +
-                   '"Description":"' + $("#txtDescription").val() + '"}]';
-        $("#tblParameters").bootstrapTable('append', JSON.parse(data));
+        var data = {"Id": result.d,
+                    "Name": $("#txtName").val(),
+                    "Value": $("#txtValue").val(),
+                    "Description": $("#txtDescription").val() };
+        $("#tblParameters").bootstrapTable('append', data);
     }
     function insertCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
@@ -184,12 +184,6 @@
         $("#txtValue").attr("maxlength", '2000');
         $("#txtDescription").attr("maxlength", "1000");
     }
-    function actionFormatter(value, row, index) {
-        return [
-            '<i style="cursor: pointer;" class="edit glyphicon glyphicon-edit"></i>',
-            '<i style="cursor: pointer;" class="remove glyphicon glyphicon-remove"></i>'
-        ].join('');
-    }
     function setupPage() {
         $("#tblParameters")
             .on("check.bs.table", function (e, row) {
@@ -205,14 +199,14 @@
 
     /*---   L O A D   ---*/
     function afterTableLoad() {
-        if (sessionStorage.getItem("search_all_selected_obj").toString() !== 'null') {
+        if (sessionStorage.getItem("search_all_selected_obj") !== null) {
             var obj,
                 index;
             obj = JSON.parse(sessionStorage.getItem("search_all_selected_obj"));
             index = TableUtil.getTableIndexById('#tblParameters', obj.Id);
             $("#tblParameters").bootstrapTable("check", index);
             showEditDialog();
-            sessionStorage.setItem("search_all_selected_obj", null);
+            sessionStorage.removeItem("search_all_selected_obj");
         }
     }
     function getParametersCallbackOk(result) {
@@ -251,9 +245,6 @@
 
     /*---   P U B L I C   ---*/
     return {
-        actionFormatter: function (value, row, index) {
-            return actionFormatter(value, row, index);
-        },
         getParameters: function () { return getParameters(); },
         showAddDialog: function () { return showAddDialog(); },
         showEditDialog: function (row) { return showEditDialog(row); },

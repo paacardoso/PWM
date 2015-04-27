@@ -18,10 +18,50 @@ var TableUtil = (function () {
         console.log("No index found for id: '" + id +
                     "' in table: '" + tableName + "'");
     }
+    function actionFormatter(value, row, index) {
+        return [
+            '<i style="cursor: pointer;" class="edit glyphicon glyphicon-edit"></i>',
+            '<i style="cursor: pointer;" class="remove glyphicon glyphicon-remove"></i>'
+        ].join('');
+    }
+    function textFormatter(value, row, index) {
+        var str,
+            i = 0,
+            pos,
+            lastPos;
+        str = value.replace(/\n/g, "<BR>");
+        pos = str.indexOf("<BR>");
+        lastPos = pos;
+        while (pos > -1 && i <= 4) {
+            lastPos = pos;
+            pos = str.indexOf("<BR>", pos + 1);
+            i += 1;
+        }
+        //console.log("i: " + i + "; pos: " + pos + "; lastPos: " + lastPos);
+        if (i <= 4) {
+            lastPos = str.lenght;
+        }
+        if (lastPos > -1) {
+            return str.substring(0, lastPos);
+        }
+        return str;
+    }
+    function dateFormatter(value, row, index) {
+        return DateUtil.Format(value);
+    }
 
     return {
         getTableIndexById: function (tableName, id) {
             return getTableIndexById(tableName, id);
+        },
+        actionFormatter: function (value, row, index) {
+            return actionFormatter(value, row, index);
+        },
+        textFormatter: function (value, row, index) {
+            return textFormatter(value, row, index);
+        },
+        dateFormatter: function (value, row, index) {
+            return dateFormatter(value, row, index);
         }
     };
 

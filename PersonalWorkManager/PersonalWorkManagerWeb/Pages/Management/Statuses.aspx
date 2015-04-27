@@ -47,7 +47,7 @@
                 <th data-field="Description" data-sortable="true">Descrição</th>
                 <th data-field="StatusTypeName" data-sortable="true">Tipo</th>
                 <th data-field="Order" data-sortable="true">Ordem</th>
-                <th data-field="action" data-formatter="Statuses.actionFormatter" data-events="actionEvents">Acção</th>
+                <th data-field="action" data-formatter="TableUtil.actionFormatter" data-events="actionEvents">Acção</th>
             </tr>
             </thead>
         </table>
