@@ -120,7 +120,7 @@ var Projects = (function () {
 
         setupMode("edit");
 
-        if (sessionStorage.getItem("search_all_selected_obj").toString() !== 'null') {
+        if (sessionStorage.getItem("search_all_selected_obj") !== null) {
             obj = JSON.parse(sessionStorage.getItem("search_all_selected_obj"));
             switch (obj.Type) {
             case "task":
@@ -347,7 +347,8 @@ var Projects = (function () {
 
     /*---   L O A D   ---*/
     function afterProjectsLoad() {
-        if (sessionStorage.getItem("search_all_selected_obj").toString() !== 'null') {
+        //console.log(typeof sessionStorage.getItem("search_all_selected_obj"));
+        if (sessionStorage.getItem("search_all_selected_obj") !== null) {
             var obj,
                 ddl = $("#ddlProject"),
                 selectize = ddl[0].selectize;
@@ -357,7 +358,7 @@ var Projects = (function () {
             case "project":
                 //console.log("selecting project id: " + obj.Id);
                 selectize.setValue(obj.Id, false);
-                sessionStorage.setItem("search_all_selected_obj", null);
+                sessionStorage.removeItem("search_all_selected_obj");
                 break;
             case "task":
             case "alert":

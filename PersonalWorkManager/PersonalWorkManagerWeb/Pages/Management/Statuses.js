@@ -28,13 +28,12 @@
     /*---   A D D   ---*/
     function insertCallbackOk(result) {
         $("#mdlStatus").modal("hide");
-        var data = '[{"Id":' + result.d + ', ' +
-                   '"Name":"' + $("#txtName").val() + '", ' +
-                   '"Description":"' + $("#txtDescription").val() + '", ' +
-                   '"StatusTypeName":"' +
-                        $("#ddlStatusType option:selected").text() + '", ' +
-                   '"Order":' + $("#txtOrder").val() + '}]';
-        $("#tblStatuses").bootstrapTable("append", JSON.parse(data));
+        var data = {"Id": result.d,
+                    "Name": $("#txtName").val(),
+                    "Description": $("#txtDescription").val(),
+                    "StatusTypeName": $("#ddlStatusType option:selected").text(),
+                    "Order": $("#txtOrder").val() };
+        $("#tblStatuses").bootstrapTable("append", data);
     }
     function insertCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
@@ -201,12 +200,6 @@
         $("#txtDescription").attr("maxlength", "1000");
         $("#txtOrder").inputmask("9[9]");
     }
-    function actionFormatter(value, row, index) {
-        return [
-            '<i style="cursor: pointer;" class="edit glyphicon glyphicon-edit"></i>',
-            '<i style="cursor: pointer;" class="remove glyphicon glyphicon-remove"></i>'
-        ].join('');
-    }
     function setupPage() {
         $("#tblStatuses")
             .on("check.bs.table", function (e, row) { setupToolbar(); })
@@ -218,14 +211,14 @@
 
     /*---   L O A D   ---*/
     function afterTableLoad() {
-        if (sessionStorage.getItem("search_all_selected_obj").toString() !== 'null') {
+        if (sessionStorage.getItem("search_all_selected_obj") !== null) {
             var obj,
                 index;
             obj = JSON.parse(sessionStorage.getItem("search_all_selected_obj"));
             index = TableUtil.getTableIndexById('#tblStatuses', obj.Id);
             $("#tblStatuses").bootstrapTable("check", index);
             showEditDialog();
-            sessionStorage.setItem("search_all_selected_obj", null);
+            sessionStorage.removeItem("search_all_selected_obj");
         }
     }
     function getStatusStatusTypesCallbackOk(result) {
@@ -280,9 +273,6 @@
 
     /*---   P U B L I C   ---*/
     return {
-        actionFormatter: function (value, row, index) {
-            return actionFormatter(value, row, index);
-        },
         getStatuses: function () { return getStatuses(); },
         showAddDialog: function () { return showAddDialog(); },
         showEditDialog: function (row) { return showEditDialog(row); },

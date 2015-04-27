@@ -133,10 +133,10 @@
                     <th data-field="state" data-checkbox="true"></th>
                     <th data-field="Id" data-sortable="true">Id</th>
                     <th data-field="Name" data-sortable="true">Nome</th>
-                    <th data-field="Description" data-sortable="true">Descrição</th>
+                    <th data-field="Description" data-sortable="true" data-formatter="TableUtil.textFormatter">Descrição</th>
                     <th data-field="Order" data-sortable="true">Ordem</th>
                     <th data-field="Status" data-sortable="true">Estado</th>
-                    <th data-field="action" data-formatter="ProjectTasks.actionFormatter" data-events="actionEvents">Acção</th>
+                    <th data-field="action" data-formatter="TableUtil.actionFormatter" data-events="actionEvents">Acção</th>
                 </tr>
                 </thead>
             </table>
@@ -171,9 +171,9 @@
                     <th data-field="state" data-checkbox="true"></th>
                     <th data-field="Id" data-sortable="true">Id</th>
                     <th data-field="Name" data-sortable="true">Nome</th>
-                    <th data-field="Description" data-sortable="true">Descrição</th>
-                    <th data-field="DueDate" data-sortable="true" data-formatter="ProjectAlerts.dueDateFormatter">Data</th>
-                    <th data-field="action" data-formatter="ProjectAlerts.actionFormatter" data-events="actionEvents">Acção</th>
+                    <th data-field="Description" data-sortable="true" data-formatter="TableUtil.textFormatter">Descrição</th>
+                    <th data-field="DueDate" data-sortable="true" data-formatter="ProjectAlerts.dateFormatter">Data</th>
+                    <th data-field="action" data-formatter="TableUtil.actionFormatter" data-events="actionEvents">Acção</th>
                 </tr>
                 </thead>
             </table>
@@ -207,8 +207,8 @@
                 <tr>
                     <th data-field="state" data-checkbox="true"></th>
                     <th data-field="Id" data-sortable="true">Id</th>
-                    <th data-field="Text" data-sortable="true" data-formatter="ProjectNotes.textFormatter">Texto</th>
-                    <th data-field="action" data-formatter="ProjectNotes.actionFormatter" data-events="actionEvents">Acção</th>
+                    <th data-field="Text" data-sortable="true" data-formatter="TableUtil.textFormatter">Texto</th>
+                    <th data-field="action" data-formatter="TableUtil.actionFormatter" data-events="actionEvents">Acção</th>
                 </tr>
                 </thead>
             </table>

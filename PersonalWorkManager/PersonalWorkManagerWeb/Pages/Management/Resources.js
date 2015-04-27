@@ -27,11 +27,11 @@
     /*---   A D D   ---*/
     function insertCallbackOk(result) {
         $("#mdlResource").modal("hide");
-        var data = '[{"Id":' + result.d + ', ' +
-                   '"Login":"' + $("#txtLogin").val() + '", ' +
-                   '"Name":"' + $("#txtName").val() + '", ' +
-                   '"Status":"' + $("#ddlStatus option:selected").text() + '"}]';
-        $("#tblResources").bootstrapTable("append", JSON.parse(data));
+        var data = {"Id": result.d,
+                    "Login": $("#txtLogin").val(),
+                    "Name": $("#txtName").val(),
+                    "Status": $("#ddlStatus option:selected").text() };
+        $("#tblResources").bootstrapTable("append", data);
     }
     function insertCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
@@ -194,12 +194,6 @@
         $("#txtLogin").attr("maxlength", "100");
         $("#txtName").attr("maxlength", "200");
     }
-    function actionFormatter(value, row, index) {
-        return [
-            '<i style="cursor: pointer;" class="edit glyphicon glyphicon-edit"></i>',
-            '<i style="cursor: pointer;" class="remove glyphicon glyphicon-remove"></i>'
-        ].join('');
-    }
     function setupPage() {
         $("#tblResources")
             .on("check.bs.table", function (e, row) { setupToolbar(); })
@@ -211,14 +205,14 @@
 
     /*---   L O A D   ---*/
     function afterTableLoad() {
-        if (sessionStorage.getItem("search_all_selected_obj").toString() !== 'null') {
+        if (sessionStorage.getItem("search_all_selected_obj") !== null) {
             var obj,
                 index;
             obj = JSON.parse(sessionStorage.getItem("search_all_selected_obj"));
             index = TableUtil.getTableIndexById('#tblResources', obj.Id);
             $("#tblResources").bootstrapTable("check", index);
             showEditDialog();
-            sessionStorage.setItem("search_all_selected_obj", null);
+            sessionStorage.removeItem("search_all_selected_obj");
         }
     }
     function getResourcesCallbackOk(result) {
@@ -273,9 +267,6 @@
 
     /*---   P U B L I C   ---*/
     return {
-        actionFormatter: function (value, row, index) {
-            return actionFormatter(value, row, index);
-        },
         getResources: function () { return getResources(); },
         showAddDialog: function () { return showAddDialog(); },
         showEditDialog: function (row) { return showEditDialog(row); },

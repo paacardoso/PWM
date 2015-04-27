@@ -21,9 +21,11 @@
     /*---   A D D   ---*/
     function insertCallbackOk(result) {
         $("#mdlNote").modal("hide");
-        var data = '[{"Id":' + result.d + ', ' +
-                   '"Text":"' + $("#txtNoteText").val() + '"}]';
-        $("#tblNotes").bootstrapTable('append', JSON.parse(data));
+        var data = {"Id": result.d,
+                    "Text": $("#txtNoteText").val()};
+        console.log(JSON.stringify(data));
+        $("#tblNotes").bootstrapTable('append', data);
+
     }
     function insertCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
@@ -172,34 +174,6 @@
     function setupForm() {
         $("#txtNoteText").attr("maxlength", "4000");
     }
-    function actionFormatter(value, row, index) {
-        return [
-            '<i style="cursor: pointer;" class="edit glyphicon glyphicon-edit"></i>',
-            '<i style="cursor: pointer;" class="remove glyphicon glyphicon-remove"></i>'
-        ].join('');
-    }
-    function textFormatter(value, row, index) {
-        var str,
-            i,
-            pos,
-            lastPos;
-        str = value.replace(/\n/g, "<BR>");
-        pos = str.indexOf("<BR>");
-        lastPos = pos;
-        while (pos > -1 && i < 5) {
-            lastPos = pos;
-            pos = str.indexOf("<BR>", pos + 1);
-            console.log("pos: " + pos);
-        }
-
-        aqui ...
-
-        if (lastPos === -1) {
-            return str;
-        } else {
-            return str.substring(1, pos);
-        }
-    }
     function setupPage() {
         $("#tblNotes")
             .on("check.bs.table", function (e, row) { setupToolbar(); })
@@ -211,14 +185,14 @@
 
     /*---   L O A D   ---*/
     function afterNotesLoad() {
-        if (sessionStorage.getItem("search_all_selected_obj").toString() !== 'null') {
+        if (sessionStorage.getItem("search_all_selected_obj") !== null) {
             var obj,
                 index;
             obj = JSON.parse(sessionStorage.getItem("search_all_selected_obj"));
             index = TableUtil.getTableIndexById('#tblNotes', obj.Id);
             $("#tblNotes").bootstrapTable("check", index);
             showEditDialog();
-            sessionStorage.setItem("search_all_selected_obj", null);
+            sessionStorage.removeItem("search_all_selected_obj");
         }
     }
     function getNotesCallbackOk(result) {
@@ -256,12 +230,6 @@
 
     /*---   P U B L I C   ---*/
     return {
-        actionFormatter: function (value, row, index) {
-            return actionFormatter(value, row, index);
-        },
-        textFormatter: function (value, row, index) {
-            return textFormatter(value, row, index);
-        },
         getNotes: function (idProject) { return getNotes(idProject); },
         showAddDialog: function () { return showAddDialog(); },
         showEditDialog: function (row) { return showEditDialog(row); },
