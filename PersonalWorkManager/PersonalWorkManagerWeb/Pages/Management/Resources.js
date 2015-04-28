@@ -27,10 +27,10 @@
     /*---   A D D   ---*/
     function insertCallbackOk(result) {
         $("#mdlResource").modal("hide");
-        var data = {"Id": result.d,
-                    "Login": $("#txtLogin").val(),
-                    "Name": $("#txtName").val(),
-                    "Status": $("#ddlStatus option:selected").text() };
+        var data = {Id: result.d,
+                    Login: $("#txtLogin").val(),
+                    Name: $("#txtName").val(),
+                    Status: $("#ddlStatus option:selected").text() };
         $("#tblResources").bootstrapTable("append", data);
     }
     function insertCallbackFailed(msg) {
@@ -40,10 +40,10 @@
     function insert() {
         if (validateRequired() === true) {
             AjaxUtil.Call("Resources.aspx/InsertResourceJSON",
-                          '{Login:"' + $("#txtLogin").val() + '", ' +
-                          'Name:"' + $("#txtName").val() + '", ' +
-                          'Password:"' + $("#txtPassword").val() + '", ' +
-                          'IdStatus:' + $("#ddlStatus").val() + '}',
+                          {Login: $("#txtLogin").val(),
+                           Name: $("#txtName").val(),
+                           Password: $("#txtPassword").val(),
+                           IdStatus: $("#ddlStatus").val()},
                           insertCallbackOk,
                           insertCallbackFailed);
         }
@@ -83,11 +83,11 @@
     function update() {
         if (validateRequired() === true) {
             AjaxUtil.Call("Resources.aspx/UpdateResourceJSON",
-                          '{Id:' + $("#txtId").val() + ', ' +
-                          'Login:"' + $("#txtLogin").val() + '", ' +
-                          'Name:"' + $("#txtName").val() + '", ' +
-                          'Password:"' + $("#txtPassword").val() + '", ' +
-                          'IdStatus:' + $("#ddlStatus").val() + '}',
+                          {Id: $("#txtId").val(),
+                           Login: $("#txtLogin").val(),
+                           Name: $("#txtName").val(),
+                           Password: $("#txtPassword").val(),
+                           IdStatus: $("#ddlStatus").val()},
                           updateCallbackOk,
                           updateCallbackFailed);
         }
@@ -145,7 +145,7 @@
         }
 
         AjaxUtil.Call("Resources.aspx/DeleteResourcesJSON",
-                      '{Ids:"' + ids.values.join() + '"}',
+                      {Ids: ids.values.join()},
                       function (result) { removeCallbackOk(result, ids); },
                       removeCallbackFailed);
     }
@@ -228,7 +228,7 @@
     //}
     function getResources() {
         AjaxUtil.Call("Resources.aspx/GetResourcesJSON",
-                      "",
+                      {},
                       getResourcesCallbackOk);
     }
     function getResourceStatusesCallbackOk(result) {
@@ -242,7 +242,7 @@
     //}
     function getResourceStatuses() {
         AjaxUtil.Call("Resources.aspx/GetResourceStatusesJSON",
-                      "",
+                      {},
                       getResourceStatusesCallbackOk);
     }
 

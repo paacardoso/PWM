@@ -25,9 +25,9 @@
     }
     function login() {
         AjaxUtil.Call("Login.aspx/LoginJSON",
-                      '{Login:"' + $("#txtLogin").val() + '", ' +
-                      'Password:"' + $("#txtPassword").val() + '", ' +
-                      'Persistable:' + $("#chkPersistLoginCookie").is(":checked") + '}',
+                      {Login: $("#txtLogin").val(),
+                       Password: $("#txtPassword").val(),
+                       Persistable: $("#chkPersistLoginCookie").is(":checked")},
                       loginCallbackOk,
                       loginCallbackFailed);
     }

@@ -28,11 +28,11 @@
     /*---   A D D   ---*/
     function insertCallbackOk(result) {
         $("#mdlStatus").modal("hide");
-        var data = {"Id": result.d,
-                    "Name": $("#txtName").val(),
-                    "Description": $("#txtDescription").val(),
-                    "StatusTypeName": $("#ddlStatusType option:selected").text(),
-                    "Order": $("#txtOrder").val() };
+        var data = {Id: result.d,
+                    Name: $("#txtName").val(),
+                    Description: $("#txtDescription").val(),
+                    StatusTypeName: $("#ddlStatusType option:selected").text(),
+                    Order: $("#txtOrder").val() };
         $("#tblStatuses").bootstrapTable("append", data);
     }
     function insertCallbackFailed(msg) {
@@ -42,10 +42,10 @@
     function insert() {
         if (validateRequired() === true) {
             AjaxUtil.Call("Statuses.aspx/InsertStatusJSON",
-                          '{Name:"' + $("#txtName").val() + '", ' +
-                          'Description:"' + $("#txtDescription").val() + '", ' +
-                          'IdStatusType:' + $("#ddlStatusType").val() + ', ' +
-                          'Order:' + $("#txtOrder").val() + '}',
+                          {Name: $("#txtName").val(),
+                           Description: $("#txtDescription").val(),
+                           IdStatusType: $("#ddlStatusType").val(),
+                           Order: $("#txtOrder").val()},
                           insertCallbackOk,
                           insertCallbackFailed);
         }
@@ -86,11 +86,11 @@
     function update() {
         if (validateRequired() === true) {
             AjaxUtil.Call("Statuses.aspx/UpdateStatusJSON",
-                          '{Id:' + $("#txtId").val() + ', ' +
-                          'Name:"' + $("#txtName").val() + '", ' +
-                          'Description:"' + $("#txtDescription").val() + '", ' +
-                          'IdStatusType:' + $("#ddlStatusType").val() + ', ' +
-                          'Order:' + $("#txtOrder").val() + '}',
+                          {Id: $("#txtId").val(),
+                           Name: $("#txtName").val(),
+                           Description: $("#txtDescription").val(),
+                           IdStatusType: $("#ddlStatusType").val(),
+                           Order: $("#txtOrder").val()},
                           updateCallbackOk,
                           updateCallbackFailed);
         }
@@ -149,7 +149,7 @@
         }
 
         AjaxUtil.Call("Statuses.aspx/DeleteStatusesJSON",
-                      '{Ids:"' + ids.values.join() + '"}',
+                      {Ids: ids.values.join()},
                       function (result) { removeCallbackOk(result, ids); },
                       removeCallbackFailed);
 
@@ -232,7 +232,7 @@
     //}
     function getStatusStatusTypes() {
         AjaxUtil.Call("Statuses.aspx/GetStatusStatusTypesJSON",
-                      "",
+                      {},
                       getStatusStatusTypesCallbackOk);
     }
     function getStatusesCallbackOk(result) {
@@ -248,7 +248,7 @@
     //}
     function getStatuses() {
         AjaxUtil.Call("Statuses.aspx/GetStatusesJSON",
-                      "",
+                      {},
                       getStatusesCallbackOk);
     }
 

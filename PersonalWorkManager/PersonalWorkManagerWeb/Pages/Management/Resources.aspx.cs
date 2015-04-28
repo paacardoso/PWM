@@ -22,7 +22,6 @@
                                   Login = r.Login,
                                   Name = r.Name,
                                   Status = e.Name
-
                               };
                 string json = JsonConvert.SerializeObject(records);
                 return json;

@@ -23,7 +23,6 @@
                                   Description = e.Description,
                                   StatusTypeName = et.Name,
                                   Order = e.Order
-
                               };
                 string json = JsonConvert.SerializeObject(records);
                 return json;

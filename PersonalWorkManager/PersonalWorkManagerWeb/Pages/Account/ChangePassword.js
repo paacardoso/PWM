@@ -48,9 +48,9 @@
             currentUser = JSON.parse(sessionStorage.getItem("current_resource"));
             //console.log('changing id: ' + currentUser.Id);
             AjaxUtil.Call("ChangePassword.aspx/ChangePasswordJSON",
-                          '{Id:' + currentUser.Id + ', ' +
-                          'OldPassword:"' + $("#txtOldPassword").val() + '", ' +
-                          'NewPassword:"' + $("#txtNewPassword").val() + '"}',
+                          {Id: currentUser.Id,
+                           OldPassword: $("#txtOldPassword").val(),
+                           NewPassword: $("#txtNewPassword").val()},
                           updatePasswordCallbackOk,
                           updatePasswordCallbackFailed);
         }

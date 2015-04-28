@@ -17,12 +17,11 @@
     }
 
 
-
     /*---   A D D   ---*/
     function insertCallbackOk(result) {
         $("#mdlNote").modal("hide");
-        var data = {"Id": result.d,
-                    "Text": $("#txtNoteText").val()};
+        var data = {Id: result.d,
+                    Text: $("#txtNoteText").val()};
         console.log(JSON.stringify(data));
         $("#tblNotes").bootstrapTable('append', data);
 
@@ -35,8 +34,8 @@
     function insertNote() {
         if (validateInputFields() === true) {
             AjaxUtil.Call("Projects.aspx/InsertNoteJSON",
-                          '{Text:"' + $("#txtNoteText").val() + '", ' +
-                          'IdProject:' + $("#txtId").val() + '}',
+                          {Text: $("#txtNoteText").val(),
+                           IdProject: $("#txtId").val()},
                           insertCallbackOk,
                           insertCallbackFailed);
         }
@@ -70,9 +69,9 @@
     function update() {
         if (validateInputFields() === true) {
             AjaxUtil.Call("Projects.aspx/updateNoteJSON",
-                          '{Id:"' + $("#txtNoteId").val() + '", ' +
-                          'Text:"' + $("#txtNoteText").val() + '", ' +
-                          'IdProject:' + $("#txtId").val() + '}',
+                          {Id: $("#txtNoteId").val(),
+                           Text: $("#txtNoteText").val(),
+                           IdProject: $("#txtId").val()},
                           updateCallbackOk,
                           updateCallbackFailed);
         }
@@ -126,7 +125,7 @@
             ids.values[index] = notes[index].Id;
         }
         AjaxUtil.Call("Projects.aspx/DeleteNotesJSON",
-                      '{Ids:"' + ids.values.join() + '"}',
+                      {Ids: ids.values.join()},
                       function (result) { removeCallbackOk(result, ids); },
                       removeCallbackFailed);
     }
@@ -209,7 +208,7 @@
     function getNotes() {
         var idProject = $("#txtId").val();
         AjaxUtil.Call("Projects.aspx/GetNotesJSON",
-                      '{IdProject:' + idProject + '}',
+                      {IdProject: idProject},
                       getNotesCallbackOk);
     }
 

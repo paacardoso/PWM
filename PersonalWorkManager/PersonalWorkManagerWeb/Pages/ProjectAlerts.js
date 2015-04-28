@@ -25,15 +25,14 @@
     }
 
 
-
     /*---   A D D   ---*/
     function insertCallbackOk(result) {
         $("#mdlAlert").modal("hide");
-        var data = {"Id": result.d,
-                    "Name": $("#txtAlertName").val(),
-                    "Description": $("#txtAlertDescription").val(),
-                    "DueDate": $("#txtAlertDueDate").datetimepicker()
-                     .children("input").val() };
+        var data = {Id: result.d,
+                    Name: $("#txtAlertName").val(),
+                    Description: $("#txtAlertDescription").val(),
+                    DueDate: DateUtil.Format($("#txtAlertDueDate").data("DateTimePicker")
+                      .date().format(), { ShowTime: true})};
         $("#tblAlerts").bootstrapTable('append', data);
     }
     function insertCallbackFailed(msg) {
@@ -44,11 +43,11 @@
     function insertAlert() {
         if (validateInputFields() === true) {
             AjaxUtil.Call("Projects.aspx/InsertAlertJSON",
-                          '{Name:"' + $("#txtAlertName").val() + '", ' +
-                          'Description:"' + $("#txtAlertDescription").val() + '", ' +
-                          'DueDate:"' + $("#txtAlertDueDate").datetimepicker()
-                            .children("input").val() + '", ' +
-                          'IdProject:' + $("#txtId").val() + '}',
+                          {Name: $("#txtAlertName").val(),
+                           Description: $("#txtAlertDescription").val(),
+                           DueDate: $("#txtAlertDueDate").data("DateTimePicker")
+                             .date().format(),
+                           IdProject: $("#txtId").val()},
                           insertCallbackOk,
                           insertCallbackFailed);
         }
@@ -58,7 +57,7 @@
         $("#txtAlertId").val("");
         $("#txtAlertName").val("");
         $("#txtAlertDescription").val("");
-        $("#txtAlertDueDate").datetimepicker().children("input").val('');
+        $("#txtAlertDueDate").data("DateTimePicker").date(new Date());
         $("#btnAlertActionConfirmed").unbind("click");
         $("#btnAlertActionConfirmed").on("click", insertAlert);
         $("#mdlAlert").modal("show");
@@ -74,7 +73,8 @@
                 Id: $("#txtAlertId").val(),
                 Name: $("#txtAlertName").val(),
                 Description: $("#txtAlertDescription").val(),
-                DueDate: $("#txtAlertDueDate").datetimepicker().children("input").val()
+                DueDate: DateUtil.Format($("#txtAlertDueDate").data("DateTimePicker")
+                    .date().format(), { ShowTime: true})
             }
         });
     }
@@ -86,12 +86,12 @@
     function update() {
         if (validateInputFields() === true) {
             AjaxUtil.Call("Projects.aspx/updateAlertJSON",
-                          '{Id:"' + $("#txtAlertId").val() + '", ' +
-                          'Name:"' + $("#txtAlertName").val() + '", ' +
-                          'Description:"' + $("#txtAlertDescription").val() + '", ' +
-                          'DueDate:"' + $("#txtAlertDueDate").datetimepicker()
-                            .children("input").val() + '", ' +
-                          'IdProject:' + $("#txtId").val() + '}',
+                          {Id: $("#txtAlertId").val(),
+                           Name: $("#txtAlertName").val(),
+                           Description: $("#txtAlertDescription").val(),
+                           DueDate: $("#txtAlertDueDate").data("DateTimePicker")
+                             .date().format(),
+                           IdProject: $("#txtId").val()},
                           updateCallbackOk,
                           updateCallbackFailed);
         }
@@ -108,8 +108,7 @@
         $("#txtAlertId").val(alert.Id);
         $("#txtAlertName").val(alert.Name);
         $("#txtAlertDescription").val(alert.Description);
-        $("#txtAlertDueDate").datetimepicker().children("input")
-            .val(DateUtil.Format(alert.DueDate));
+        $("#txtAlertDueDate").data("DateTimePicker").date(moment(alert.DueDate));
         $("#btnAlertActionConfirmed").unbind("click");
         $("#btnAlertActionConfirmed").on("click", update);
         $("#mdlAlert").modal("show");
@@ -148,7 +147,7 @@
             ids.values[index] = alerts[index].Id;
         }
         AjaxUtil.Call("Projects.aspx/DeleteAlertsJSON",
-                      '{Ids:"' + ids.values.join() + '"}',
+                      {Ids: ids.values.join()},
                       function (result) { removeCallbackOk(result, ids); },
                       removeCallbackFailed);
     }
@@ -197,7 +196,8 @@
         $("#txtAlertName").attr("maxlength", "200");
         $("#txtAlertDescription").attr("maxlength", "1000");
         $("#txtAlertDueDate").datetimepicker({
-            format: "DD-MM-YYYY"
+            format: DateUtil.DATETIME_FORMAT,
+            showClose: true
         });
     }
     function setupPage() {
@@ -222,9 +222,13 @@
         }
     }
     function getAlertsCallbackOk(result) {
+        var rows = JSON.parse(result.d);
+        rows.forEach(function (row) {
+            row.DueDate = DateUtil.Format(row.DueDate, {ShowTime: true});
+        });
         $("#tblAlerts").bootstrapTable("destroy");
         $("#tblAlerts").bootstrapTable({
-            data: JSON.parse(result.d)
+            data: rows
         });
         setupToolbar();
         afterAlertsLoad();
@@ -235,7 +239,7 @@
     function getAlerts() {
         var idProject = $("#txtId").val();
         AjaxUtil.Call("Projects.aspx/GetAlertsJSON",
-                      '{IdProject:' + idProject + '}',
+                      {IdProject: idProject},
                       getAlertsCallbackOk);
     }
 

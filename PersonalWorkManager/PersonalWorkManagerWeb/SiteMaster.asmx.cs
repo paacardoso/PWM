@@ -83,7 +83,7 @@
                     {
                         Type = "note",
                         Id = "note_" + p.Id.ToString() + "_" + p.IdProject.ToString(),
-                        Name = "",
+                        Name = string.Empty,
                         Description = p.Text
                     }))
                     .Union(objCtx.Note.ToList()
@@ -92,7 +92,7 @@
                     {
                         Type = "note",
                         Id = "note_" + p.Id.ToString() + "_" + p.IdProject.ToString(),
-                        Name = "",
+                        Name = string.Empty,
                         Description = p.Text
                     }))
                     .Union(objCtx.Parameter.ToList()

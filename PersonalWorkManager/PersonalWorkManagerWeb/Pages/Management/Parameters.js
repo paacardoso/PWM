@@ -19,10 +19,10 @@
     /*---   A D D   ---*/
     function insertCallbackOk(result) {
         $("#mdlParameter").modal("hide");
-        var data = {"Id": result.d,
-                    "Name": $("#txtName").val(),
-                    "Value": $("#txtValue").val(),
-                    "Description": $("#txtDescription").val() };
+        var data = {Id: result.d,
+                    Name: $("#txtName").val(),
+                    Value: $("#txtValue").val(),
+                    Description: $("#txtDescription").val() };
         $("#tblParameters").bootstrapTable('append', data);
     }
     function insertCallbackFailed(msg) {
@@ -32,9 +32,9 @@
     function insert() {
         if (validateRequired() === true) {
             AjaxUtil.Call("Parameters.aspx/InsertParameterJSON",
-                          '{Name:"' + $("#txtName").val() + '", ' +
-                          'Value:"' + $("#txtValue").val() + '", ' +
-                          'Description:"' + $("#txtDescription").val() + '"}',
+                          {Name: $("#txtName").val(),
+                           Value: $("#txtValue").val(),
+                           Description: $("#txtDescription").val()},
                           insertCallbackOk,
                           insertCallbackFailed);
         }
@@ -73,10 +73,10 @@
     function update() {
         if (validateRequired() === true) {
             AjaxUtil.Call("Parameters.aspx/UpdateParameterJSON",
-                          '{Id:' + $("#txtId").val() + ', ' +
-                          'Name:"' + $("#txtName").val() + '", ' +
-                          'Value:"' + $("#txtValue").val() + '", ' +
-                          'Description:"' + $("#txtDescription").val() + '"}',
+                          {Id: $("#txtId").val(),
+                           Name: $("#txtName").val(),
+                           Value: $("#txtValue").val(),
+                           Description: $("#txtDescription").val()},
                           updateCallbackOk,
                           updateCallbackFailed);
         }
@@ -133,7 +133,7 @@
         }
 
         AjaxUtil.Call("Parameters.aspx/DeleteParametersJSON",
-                      '{Ids:"' + ids.values.join() + '"}',
+                      {Ids: ids.values.join()},
                       function (result) { removeCallbackOk(result, ids); },
                       removeCallbackFailed);
 
@@ -222,7 +222,7 @@
     //}
     function getParameters() {
         AjaxUtil.Call("Parameters.aspx/GetParametersJSON",
-                      "",
+                      {},
                       getParametersCallbackOk);
     }
 

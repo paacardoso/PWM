@@ -9,13 +9,13 @@ var MessageBox = (function () {
                 StackTrace: undefined
             };
 
-        console.log("options before extend: " + JSON.stringify(options));
+        //console.log("options before extend: " + JSON.stringify(options));
         if (options !== undefined) {
             jQuery.extend(options, defaults);
         } else {
             options = defaults;
         }
-        console.log("options after extend: " + JSON.stringify(options));
+        //console.log("options after extend: " + JSON.stringify(options));
 
         if (options.Div === undefined) {
             if ($("#divModalMessage").length > 0) {

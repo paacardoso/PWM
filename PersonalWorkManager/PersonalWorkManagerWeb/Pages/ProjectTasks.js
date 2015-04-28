@@ -29,15 +29,14 @@
     }
 
 
-
     /*---   A D D   ---*/
     function insertCallbackOk(result) {
         $("#mdlTask").modal("hide");
-        var data = {"Id": result.d,
-                    "Name": $("#txtTaskName").val(),
-                    "Description": $("#txtTaskDescription").val(),
-                    "Order": $("#txtTaskOrder").val(),
-                    "Status": $("#ddlTaskStatus option:selected").text() };
+        var data = {Id: result.d,
+                    Name: $("#txtTaskName").val(),
+                    Description: $("#txtTaskDescription").val(),
+                    Order: $("#txtTaskOrder").val(),
+                    Status: $("#ddlTaskStatus option:selected").text() };
         $("#tblTasks").bootstrapTable('append', data);
     }
     function insertCallbackFailed(msg) {
@@ -48,11 +47,11 @@
     function insertTask() {
         if (validateInputFields() === true) {
             AjaxUtil.Call("Projects.aspx/InsertTaskJSON",
-                          '{Name:"' + $("#txtTaskName").val() + '", ' +
-                          'Description:"' + $("#txtTaskDescription").val() + '", ' +
-                          'Order:' + $("#txtTaskOrder").val() + ', ' +
-                          'IdProject:' + $("#txtId").val() + ', ' +
-                          'IdStatus:' + $("#ddlTaskStatus").val() + '}',
+                          {Name: $("#txtTaskName").val(),
+                           Description: $("#txtTaskDescription").val(),
+                           Order: $("#txtTaskOrder").val(),
+                           IdProject: $("#txtId").val(),
+                           IdStatus: $("#ddlTaskStatus").val()},
                           insertCallbackOk,
                           insertCallbackFailed);
         }
@@ -92,12 +91,12 @@
     function update() {
         if (validateInputFields() === true) {
             AjaxUtil.Call("Projects.aspx/updateTaskJSON",
-                          '{Id:"' + $("#txtTaskId").val() + '", ' +
-                          'Name:"' + $("#txtTaskName").val() + '", ' +
-                          'Description:"' + $("#txtTaskDescription").val() + '", ' +
-                          'Order:' + $("#txtTaskOrder").val() + ', ' +
-                          'IdProject:' + $("#txtId").val() + ', ' +
-                          'IdStatus:' + $("#ddlTaskStatus").val() + '}',
+                          {Id: $("#txtTaskId").val(),
+                           Name: $("#txtTaskName").val(),
+                           Description: $("#txtTaskDescription").val(),
+                           Order: $("#txtTaskOrder").val(),
+                           IdProject: $("#txtId").val(),
+                           IdStatus: $("#ddlTaskStatus").val()},
                           updateCallbackOk,
                           updateCallbackFailed);
         }
@@ -155,7 +154,7 @@
             ids.values[index] = tasks[index].Id;
         }
         AjaxUtil.Call("Projects.aspx/DeleteTasksJSON",
-                      '{Ids:"' + ids.values.join() + '"}',
+                      {Ids: ids.values.join()},
                       function (result) { removeCallbackOk(result, ids); },
                       removeCallbackFailed);
     }
@@ -240,7 +239,7 @@
     function getTasks() {
         var idProject = $("#txtId").val();
         AjaxUtil.Call("Projects.aspx/GetTasksJSON",
-                      '{IdProject:' + idProject + '}',
+                      {IdProject: idProject},
                       getTasksCallbackOk);
     }
     function getTaskStatusesCallbackOk(result) {
@@ -254,7 +253,7 @@
     //}
     function getTaskStatuses() {
         AjaxUtil.Call("Projects.aspx/GetTaskStatusesJSON",
-                      "",
+                      {},
                       getTaskStatusesCallbackOk);
     }
 

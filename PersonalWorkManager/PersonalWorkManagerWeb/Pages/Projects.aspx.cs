@@ -72,17 +72,13 @@
         [WebMethod]
         public static long InsertProjectJSON(string Code, string Name, string Description, string StartDate, string EndDate, long IdStatus)
         {
-            // Parse date with custom specifier.
-            CultureInfo provider = CultureInfo.InvariantCulture;
-            DateTime StartDateDT;
             DateTime? EndDateDT = null;
-            StartDateDT = DateTime.ParseExact(StartDate, "dd-mm-yyyy", provider);
             if (EndDate.Length > 0)
             {
-                EndDateDT = DateTime.ParseExact(EndDate, "dd-mm-yyyy", provider);
+                EndDateDT = DateTime.Parse(EndDate);
             }
 
-            Project project = new Project() { Code = Code, Name = Name, Description = Description, StartDate = StartDateDT, EndDate = EndDateDT, IdStatus = IdStatus };
+            Project project = new Project() { Code = Code, Name = Name, Description = Description, StartDate = DateTime.Parse(StartDate), EndDate = EndDateDT, IdStatus = IdStatus };
             using (var objCtx = new PWMEntities())
             {
                 objCtx.Project.AddObject(project);
@@ -94,14 +90,10 @@
         [WebMethod]
         public static bool UpdateProjectJSON(long Id, string Code, string Name, string Description, string StartDate, string EndDate, long IdStatus)
         {
-            // Parse date with custom specifier.
-            CultureInfo provider = CultureInfo.InvariantCulture;
-            DateTime StartDateDT;
             DateTime? EndDateDT = null;
-            StartDateDT = DateTime.ParseExact(StartDate, "dd-mm-yyyy", provider);
             if (EndDate.Length > 0)
             {
-                EndDateDT = DateTime.ParseExact(EndDate, "dd-mm-yyyy", provider);
+                EndDateDT = DateTime.Parse(EndDate);
             }
 
             Project project;
@@ -111,7 +103,7 @@
                 project.Code = Code;
                 project.Name = Name;
                 project.Description = Description;
-                project.StartDate = StartDateDT;
+                project.StartDate = DateTime.Parse(StartDate);
                 project.EndDate = EndDateDT;
                 project.IdStatus = IdStatus;
                 objCtx.SaveChanges();
@@ -149,7 +141,6 @@
                                   Description = t.Description,
                                   Order = t.Order,
                                   Status = e.Name
-
                               };
                 string json = JsonConvert.SerializeObject(records);
                 return json;
@@ -242,7 +233,6 @@
                                   Name = t.Name,
                                   Description = t.Description,
                                   DueDate = t.DueDate
-
                               };
                 string json = JsonConvert.SerializeObject(records);
                 return json;
@@ -252,12 +242,7 @@
         [WebMethod]
         public static long InsertAlertJSON(string Name, string Description, string DueDate, int IdProject)
         {
-            // Parse date with custom specifier.
-            CultureInfo provider = CultureInfo.InvariantCulture;
-            DateTime DueDateDT;
-            DueDateDT = DateTime.ParseExact(DueDate, "dd-mm-yyyy", provider);
-
-            Alert Alert = new Alert() { Name = Name, Description = Description, DueDate = DueDateDT, IdProject = IdProject };
+            Alert Alert = new Alert() { Name = Name, Description = Description, DueDate = DateTime.Parse(DueDate), IdProject = IdProject };
             using (var objCtx = new PWMEntities())
             {
                 objCtx.Alert.AddObject(Alert);
@@ -269,18 +254,13 @@
         [WebMethod]
         public static bool UpdateAlertJSON(int Id, string Name, string Description, string DueDate, int IdProject)
         {
-            // Parse date with custom specifier.
-            CultureInfo provider = CultureInfo.InvariantCulture;
-            DateTime DueDateDT;
-            DueDateDT = DateTime.ParseExact(DueDate, "dd-mm-yyyy", provider);
-
             Alert Alert;
             using (var objCtx = new PWMEntities())
             {
                 Alert = objCtx.Alert.SingleOrDefault(x => x.Id == Id);
                 Alert.Name = Name;
                 Alert.Description = Description;
-                Alert.DueDate = DueDateDT;
+                Alert.DueDate = DateTime.Parse(DueDate);
                 Alert.IdProject = IdProject;
                 objCtx.SaveChanges();
             }
@@ -324,7 +304,6 @@
                               {
                                   Id = t.Id,
                                   Text = t.Text
-
                               };
                 string json = JsonConvert.SerializeObject(records);
                 return json;
@@ -376,6 +355,116 @@
             using (var objCtx = new PWMEntities())
             {
                 objCtx.ExecuteStoreCommand("DELETE FROM Note WHERE Id IN (" + Ids + ")");
+                objCtx.SaveChanges();
+            }
+            return true;
+        }
+        #endregion
+
+        #region "Session"
+        [WebMethod]
+        public static string GetSessionsJSON(long IdProject)
+        {
+            using (var objCtx = new PWMEntities())
+            {
+                var records = from s in objCtx.Session
+                              join t in objCtx.Task on s.IdTask equals t.Id
+                              join r in objCtx.Resource on s.IdResource equals r.Id
+                              join p in objCtx.Project on t.IdProject equals p.Id
+                              where p.Id == IdProject
+                              select new
+                              {
+                                  Id = t.Id,
+                                  StartTime = s.StartTime,
+                                  EndTime = s.EndTime,
+                                  Task = t.Name,
+                                  Resource = r.Name
+                              };
+                string json = JsonConvert.SerializeObject(records);
+                return json;
+            }
+        }
+
+        [WebMethod]
+        public static string GetSessionTasksJSON(long IdProject)
+        {
+            using (var objCtx = new PWMEntities())
+            {
+                var records = from t in objCtx.Task
+                              join e in objCtx.Status on t.IdStatus equals e.Id
+                              where t.IdProject == IdProject
+                              select new
+                              {
+                                  Id = t.Id,
+                                  Name = t.Name
+                              };
+                string json = JsonConvert.SerializeObject(records);
+                return json;
+            }
+        }
+
+        [WebMethod]
+        public static string GetSessionResourcesJSON(long IdProject)
+        {
+            using (var objCtx = new PWMEntities())
+            {
+                var records = from r in objCtx.Resource
+                              join e in objCtx.Status on r.IdStatus equals e.Id
+                              select new
+                              {
+                                  Id = r.Id,
+                                  Name = r.Name
+                              };
+                string json = JsonConvert.SerializeObject(records);
+                return json;
+            }
+        }
+
+        [WebMethod]
+        public static long InsertSessionJSON(string StartTime, string EndTime, long IdTask, long IdResource)
+        {
+            Session Session = new Session() { StartTime = DateTime.Parse(StartTime), EndTime = DateTime.Parse(EndTime), IdTask = IdTask, IdResource = IdResource };
+            using (var objCtx = new PWMEntities())
+            {
+                objCtx.Session.AddObject(Session);
+                objCtx.SaveChanges();
+            }
+            return Session.Id;
+        }
+
+        [WebMethod]
+        public static bool UpdateSessionJSON(int Id, string StartTime, string EndTime, long IdTask, long IdResource)
+        {
+            Session Session;
+            using (var objCtx = new PWMEntities())
+            {
+                Session = objCtx.Session.SingleOrDefault(x => x.Id == Id);
+                Session.StartTime = DateTime.Parse(StartTime);
+                Session.EndTime = DateTime.Parse(EndTime);
+                objCtx.SaveChanges();
+            }
+            return true;
+        }
+
+        [WebMethod]
+        public static bool DeleteSessionJSON(int Id)
+        {
+            Session Session;
+            using (var objCtx = new PWMEntities())
+            {
+                Session = objCtx.Session.SingleOrDefault(x => x.Id == Id);
+                objCtx.Session.DeleteObject(Session);
+                objCtx.SaveChanges();
+            }
+            return true;
+        }
+
+        [WebMethod]
+        public static bool DeleteSessionsJSON(string Ids)
+        {
+            using (var objCtx = new PWMEntities())
+            {
+                objCtx.ExecuteStoreCommand("DELETE FROM Session WHERE Id IN (" + Ids + ")");
                 objCtx.SaveChanges();
             }
             return true;

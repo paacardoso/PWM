@@ -703,6 +703,7 @@
       <string>TableUtil</string>
       <string>AjaxUtil</string>
       <string>DateUtil</string>
+      <string>moment</string>
     </PreDefined>
   </JSLintOptions>
   <BuildFileTypes>JS</BuildFileTypes>

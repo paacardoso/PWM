@@ -1,5 +1,5 @@
 ﻿/*jslint browser: true*/
-/*global ProjectTasks, ProjectAlerts, ProjectNotes*/
+/*global ProjectTasks, ProjectAlerts, ProjectNotes, ProjectSessions*/
 var Projects = (function () {
 
     var pageHasLoaded = false,
@@ -78,8 +78,9 @@ var Projects = (function () {
         $("#txtCode").val('');
         $("#txtName").val('');
         $("#txtDescription").val('');
-        $("#txtStartDate").datetimepicker().children("input").val('');
-        $("#txtEndDate").datetimepicker().children("input").val('');
+        $("#txtStartDate").data("DateTimePicker").date(new Date());
+        $("#txtEndDate").data("DateTimePicker").date(null);
+
         $("#ddlStatus").val(-1);
     }
     function setupMode(mode) {
@@ -112,10 +113,8 @@ var Projects = (function () {
         $("#txtCode").val(proj.Code);
         $("#txtName").val(proj.Name);
         $("#txtDescription").val(proj.Description);
-        $("#txtStartDate").datetimepicker().children("input")
-            .val(DateUtil.Format(proj.StartDate));
-        $("#txtEndDate").datetimepicker().children("input")
-            .val(DateUtil.Format(proj.EndDate));
+        $("#txtStartDate").data("DateTimePicker").date(moment(proj.StartDate));
+        $("#txtEndDate").data("DateTimePicker").date(moment(proj.EndDate));
         $("#ddlStatus").val(proj.IdStatus);
 
         setupMode("edit");
@@ -132,6 +131,9 @@ var Projects = (function () {
             case "note":
                 $('#tabProject a[href="#tabNotes"]').tab('show');
                 break;
+            case "session":
+                $('#tabProject a[href="#tabSessions"]').tab('show');
+                break;
             default:
                 break;
             }
@@ -145,7 +147,7 @@ var Projects = (function () {
     function getProject(id) {
         if (id !== '') {
             AjaxUtil.Call("Projects.aspx/GetProjectJSON",
-                          '{Id:' + id + '}',
+                          {Id: id},
                           getProjectCallbackOk);
         }
     }
@@ -169,14 +171,14 @@ var Projects = (function () {
     function insert() {
         if (validateInputFields() === true) {
             AjaxUtil.Call("Projects.aspx/InsertProjectJSON",
-                          '{Code:"' + $("#txtCode").val() + '", ' +
-                          'Name:"' + $("#txtName").val() + '", ' +
-                          'Description:"' + $("#txtDescription").val() + '", ' +
-                          'StartDate:"' + $("#txtStartDate").datetimepicker()
-                            .children("input").val() + '", ' +
-                          'EndDate:"' + $("#txtEndDate").datetimepicker()
-                            .children("input").val() + '", ' +
-                          'IdStatus:' + $("#ddlStatus").val() + '}',
+                          {Code: $("#txtCode").val(),
+                           Name: $("#txtName").val(),
+                           Description: $("#txtDescription").val(),
+                           StartDate: $("#txtStartDate").data("DateTimePicker")
+                             .date().format(),
+                           EndDate: $("#txtEndDate").data("DateTimePicker")
+                             .date().format(),
+                           IdStatus: $("#ddlStatus").val()},
                           insertCallbackOk,
                           insertCallbackFailed);
         }
@@ -200,18 +202,21 @@ var Projects = (function () {
         MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
     }
     function update() {
+
+        console.log($("#txtStartDate").data("DateTimePicker").date().format());
+
         if (validateInputFields() === true) {
             console.log("Updating fields ...");
             AjaxUtil.Call("Projects.aspx/UpdateProjectJSON",
-                          '{Id:' + $("#txtId").val() + ', ' +
-                          'Code:"' + $("#txtCode").val() + '", ' +
-                          'Name:"' + $("#txtName").val() + '", ' +
-                          'Description:"' + $("#txtDescription").val() + '", ' +
-                          'StartDate:"' + $("#txtStartDate").datetimepicker()
-                            .children("input").val() + '", ' +
-                          'EndDate:"' + $("#txtEndDate").datetimepicker()
-                            .children("input").val() + '", ' +
-                          'IdStatus:' + $("#ddlStatus").val() + '}',
+                          {Id: $("#txtId").val(),
+                           Code: $("#txtCode").val(),
+                           Name: $("#txtName").val(),
+                           Description: $("#txtDescription").val(),
+                           StartDate: $("#txtStartDate").data("DateTimePicker")
+                             .date().format(),
+                           EndDate: $("#txtEndDate").data("DateTimePicker")
+                             .date().format(),
+                          IdStatus: $("#ddlStatus").val()},
                           updateCallbackOk,
                           updateCallbackFailed);
         }
@@ -236,7 +241,7 @@ var Projects = (function () {
     }
     function removeConfirmed(id) {
         AjaxUtil.Call("Projects.aspx/DeleteProjectJSON",
-                      '{Id:' + id + '}',
+                      {Id: id},
                       function (result) { removeCallbackOk(result, id); },
                       removeCallbackFailed);
     }
@@ -318,6 +323,7 @@ var Projects = (function () {
                 ProjectNotes.tabLoad();
                 break;
             case "Sessions":
+                ProjectSessions.tabLoad();
                 break;
             default:
                 break;
@@ -326,10 +332,10 @@ var Projects = (function () {
         $("#txtName").attr("maxlength", "200");
         $("#txtDescription").attr("maxlength", "1000");
         $("#txtStartDate").datetimepicker({
-            format: "DD-MM-YYYY"
+            format: DateUtil.DATE_FORMAT
         });
         $("#txtEndDate").datetimepicker({
-            format: "DD-MM-YYYY"
+            format: DateUtil.DATE_FORMAT
         });
         $("#txtStartDate").on("dp.change", function (e) {
             $("#txtEndDate").data("DateTimePicker").minDate(e.date);
@@ -393,7 +399,7 @@ var Projects = (function () {
     //}
     function getProjects() {
         AjaxUtil.Call("Projects.aspx/GetProjectsJSON",
-                      "",
+                      {},
                       getProjectsCallbackOk);
     }
     function getProjectStatusesCallbackOk(result) {
@@ -407,7 +413,7 @@ var Projects = (function () {
     //}
     function getProjectStatuses() {
         AjaxUtil.Call("Projects.aspx/GetProjectStatusesJSON",
-                 "",
+                 {},
                  getProjectStatusesCallbackOk);
     }
 
