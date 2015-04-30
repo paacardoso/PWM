@@ -10,17 +10,17 @@
         }
         if ($("#txtAlertDescription").val() === "") {
             if (msg.length > 0) { msg += "<br>"; }
-            msg += "O campo 'Nome' é obrigatório.";
+            msg += "O campo 'Descrição' é obrigatório.";
         }
-        if ($("#txtAlertDueDate").datetimepicker().children("input").val() === '') {
+        if ($("#txtAlertDueDate").data("DateTimePicker").date() === null) {
             if (msg.length > 0) { msg += "<br>"; }
             msg += "O campo 'Data' é obrigatório.";
         }
         if (msg.length > 0) {
-            MessageBox.Info(msg, { Div: "#divAlertModalMessage" });
+            MessageBox.info(msg, { Div: "#divAlertModalMessage" });
             return false;
         }
-        MessageBox.Clear();
+        MessageBox.clear();
         return true;
     }
 
@@ -31,22 +31,22 @@
         var data = {Id: result.d,
                     Name: $("#txtAlertName").val(),
                     Description: $("#txtAlertDescription").val(),
-                    DueDate: DateUtil.Format($("#txtAlertDueDate").data("DateTimePicker")
-                      .date().format(), { ShowTime: true})};
+                    DueDate: DateUtil.formatDateTime($("#txtAlertDueDate")
+                        .data("DateTimePicker").date())};
         $("#tblAlerts").bootstrapTable('append', data);
     }
     function insertCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace,
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace,
                                           Div: "#divAlertModalMessage" });
     }
     function insertAlert() {
         if (validateInputFields() === true) {
-            AjaxUtil.Call("Projects.aspx/InsertAlertJSON",
+            AjaxUtil.invoke("Projects.aspx/InsertAlertJSON",
                           {Name: $("#txtAlertName").val(),
                            Description: $("#txtAlertDescription").val(),
-                           DueDate: $("#txtAlertDueDate").data("DateTimePicker")
-                             .date().format(),
+                           DueDate: DateUtil.toUTC($("#txtAlertDueDate")
+                               .data("DateTimePicker").date()),
                            IdProject: $("#txtId").val()},
                           insertCallbackOk,
                           insertCallbackFailed);
@@ -57,7 +57,7 @@
         $("#txtAlertId").val("");
         $("#txtAlertName").val("");
         $("#txtAlertDescription").val("");
-        $("#txtAlertDueDate").data("DateTimePicker").date(new Date());
+        $("#txtAlertDueDate").data("DateTimePicker").date(DateUtil.today());
         $("#btnAlertActionConfirmed").unbind("click");
         $("#btnAlertActionConfirmed").on("click", insertAlert);
         $("#mdlAlert").modal("show");
@@ -73,42 +73,43 @@
                 Id: $("#txtAlertId").val(),
                 Name: $("#txtAlertName").val(),
                 Description: $("#txtAlertDescription").val(),
-                DueDate: DateUtil.Format($("#txtAlertDueDate").data("DateTimePicker")
-                    .date().format(), { ShowTime: true})
+                DueDate: DateUtil.formatDateTime($("#txtAlertDueDate")
+                    .data("DateTimePicker").date())
             }
         });
     }
     function updateCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace,
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace,
                                           Div: "#divAlertModalMessage" });
     }
     function update() {
         if (validateInputFields() === true) {
-            AjaxUtil.Call("Projects.aspx/updateAlertJSON",
+            AjaxUtil.invoke("Projects.aspx/updateAlertJSON",
                           {Id: $("#txtAlertId").val(),
                            Name: $("#txtAlertName").val(),
                            Description: $("#txtAlertDescription").val(),
-                           DueDate: $("#txtAlertDueDate").data("DateTimePicker")
-                             .date().format(),
+                           DueDate: DateUtil.toUTC($("#txtAlertDueDate")
+                               .data("DateTimePicker").date()),
                            IdProject: $("#txtId").val()},
                           updateCallbackOk,
                           updateCallbackFailed);
         }
     }
     function showEditDialog(row) {
-        var alert;
+        var my_alert;
         if (row === undefined) {
-            alert = $("#tblAlerts").bootstrapTable("getSelections")[0];
+            my_alert = $("#tblAlerts").bootstrapTable("getSelections")[0];
         } else {
-            alert = row;
+            my_alert = row;
         }
-        MessageBox.Clear();
+        MessageBox.clear();
         $("#mdlAlertLabel").text("Editar Alerta");
-        $("#txtAlertId").val(alert.Id);
-        $("#txtAlertName").val(alert.Name);
-        $("#txtAlertDescription").val(alert.Description);
-        $("#txtAlertDueDate").data("DateTimePicker").date(moment(alert.DueDate));
+        $("#txtAlertId").val(my_alert.Id);
+        $("#txtAlertName").val(my_alert.Name);
+        $("#txtAlertDescription").val(my_alert.Description);
+        $("#txtAlertDueDate").data("DateTimePicker")
+            .date(DateUtil.parseDateTime(my_alert.DueDate));
         $("#btnAlertActionConfirmed").unbind("click");
         $("#btnAlertActionConfirmed").on("click", update);
         $("#mdlAlert").modal("show");
@@ -118,48 +119,48 @@
     /*---   R E M O V E   ---*/
     function removeCallbackOk(result, ids) {
         $("#tblAlerts").bootstrapTable("remove", ids);
-        MessageBox.Hide();
+        MessageBox.hide();
     }
     function removeCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Hide();
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace,
+        MessageBox.hide();
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace,
                                           Div: "#divAlertModalMessage" });
     }
     function removeCancelled() {
-        MessageBox.Hide();
+        MessageBox.hide();
     }
-    function removeConfirmed(alert) {
-        var alerts = [],
+    function removeConfirmed(my_alert) {
+        var my_alerts = [],
             ids = {
                 field: "Id",
                 values: []
             },
             index;
 
-        if (alert !== undefined) {
-            alerts[0] = alert;
+        if (my_alert !== undefined) {
+            my_alerts[0] = my_alert;
         } else {
-            alerts = $("#tblAlerts").bootstrapTable("getSelections");
+            my_alerts = $("#tblAlerts").bootstrapTable("getSelections");
         }
 
-        for (index = 0; index < alerts.length; index += 1) {
-            ids.values[index] = alerts[index].Id;
+        for (index = 0; index < my_alerts.length; index += 1) {
+            ids.values[index] = my_alerts[index].Id;
         }
-        AjaxUtil.Call("Projects.aspx/DeleteAlertsJSON",
+        AjaxUtil.invoke("Projects.aspx/DeleteAlertsJSON",
                       {Ids: ids.values.join()},
                       function (result) { removeCallbackOk(result, ids); },
                       removeCallbackFailed);
     }
-    function showRemoveDialog(alert) {
-        if (alert !== undefined) {
-            MessageBox.Ask("Remover Alerta",
-                           "Confirma a remoção do alerta '" + alert.Name + "' ?",
+    function showRemoveDialog(al) {
+        if (al !== undefined) {
+            MessageBox.ask("Remover Alerta",
+                           "Confirma a remoção do ala '" + al.Name + "' ?",
                            removeCancelled,
-                           function () { removeConfirmed(alert); });
+                           function () { removeConfirmed(al); });
         } else {
-            MessageBox.Ask("Remover Alerta",
-                           "Confirma a remoção dos alertas seleccionados ?",
+            MessageBox.ask("Remover Alerta",
+                           "Confirma a remoção dos alas seleccionados ?",
                            removeCancelled,
                            function () { removeConfirmed(undefined); });
         }
@@ -224,7 +225,7 @@
     function getAlertsCallbackOk(result) {
         var rows = JSON.parse(result.d);
         rows.forEach(function (row) {
-            row.DueDate = DateUtil.Format(row.DueDate, {ShowTime: true});
+            row.DueDate = DateUtil.formatDateTime(row.DueDate);
         });
         $("#tblAlerts").bootstrapTable("destroy");
         $("#tblAlerts").bootstrapTable({
@@ -238,7 +239,8 @@
     //}
     function getAlerts() {
         var idProject = $("#txtId").val();
-        AjaxUtil.Call("Projects.aspx/GetAlertsJSON",
+        //console.log("Getting alerts of project id: " + idProject);
+        AjaxUtil.invoke("Projects.aspx/GetAlertsJSON",
                       {IdProject: idProject},
                       getAlertsCallbackOk);
     }
@@ -264,7 +266,8 @@
         showAddDialog: function () { return showAddDialog(); },
         showEditDialog: function (row) { return showEditDialog(row); },
         showRemoveDialog: function (Alert) { return showRemoveDialog(Alert); },
-        tabLoad: function () { return tabLoad(); }
+        tabLoad: function () { return tabLoad(); },
+        invalidate: function () { tabHasLoaded = false; }
     };
 
 }());

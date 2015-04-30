@@ -9,7 +9,7 @@
             msg += "O campo 'Nome' é obrigatório.";
         }
         if (msg.length > 0) {
-            MessageBox.Info(msg);
+            MessageBox.info(msg);
             return false;
         }
         return true;
@@ -27,11 +27,11 @@
     }
     function insertCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace});
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace});
     }
     function insert() {
         if (validateRequired() === true) {
-            AjaxUtil.Call("Parameters.aspx/InsertParameterJSON",
+            AjaxUtil.invoke("Parameters.aspx/InsertParameterJSON",
                           {Name: $("#txtName").val(),
                            Value: $("#txtValue").val(),
                            Description: $("#txtDescription").val()},
@@ -41,7 +41,7 @@
     }
     function showAddDialog() {
         $("#mdlLabel").text("Adicionar Novo Parâmetro");
-        MessageBox.Clear();
+        MessageBox.clear();
         $("#txtId").val("");
         $("#txtName").val("");
         $("#txtValue").val("");
@@ -68,11 +68,11 @@
     }
     function updateCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace });
     }
     function update() {
         if (validateRequired() === true) {
-            AjaxUtil.Call("Parameters.aspx/UpdateParameterJSON",
+            AjaxUtil.invoke("Parameters.aspx/UpdateParameterJSON",
                           {Id: $("#txtId").val(),
                            Name: $("#txtName").val(),
                            Value: $("#txtValue").val(),
@@ -88,7 +88,7 @@
         } else {
             param = row;
         }
-        MessageBox.Clear();
+        MessageBox.clear();
         $("#mdlLabel").text("Editar Parâmetro");
         $("#txtId").val(param.Id);
         $("#txtName").val(param.Name);
@@ -104,15 +104,15 @@
     function removeCallbackOk(result, ids) {
         //console.log("ids: " + JSON.stringify(ids));
         $("#tblParameters").bootstrapTable("remove", ids);
-        MessageBox.Hide();
+        MessageBox.hide();
     }
     function removeCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Hide();
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
+        MessageBox.hide();
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace });
     }
     function removeCancelled() {
-        MessageBox.Hide();
+        MessageBox.hide();
     }
     function removeConfirmed(param) {
         var params = [],
@@ -132,7 +132,7 @@
             ids.values[index] = params[index].Id;
         }
 
-        AjaxUtil.Call("Parameters.aspx/DeleteParametersJSON",
+        AjaxUtil.invoke("Parameters.aspx/DeleteParametersJSON",
                       {Ids: ids.values.join()},
                       function (result) { removeCallbackOk(result, ids); },
                       removeCallbackFailed);
@@ -140,12 +140,12 @@
     }
     function showRemoveDialog(param) {
         if (param !== undefined) {
-            MessageBox.Ask("Remover Parâmetro",
+            MessageBox.ask("Remover Parâmetro",
                            "Confirma a remoção do parâmetro '" + param.Name + "' ?",
                            removeCancelled,
                            function () { removeConfirmed(param); });
         } else {
-            MessageBox.Ask("Remover Parâmetro",
+            MessageBox.ask("Remover Parâmetro",
                            "Confirma a remoção dos parâmetros seleccionados ?",
                            removeCancelled,
                            function () { removeConfirmed(undefined); });
@@ -221,7 +221,7 @@
     // handled by the default ajax function (AjaxUtil.js\defaultFailFunc)
     //}
     function getParameters() {
-        AjaxUtil.Call("Parameters.aspx/GetParametersJSON",
+        AjaxUtil.invoke("Parameters.aspx/GetParametersJSON",
                       {},
                       getParametersCallbackOk);
     }

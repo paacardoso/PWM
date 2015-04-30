@@ -32,7 +32,7 @@ var Master = (function () {
     //function logoutCallbackFailed(msg) {
     //    alert('failed !!!');
     //    var ex = JSON.parse(msg.responseText);
-    //    MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
+    //    MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace });
     //}
 
 
@@ -163,7 +163,7 @@ var Master = (function () {
                     dataType: "json",
                     error: function (msg) {
                         var ex = JSON.parse(msg.responseText);
-                        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
+                        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace });
                         callback();
                     },
                     success: function (res) {

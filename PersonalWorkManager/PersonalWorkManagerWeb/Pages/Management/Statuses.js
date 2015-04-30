@@ -18,7 +18,7 @@
             msg += "O campo 'Ordem' é obrigatório.";
         }
         if (msg.length > 0) {
-            MessageBox.Info(msg);
+            MessageBox.info(msg);
             return false;
         }
         return true;
@@ -37,11 +37,11 @@
     }
     function insertCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace });
     }
     function insert() {
         if (validateRequired() === true) {
-            AjaxUtil.Call("Statuses.aspx/InsertStatusJSON",
+            AjaxUtil.invoke("Statuses.aspx/InsertStatusJSON",
                           {Name: $("#txtName").val(),
                            Description: $("#txtDescription").val(),
                            IdStatusType: $("#ddlStatusType").val(),
@@ -52,7 +52,7 @@
     }
     function showAddDialog() {
         $("#mdlLabel").text("Adicionar Novo Estado");
-        MessageBox.Clear();
+        MessageBox.clear();
         $("#txtId").val("");
         $("#txtName").val("");
         $("#txtDescription").val("");
@@ -81,11 +81,11 @@
     }
     function updateCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace });
     }
     function update() {
         if (validateRequired() === true) {
-            AjaxUtil.Call("Statuses.aspx/UpdateStatusJSON",
+            AjaxUtil.invoke("Statuses.aspx/UpdateStatusJSON",
                           {Id: $("#txtId").val(),
                            Name: $("#txtName").val(),
                            Description: $("#txtDescription").val(),
@@ -102,7 +102,7 @@
         } else {
             status = row;
         }
-        MessageBox.Clear();
+        MessageBox.clear();
         $("#mdlLabel").text("Editar Estado");
         $("#txtId").val(status.Id);
         $("#txtName").val(status.Name);
@@ -120,15 +120,15 @@
     /*---   R E M O V E   ---*/
     function removeCallbackOk(result, ids) {
         $("#tblStatuses").bootstrapTable("remove", ids);
-        MessageBox.Hide();
+        MessageBox.hide();
     }
     function removeCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Hide();
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
+        MessageBox.hide();
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace });
     }
     function removeCancelled() {
-        MessageBox.Hide();
+        MessageBox.hide();
     }
     function removeConfirmed(status) {
         var statuses = [],
@@ -148,7 +148,7 @@
             ids.values[index] = statuses[index].Id;
         }
 
-        AjaxUtil.Call("Statuses.aspx/DeleteStatusesJSON",
+        AjaxUtil.invoke("Statuses.aspx/DeleteStatusesJSON",
                       {Ids: ids.values.join()},
                       function (result) { removeCallbackOk(result, ids); },
                       removeCallbackFailed);
@@ -156,12 +156,12 @@
     }
     function showRemoveDialog(status) {
         if (status !== undefined) {
-            MessageBox.Ask("Remover Estado",
+            MessageBox.ask("Remover Estado",
                            "Confirma a remoção do Estado '" + status.Name + "' ?",
                            removeCancelled,
                            function () { removeConfirmed(status); });
         } else {
-            MessageBox.Ask("Remover Estado",
+            MessageBox.ask("Remover Estado",
                            "Confirma a remoção dos Estados seleccionados ?",
                            removeCancelled,
                            function () { removeConfirmed(undefined); });
@@ -231,7 +231,7 @@
     // handled by the default ajax function (AjaxUtil.js\defaultFailFunc)
     //}
     function getStatusStatusTypes() {
-        AjaxUtil.Call("Statuses.aspx/GetStatusStatusTypesJSON",
+        AjaxUtil.invoke("Statuses.aspx/GetStatusStatusTypesJSON",
                       {},
                       getStatusStatusTypesCallbackOk);
     }
@@ -247,7 +247,7 @@
     // handled by the default ajax function (AjaxUtil.js\defaultFailFunc)
     //}
     function getStatuses() {
-        AjaxUtil.Call("Statuses.aspx/GetStatusesJSON",
+        AjaxUtil.invoke("Statuses.aspx/GetStatusesJSON",
                       {},
                       getStatusesCallbackOk);
     }

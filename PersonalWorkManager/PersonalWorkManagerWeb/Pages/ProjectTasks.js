@@ -21,10 +21,10 @@
             msg += "O campo 'Estado' é obrigatório.";
         }
         if (msg.length > 0) {
-            MessageBox.Info(msg, { Div: "#divTaskModalMessage" });
+            MessageBox.info(msg, { Div: "#divTaskModalMessage" });
             return false;
         }
-        MessageBox.Clear();
+        MessageBox.clear();
         return true;
     }
 
@@ -41,12 +41,12 @@
     }
     function insertCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace,
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace,
                                           Div: "#divTaskModalMessage" });
     }
     function insertTask() {
         if (validateInputFields() === true) {
-            AjaxUtil.Call("Projects.aspx/InsertTaskJSON",
+            AjaxUtil.invoke("Projects.aspx/InsertTaskJSON",
                           {Name: $("#txtTaskName").val(),
                            Description: $("#txtTaskDescription").val(),
                            Order: $("#txtTaskOrder").val(),
@@ -85,12 +85,12 @@
     }
     function updateCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace,
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace,
                                           Div: "#divTaskModalMessage" });
     }
     function update() {
         if (validateInputFields() === true) {
-            AjaxUtil.Call("Projects.aspx/updateTaskJSON",
+            AjaxUtil.invoke("Projects.aspx/updateTaskJSON",
                           {Id: $("#txtTaskId").val(),
                            Name: $("#txtTaskName").val(),
                            Description: $("#txtTaskDescription").val(),
@@ -108,7 +108,7 @@
         } else {
             task = row;
         }
-        MessageBox.Clear();
+        MessageBox.clear();
         $("#mdlTaskLabel").text("Editar Tarefa");
         $("#txtTaskId").val(task.Id);
         $("#txtTaskName").val(task.Name);
@@ -125,16 +125,16 @@
     /*---   R E M O V E   ---*/
     function removeCallbackOk(result, ids) {
         $("#tblTasks").bootstrapTable("remove", ids);
-        MessageBox.Hide();
+        MessageBox.hide();
     }
     function removeCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Hide();
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace,
+        MessageBox.hide();
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace,
                                           Div: "#divTaskModalMessage" });
     }
     function removeCancelled() {
-        MessageBox.Hide();
+        MessageBox.hide();
     }
     function removeConfirmed(task) {
         var tasks = [],
@@ -153,19 +153,19 @@
         for (index = 0; index < tasks.length; index += 1) {
             ids.values[index] = tasks[index].Id;
         }
-        AjaxUtil.Call("Projects.aspx/DeleteTasksJSON",
+        AjaxUtil.invoke("Projects.aspx/DeleteTasksJSON",
                       {Ids: ids.values.join()},
                       function (result) { removeCallbackOk(result, ids); },
                       removeCallbackFailed);
     }
     function showRemoveDialog(task) {
         if (task !== undefined) {
-            MessageBox.Ask("Remover Tarefa",
+            MessageBox.ask("Remover Tarefa",
                            "Confirma a remoção da tarefa '" + task.Name + "' ?",
                            removeCancelled,
                            function () { removeConfirmed(task); });
         } else {
-            MessageBox.Ask("Remover Tarefa",
+            MessageBox.ask("Remover Tarefa",
                            "Confirma a remoção das tarefas seleccionadas ?",
                            removeCancelled,
                            function () { removeConfirmed(undefined); });
@@ -238,7 +238,7 @@
     //}
     function getTasks() {
         var idProject = $("#txtId").val();
-        AjaxUtil.Call("Projects.aspx/GetTasksJSON",
+        AjaxUtil.invoke("Projects.aspx/GetTasksJSON",
                       {IdProject: idProject},
                       getTasksCallbackOk);
     }
@@ -252,7 +252,7 @@
     // handled by the default ajax function (AjaxUtil.js\defaultFailFunc)
     //}
     function getTaskStatuses() {
-        AjaxUtil.Call("Projects.aspx/GetTaskStatusesJSON",
+        AjaxUtil.invoke("Projects.aspx/GetTaskStatusesJSON",
                       {},
                       getTaskStatusesCallbackOk);
     }
@@ -279,7 +279,8 @@
         showAddDialog: function () { return showAddDialog(); },
         showEditDialog: function (row) { return showEditDialog(row); },
         showRemoveDialog: function (task) { return showRemoveDialog(task); },
-        tabLoad: function () { return tabLoad(); }
+        tabLoad: function () { return tabLoad(); },
+        invalidate: function () { tabHasLoaded = false; }
     };
 
 }());

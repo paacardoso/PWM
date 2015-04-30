@@ -5,10 +5,10 @@
     /*---   A F T E R   L O A D   ---*/
     function validateInputFields() {
         var msg = "";
-        if ($("#txtSessionStartTime").datetimepicker().children("input").val() === '') {
+        if ($("#txtSessionStartTime").data("DateTimePicker").date() === null) {
             msg += "O campo 'Hora Inicial' é obrigatório.";
         }
-        if ($("#txtSessionEndTime").datetimepicker().children("input").val() === '') {
+        if ($("#txtSessionEndTime").data("DateTimePicker").date() === null) {
             if (msg.length > 0) { msg += "<br>"; }
             msg += "O campo 'Hora Final' é obrigatório.";
         }
@@ -21,10 +21,10 @@
             msg += "O campo 'Recurso' é obrigatório.";
         }
         if (msg.length > 0) {
-            MessageBox.Info(msg, { Div: "#divSessionModalMessage" });
+            MessageBox.info(msg, { Div: "#divSessionModalMessage" });
             return false;
         }
-        MessageBox.Clear();
+        MessageBox.clear();
         return true;
     }
 
@@ -33,26 +33,26 @@
     function insertCallbackOk(result) {
         $("#mdlSession").modal("hide");
         var data = {Id: result.d,
-                    StartTime: DateUtil.Format($("#txtSessionStartTime")
-                      .data("DateTimePicker").date().format(), { ShowTime: true}),
-                    EndTime: DateUtil.Format($("#txtSessionEndTime")
-                      .data("DateTimePicker").date().format(), { ShowTime: true}),
+                    StartTime: DateUtil.formatDateTime($("#txtSessionStartTime")
+                      .data("DateTimePicker").date()),
+                    EndTime: DateUtil.formatDateTime($("#txtSessionEndTime")
+                      .data("DateTimePicker").date()),
                     Task: $("#ddlSessionTask option:selected").text(),
                     Resource: $("#ddlSessionResource option:selected").text()};
         $("#tblSessions").bootstrapTable('append', data);
     }
     function insertCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace,
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace,
                                           Div: "#divSessionModalMessage" });
     }
     function insertSession() {
         if (validateInputFields() === true) {
-            AjaxUtil.Call("Projects.aspx/InsertSessionJSON",
-                          {StartTime: $("#txtSessionStartTime").data("DateTimePicker")
-                             .date().format(),
-                           EndTime: $("#txtSessionEndTime").data("DateTimePicker")
-                             .date().format(),
+            AjaxUtil.invoke("Projects.aspx/InsertSessionJSON",
+                          {StartTime: DateUtil.toUTC($("#txtSessionStartTime")
+                             .data("DateTimePicker").date()),
+                           EndTime: DateUtil.toUTC($("#txtSessionEndTime")
+                             .data("DateTimePicker").date()),
                            IdTask: $("#ddlSessionTask").val(),
                            IdResource: $("#ddlSessionResource").val()},
                           insertCallbackOk,
@@ -62,7 +62,9 @@
     function showAddDialog() {
         $("#mdlSessionLabel").text("Adicionar nova Sessão");
         $("#txtSessionId").val("");
-        $("#txtSessionStartTime").data("DateTimePicker").date(new Date());
+        $("#txtSessionStartTime").data("DateTimePicker").minDate(false).maxDate(false);
+        $("#txtSessionEndTime").data("DateTimePicker").minDate(false).maxDate(false);
+        $("#txtSessionStartTime").data("DateTimePicker").date(DateUtil.today());
         $("#txtSessionEndTime").data("DateTimePicker").date(null);
         $("#ddlSessionTask").val("");
         $("#ddlSessionResource").val("");
@@ -74,15 +76,16 @@
 
     /*---   E D I T   ---*/
     function updateCallbackOk(result) {
+        //console.log("Session updated ...");
         $("#mdlSession").modal("hide");
         $("#tblSessions").bootstrapTable("updateRow", {
             index: TableUtil.getTableIndexById("#tblSessions", $("#txtSessionId").val()),
             row: {
                 Id: $("#txtSessionId").val(),
-                StartTime: DateUtil.Format($("#txtSessionStartTime")
-                    .data("DateTimePicker").date().format(), { ShowTime: true}),
-                EndTime: DateUtil.Format($("#txtSessionEndTime")
-                    .data("DateTimePicker").date().format(), { ShowTime: true}),
+                StartTime: DateUtil.formatDateTime($("#txtSessionStartTime")
+                    .data("DateTimePicker").date()),
+                EndTime: DateUtil.formatDateTime($("#txtSessionEndTime")
+                    .data("DateTimePicker").date()),
                 Task: $("#ddlSessionTask option:selected").text(),
                 Resource: $("#ddlSessionResource option:selected").text()
             }
@@ -90,17 +93,17 @@
     }
     function updateCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace,
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace,
                                           Div: "#divSessionModalMessage" });
     }
     function update() {
         if (validateInputFields() === true) {
-            AjaxUtil.Call("Projects.aspx/updateSessionJSON",
+            AjaxUtil.invoke("Projects.aspx/updateSessionJSON",
                           {Id: $("#txtSessionId").val(),
-                           StartTime: $("#txtSessionStartTime").data("DateTimePicker")
-                             .date().format(),
-                           EndTime: $("#txtSessionEndTime").data("DateTimePicker")
-                             .date().format(),
+                           StartTime: DateUtil.toUTC($("#txtSessionStartTime")
+                             .data("DateTimePicker").date()),
+                           EndTime: DateUtil.toUTC($("#txtSessionEndTime")
+                             .data("DateTimePicker").date()),
                            IdTask: $("#ddlSessionTask").val(),
                            IdResource: $("#ddlSessionResource").val()},
                           updateCallbackOk,
@@ -114,11 +117,13 @@
         } else {
             session = row;
         }
-        MessageBox.Clear();
+        MessageBox.clear();
         $("#mdlSessionLabel").text("Editar Sessão");
         $("#txtSessionId").val(session.Id);
-        $("#txtSessionStartTime").data("DateTimePicker").date(moment(session.StartTime));
-        $("#txtSessionEndTime").data("DateTimePicker").date(moment(session.EndTime));
+        $("#txtSessionStartTime").data("DateTimePicker").date(DateUtil
+            .parseDateTime(session.StartTime));
+        $("#txtSessionEndTime").data("DateTimePicker").date(DateUtil
+            .parseDateTime(session.EndTime));
         $("#ddlSessionTask option:contains('" + session.TaskName + "')")
             .attr("selected", true);
         $("#ddlSessionResource option:contains('" + session.ResourceName + "')")
@@ -132,16 +137,16 @@
     /*---   R E M O V E   ---*/
     function removeCallbackOk(result, ids) {
         $("#tblSessions").bootstrapTable("remove", ids);
-        MessageBox.Hide();
+        MessageBox.hide();
     }
     function removeCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Hide();
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace,
+        MessageBox.hide();
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace,
                                           Div: "#divSessionModalMessage" });
     }
     function removeCancelled() {
-        MessageBox.Hide();
+        MessageBox.hide();
     }
     function removeConfirmed(session) {
         var sessions = [],
@@ -160,19 +165,19 @@
         for (index = 0; index < sessions.length; index += 1) {
             ids.values[index] = sessions[index].Id;
         }
-        AjaxUtil.Call("Projects.aspx/DeleteSessionsJSON",
+        AjaxUtil.invoke("Projects.aspx/DeleteSessionsJSON",
                       {Ids: ids.values.join()},
                       function (result) { removeCallbackOk(result, ids); },
                       removeCallbackFailed);
     }
     function showRemoveDialog(session) {
         if (session !== undefined) {
-            MessageBox.Ask("Remover Sessão",
+            MessageBox.ask("Remover Sessão",
                            "Confirma a remoção da sessão '" + session.Id + "' ?",
                            removeCancelled,
                            function () { removeConfirmed(session); });
         } else {
-            MessageBox.Ask("Remover Sessão",
+            MessageBox.ask("Remover Sessão",
                            "Confirma a remoção das sessões seleccionadas ?",
                            removeCancelled,
                            function () { removeConfirmed(undefined); });
@@ -215,12 +220,7 @@
             format: DateUtil.DATETIME_FORMAT,
             showClose: true
         });
-        $("#txtSessionStartTime").on("dp.change", function (e) {
-            $('#txtSessionEndTime').data("DateTimePicker").minDate(e.date);
-        });
-        $("#txtSessionEndTime").on("dp.change", function (e) {
-            $('#txtSessionStartTime').data("DateTimePicker").maxDate(e.date);
-        });
+        DateUtil.defineDateInterval("#txtSessionStartTime", "#txtSessionEndTime");
     }
     function setupPage() {
         $("#tblSessions")
@@ -246,8 +246,8 @@
     function getSessionsCallbackOk(result) {
         var rows = JSON.parse(result.d);
         rows.forEach(function (row) {
-            row.StartTime = DateUtil.Format(row.StartTime, {ShowTime: true});
-            row.EndTime = DateUtil.Format(row.EndTime, {ShowTime: true});
+            row.StartTime = DateUtil.formatDateTime(row.StartTime);
+            row.EndTime = DateUtil.formatDateTime(row.EndTime);
         });
         $("#tblSessions").bootstrapTable("destroy");
         $("#tblSessions").bootstrapTable({
@@ -261,7 +261,7 @@
     //}
     function getSessions() {
         var idProject = $("#txtId").val();
-        AjaxUtil.Call("Projects.aspx/GetSessionsJSON",
+        AjaxUtil.invoke("Projects.aspx/GetSessionsJSON",
                       {IdProject: idProject},
                       getSessionsCallbackOk);
     }
@@ -276,7 +276,7 @@
     //}
     function getSessionTasks() {
         var idProject = $("#txtId").val();
-        AjaxUtil.Call("Projects.aspx/GetSessionTasksJSON",
+        AjaxUtil.invoke("Projects.aspx/GetSessionTasksJSON",
                       {IdProject: idProject},
                       getSessionTasksCallbackOk);
     }
@@ -291,7 +291,7 @@
     //}
     function getSessionResources() {
         var idProject = $("#txtId").val();
-        AjaxUtil.Call("Projects.aspx/GetSessionResourcesJSON",
+        AjaxUtil.invoke("Projects.aspx/GetSessionResourcesJSON",
                       {IdProject: idProject},
                       getSessionResourcesCallbackOk);
     }
@@ -319,7 +319,8 @@
         showAddDialog: function () { return showAddDialog(); },
         showEditDialog: function (row) { return showEditDialog(row); },
         showRemoveDialog: function (Session) { return showRemoveDialog(Session); },
-        tabLoad: function () { return tabLoad(); }
+        tabLoad: function () { return tabLoad(); },
+        invalidate: function () { tabHasLoaded = false; }
     };
 
 }());

@@ -9,10 +9,10 @@
             msg += "O campo 'Nome' é obrigatório.";
         }
         if (msg.length > 0) {
-            MessageBox.Info(msg, { Div: "#divNoteModalMessage" });
+            MessageBox.info(msg, { Div: "#divNoteModalMessage" });
             return false;
         }
-        MessageBox.Clear();
+        MessageBox.clear();
         return true;
     }
 
@@ -22,18 +22,18 @@
         $("#mdlNote").modal("hide");
         var data = {Id: result.d,
                     Text: $("#txtNoteText").val()};
-        console.log(JSON.stringify(data));
+        //console.log(JSON.stringify(data));
         $("#tblNotes").bootstrapTable('append', data);
 
     }
     function insertCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace,
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace,
                                           Div: "#divNoteModalMessage" });
     }
     function insertNote() {
         if (validateInputFields() === true) {
-            AjaxUtil.Call("Projects.aspx/InsertNoteJSON",
+            AjaxUtil.invoke("Projects.aspx/InsertNoteJSON",
                           {Text: $("#txtNoteText").val(),
                            IdProject: $("#txtId").val()},
                           insertCallbackOk,
@@ -63,12 +63,12 @@
     }
     function updateCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace,
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace,
                                           Div: "#divNoteModalMessage" });
     }
     function update() {
         if (validateInputFields() === true) {
-            AjaxUtil.Call("Projects.aspx/updateNoteJSON",
+            AjaxUtil.invoke("Projects.aspx/updateNoteJSON",
                           {Id: $("#txtNoteId").val(),
                            Text: $("#txtNoteText").val(),
                            IdProject: $("#txtId").val()},
@@ -83,7 +83,7 @@
         } else {
             note = row;
         }
-        MessageBox.Clear();
+        MessageBox.clear();
         $("#mdlNoteLabel").text("Editar Nota");
         $("#txtNoteId").val(note.Id);
         $("#txtNoteText").val(note.Text);
@@ -96,16 +96,16 @@
     /*---   R E M O V E   ---*/
     function removeCallbackOk(result, ids) {
         $("#tblNotes").bootstrapTable("remove", ids);
-        MessageBox.Hide();
+        MessageBox.hide();
     }
     function removeCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Hide();
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace,
+        MessageBox.hide();
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace,
                                           Div: "#divNoteModalMessage" });
     }
     function removeCancelled() {
-        MessageBox.Hide();
+        MessageBox.hide();
     }
     function removeConfirmed(note) {
         var notes = [],
@@ -124,19 +124,19 @@
         for (index = 0; index < notes.length; index += 1) {
             ids.values[index] = notes[index].Id;
         }
-        AjaxUtil.Call("Projects.aspx/DeleteNotesJSON",
+        AjaxUtil.invoke("Projects.aspx/DeleteNotesJSON",
                       {Ids: ids.values.join()},
                       function (result) { removeCallbackOk(result, ids); },
                       removeCallbackFailed);
     }
     function showRemoveDialog(note) {
         if (note !== undefined) {
-            MessageBox.Ask("Remover Nota",
+            MessageBox.ask("Remover Nota",
                            "Confirma a remoção da nota '" + note.Id + "' ?",
                            removeCancelled,
                            function () { removeConfirmed(note); });
         } else {
-            MessageBox.Ask("Remover Nota",
+            MessageBox.ask("Remover Nota",
                            "Confirma a remoção das notas seleccionadas ?",
                            removeCancelled,
                            function () { removeConfirmed(undefined); });
@@ -207,7 +207,7 @@
     //}
     function getNotes() {
         var idProject = $("#txtId").val();
-        AjaxUtil.Call("Projects.aspx/GetNotesJSON",
+        AjaxUtil.invoke("Projects.aspx/GetNotesJSON",
                       {IdProject: idProject},
                       getNotesCallbackOk);
     }
@@ -233,7 +233,8 @@
         showAddDialog: function () { return showAddDialog(); },
         showEditDialog: function (row) { return showEditDialog(row); },
         showRemoveDialog: function (note) { return showRemoveDialog(note); },
-        tabLoad: function () { return tabLoad(); }
+        tabLoad: function () { return tabLoad(); },
+        invalidate: function () { tabHasLoaded = false; }
     };
 
 }());

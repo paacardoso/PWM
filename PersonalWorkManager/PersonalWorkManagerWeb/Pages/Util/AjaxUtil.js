@@ -35,7 +35,7 @@ var AjaxUtil = (function () {
     }
 
     return {
-        Call: function (url, data, doneFunc, failFunc) {
+        invoke: function (url, data, doneFunc, failFunc) {
             return ajaxCall(url, data, doneFunc, failFunc);
         }
     };

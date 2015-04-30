@@ -374,7 +374,7 @@
                               where p.Id == IdProject
                               select new
                               {
-                                  Id = t.Id,
+                                  Id = s.Id,
                                   StartTime = s.StartTime,
                                   EndTime = s.EndTime,
                                   Task = t.Name,

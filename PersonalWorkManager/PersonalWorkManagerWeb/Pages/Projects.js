@@ -15,7 +15,7 @@ var Projects = (function () {
             if (msg.length > 0) { msg += "<br>"; }
             msg += "O campo 'Nome' é obrigatório.";
         }
-        if ($("#txtStartDate").datetimepicker().children("input").val() === '') {
+        if ($("#txtStartDate").data("DateTimePicker").date() === null) {
             if (msg.length > 0) { msg += "<br>"; }
             msg += "O campo 'Data Inicial' é obrigatório.";
         }
@@ -24,10 +24,10 @@ var Projects = (function () {
             msg += "O campo 'Estado' é obrigatório.";
         }
         if (msg.length > 0) {
-            MessageBox.Info(msg);
+            MessageBox.info(msg);
             return false;
         }
-        MessageBox.Clear();
+        MessageBox.clear();
         return true;
     }
     function setupToolbar() {
@@ -74,19 +74,20 @@ var Projects = (function () {
         }
     }
     function clearForm() {
-        $("#txtId").val('');
-        $("#txtCode").val('');
-        $("#txtName").val('');
-        $("#txtDescription").val('');
-        $("#txtStartDate").data("DateTimePicker").date(new Date());
+        $("#txtId").val("");
+        $("#txtCode").val("");
+        $("#txtName").val("");
+        $("#txtDescription").val("");
+        $("#txtStartDate").data("DateTimePicker").minDate(false).maxDate(false);
+        $("#txtEndDate").data("DateTimePicker").minDate(false).maxDate(false);
+        $("#txtStartDate").data("DateTimePicker").date(DateUtil.today());
         $("#txtEndDate").data("DateTimePicker").date(null);
-
         $("#ddlStatus").val(-1);
     }
     function setupMode(mode) {
         //console.log("Changing to mode: " + mode);
         tabProjectMode = mode;
-        MessageBox.Clear();
+        MessageBox.clear();
         setupTabs();
 
         switch (tabProjectMode) {
@@ -95,6 +96,7 @@ var Projects = (function () {
             break;
         case "new":
             $("#divMain").show();
+            $('#tabProject a[href="#tabMain"]').tab('show');
             $("#ddlProject")[0].selectize.clear(true);
             clearForm();
             setupToolbar();
@@ -109,13 +111,21 @@ var Projects = (function () {
     function getProjectCallbackOk(result) {
         var proj = JSON.parse(result.d)[0],
             obj;
+        //console.log("Opening project id: " + proj.Id);
         $("#txtId").val(proj.Id);
         $("#txtCode").val(proj.Code);
         $("#txtName").val(proj.Name);
         $("#txtDescription").val(proj.Description);
-        $("#txtStartDate").data("DateTimePicker").date(moment(proj.StartDate));
-        $("#txtEndDate").data("DateTimePicker").date(moment(proj.EndDate));
+        $("#txtStartDate").data("DateTimePicker").date(DateUtil
+            .parseUTC(proj.StartDate));
+        $("#txtEndDate").data("DateTimePicker").date(DateUtil
+            .parseUTC(proj.EndDate));
         $("#ddlStatus").val(proj.IdStatus);
+
+        ProjectTasks.invalidate();
+        ProjectAlerts.invalidate();
+        ProjectNotes.invalidate();
+        ProjectSessions.invalidate();
 
         setupMode("edit");
 
@@ -146,7 +156,7 @@ var Projects = (function () {
     //}
     function getProject(id) {
         if (id !== '') {
-            AjaxUtil.Call("Projects.aspx/GetProjectJSON",
+            AjaxUtil.invoke("Projects.aspx/GetProjectJSON",
                           {Id: id},
                           getProjectCallbackOk);
         }
@@ -166,18 +176,18 @@ var Projects = (function () {
     }
     function insertCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace });
     }
     function insert() {
         if (validateInputFields() === true) {
-            AjaxUtil.Call("Projects.aspx/InsertProjectJSON",
+            AjaxUtil.invoke("Projects.aspx/InsertProjectJSON",
                           {Code: $("#txtCode").val(),
                            Name: $("#txtName").val(),
                            Description: $("#txtDescription").val(),
-                           StartDate: $("#txtStartDate").data("DateTimePicker")
-                             .date().format(),
-                           EndDate: $("#txtEndDate").data("DateTimePicker")
-                             .date().format(),
+                           StartDate: DateUtil.toUTC($("#txtStartDate")
+                               .data("DateTimePicker").date()),
+                           EndDate: DateUtil.toUTC($("#txtEndDate")
+                               .data("DateTimePicker").date()),
                            IdStatus: $("#ddlStatus").val()},
                           insertCallbackOk,
                           insertCallbackFailed);
@@ -187,7 +197,7 @@ var Projects = (function () {
 
     /*---   E D I T   ---*/
     function updateCallbackOk(result) {
-        console.log("Updating Successfull !");
+        //console.log("Updating Successfull !");
         $("#ddlProject")[0].selectize
             .updateOption($("#txtId").val(),
                           { Id: $("#txtId").val(),
@@ -199,23 +209,20 @@ var Projects = (function () {
     }
     function updateCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace });
     }
     function update() {
-
-        console.log($("#txtStartDate").data("DateTimePicker").date().format());
-
         if (validateInputFields() === true) {
-            console.log("Updating fields ...");
-            AjaxUtil.Call("Projects.aspx/UpdateProjectJSON",
+            //console.log("Updating fields ...");
+            AjaxUtil.invoke("Projects.aspx/UpdateProjectJSON",
                           {Id: $("#txtId").val(),
                            Code: $("#txtCode").val(),
                            Name: $("#txtName").val(),
                            Description: $("#txtDescription").val(),
-                           StartDate: $("#txtStartDate").data("DateTimePicker")
-                             .date().format(),
-                           EndDate: $("#txtEndDate").data("DateTimePicker")
-                             .date().format(),
+                           StartDate: DateUtil.toUTC($("#txtStartDate")
+                               .data("DateTimePicker").date()),
+                           EndDate: DateUtil.toUTC($("#txtEndDate")
+                               .data("DateTimePicker").date()),
                           IdStatus: $("#ddlStatus").val()},
                           updateCallbackOk,
                           updateCallbackFailed);
@@ -227,20 +234,20 @@ var Projects = (function () {
     function removeCallbackOk(result, id) {
         $("#ddlProject")[0].selectize.clear(true);
         $("#ddlProject")[0].selectize.removeOption(id);
-        MessageBox.Hide();
+        MessageBox.hide();
         clearForm();
         setupMode('');
     }
     function removeCallbackFailed(msg) {
-        MessageBox.Hide();
+        MessageBox.hide();
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace });
     }
     function removeCancelled() {
-        MessageBox.Hide();
+        MessageBox.hide();
     }
     function removeConfirmed(id) {
-        AjaxUtil.Call("Projects.aspx/DeleteProjectJSON",
+        AjaxUtil.invoke("Projects.aspx/DeleteProjectJSON",
                       {Id: id},
                       function (result) { removeCallbackOk(result, id); },
                       removeCallbackFailed);
@@ -249,7 +256,7 @@ var Projects = (function () {
         var ddl = $("#ddlProject"),
             selectize = ddl[0].selectize,
             proj = selectize.getItem(selectize.getValue());
-        MessageBox.Ask("Remover Projecto",
+        MessageBox.ask("Remover Projecto",
                        "Confirma a remoção do projecto '" + proj.text() + "' ?",
                        removeCancelled,
                        function () { removeConfirmed(selectize.getValue()); });
@@ -337,12 +344,8 @@ var Projects = (function () {
         $("#txtEndDate").datetimepicker({
             format: DateUtil.DATE_FORMAT
         });
-        $("#txtStartDate").on("dp.change", function (e) {
-            $("#txtEndDate").data("DateTimePicker").minDate(e.date);
-        });
-        $("#txtEndDate").on("dp.change", function (e) {
-            $("#txtStartDate").data("DateTimePicker").maxDate(e.date);
-        });
+        DateUtil.defineDateInterval("#txtStartDate", "#txtEndDate");
+
         $(".selectize-input").css("margin-bottom", "-5px");
     }
     function setupPage() {
@@ -398,7 +401,7 @@ var Projects = (function () {
     // handled by the default ajax function (AjaxUtil.js\defaultFailFunc)
     //}
     function getProjects() {
-        AjaxUtil.Call("Projects.aspx/GetProjectsJSON",
+        AjaxUtil.invoke("Projects.aspx/GetProjectsJSON",
                       {},
                       getProjectsCallbackOk);
     }
@@ -412,7 +415,7 @@ var Projects = (function () {
     // handled by the default ajax function (AjaxUtil.js\defaultFailFunc)
     //}
     function getProjectStatuses() {
-        AjaxUtil.Call("Projects.aspx/GetProjectStatusesJSON",
+        AjaxUtil.invoke("Projects.aspx/GetProjectStatusesJSON",
                  {},
                  getProjectStatusesCallbackOk);
     }

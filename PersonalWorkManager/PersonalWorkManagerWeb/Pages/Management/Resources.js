@@ -17,7 +17,7 @@
             msg += "O campo 'Estado' é obrigatório.";
         }
         if (msg.length > 0) {
-            MessageBox.Info(msg);
+            MessageBox.info(msg);
             return false;
         }
         return true;
@@ -35,11 +35,11 @@
     }
     function insertCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace });
     }
     function insert() {
         if (validateRequired() === true) {
-            AjaxUtil.Call("Resources.aspx/InsertResourceJSON",
+            AjaxUtil.invoke("Resources.aspx/InsertResourceJSON",
                           {Login: $("#txtLogin").val(),
                            Name: $("#txtName").val(),
                            Password: $("#txtPassword").val(),
@@ -50,7 +50,7 @@
     }
     function showAddDialog() {
         $("#mdlLabel").text("Adicionar Novo Recurso");
-        MessageBox.Clear();
+        MessageBox.clear();
         $("#txtId").val("");
         $("#txtLogin").val("");
         $("#txtName").val("");
@@ -78,11 +78,11 @@
     }
     function updateCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace });
     }
     function update() {
         if (validateRequired() === true) {
-            AjaxUtil.Call("Resources.aspx/UpdateResourceJSON",
+            AjaxUtil.invoke("Resources.aspx/UpdateResourceJSON",
                           {Id: $("#txtId").val(),
                            Login: $("#txtLogin").val(),
                            Name: $("#txtName").val(),
@@ -99,7 +99,7 @@
         } else {
             resource = row;
         }
-        MessageBox.Clear();
+        MessageBox.clear();
         $("#mdlLabel").text("Editar Recurso");
         $("#txtId").val(resource.Id);
         $("#txtLogin").val(resource.Login);
@@ -116,15 +116,15 @@
     /*---   R E M O V E   ---*/
     function removeCallbackOk(result, ids) {
         $("#tblResources").bootstrapTable("remove", ids);
-        MessageBox.Hide();
+        MessageBox.hide();
     }
     function removeCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Hide();
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
+        MessageBox.hide();
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace });
     }
     function removeCancelled() {
-        MessageBox.Hide();
+        MessageBox.hide();
     }
     function removeConfirmed(resource) {
         var resources = [],
@@ -144,19 +144,19 @@
             ids.values[index] = resources[index].Id;
         }
 
-        AjaxUtil.Call("Resources.aspx/DeleteResourcesJSON",
+        AjaxUtil.invoke("Resources.aspx/DeleteResourcesJSON",
                       {Ids: ids.values.join()},
                       function (result) { removeCallbackOk(result, ids); },
                       removeCallbackFailed);
     }
     function showRemoveDialog(resource) {
         if (resource !== undefined) {
-            MessageBox.Ask("Remover Recurso",
+            MessageBox.ask("Remover Recurso",
                            "Confirma a remoção do Recurso '" + resource.Name + "' ?",
                            removeCancelled,
                            function () { removeConfirmed(resource); });
         } else {
-            MessageBox.Ask("Remover Recurso",
+            MessageBox.ask("Remover Recurso",
                            "Confirma a remoção dos Recursos seleccionados ?",
                            removeCancelled,
                            function () { removeConfirmed(undefined); });
@@ -227,7 +227,7 @@
     // handled by the default ajax function (AjaxUtil.js\defaultFailFunc)
     //}
     function getResources() {
-        AjaxUtil.Call("Resources.aspx/GetResourcesJSON",
+        AjaxUtil.invoke("Resources.aspx/GetResourcesJSON",
                       {},
                       getResourcesCallbackOk);
     }
@@ -241,7 +241,7 @@
     // handled by the default ajax function (AjaxUtil.js\defaultFailFunc)
     //}
     function getResourceStatuses() {
-        AjaxUtil.Call("Resources.aspx/GetResourceStatusesJSON",
+        AjaxUtil.invoke("Resources.aspx/GetResourceStatusesJSON",
                       {},
                       getResourceStatusesCallbackOk);
     }
