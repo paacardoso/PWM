@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="PWMModel.Store" Alias="Self" Provider="System.Data.SQLite" ProviderManifestToken="ISO8601" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="PWMModel.Store" Alias="Self" Provider="System.Data.SQLite" ProviderManifestToken="ISO8601" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="PWMModelStoreContainer">
           <EntitySet Name="Alert" EntityType="PWMModel.Store.Alert" store:Type="Tables" />
           <EntitySet Name="Note" EntityType="PWMModel.Store.Note" store:Type="Tables" />
@@ -109,7 +109,6 @@
           <Property Name="Id" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="StartTime" Type="datetime" Nullable="false" />
           <Property Name="EndTime" Type="datetime" Nullable="false" />
-          <Property Name="ElapsedSeconds" Type="integer" Nullable="false" />
           <Property Name="IdTask" Type="integer" Nullable="false" />
           <Property Name="IdResource" Type="integer" Nullable="false" />
         </EntityType>
@@ -250,8 +249,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="PWMModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
@@ -261,7 +259,6 @@
           <EntitySet Name="Parameter" EntityType="PWMModel.Parameter" />
           <EntitySet Name="Project" EntityType="PWMModel.Project" />
           <EntitySet Name="Resource" EntityType="PWMModel.Resource" />
-          <EntitySet Name="Session" EntityType="PWMModel.Session" />
           <EntitySet Name="Status" EntityType="PWMModel.Status" />
           <EntitySet Name="StatusType" EntityType="PWMModel.StatusType" />
           <EntitySet Name="Task" EntityType="PWMModel.Task" />
@@ -285,14 +282,6 @@
             <End Role="Status" EntitySet="Status" />
             <End Role="Resource" EntitySet="Resource" />
           </AssociationSet>
-          <AssociationSet Name="FK_Session_0_0" Association="PWMModel.FK_Session_0_0">
-            <End Role="Status" EntitySet="Status" />
-            <End Role="Session" EntitySet="Session" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Session_1_0" Association="PWMModel.FK_Session_1_0">
-            <End Role="Task" EntitySet="Task" />
-            <End Role="Session" EntitySet="Session" />
-          </AssociationSet>
           <AssociationSet Name="FK_Status_0_0" Association="PWMModel.FK_Status_0_0">
             <End Role="StatusType" EntitySet="StatusType" />
             <End Role="Status" EntitySet="Status" />
@@ -300,6 +289,15 @@
           <AssociationSet Name="FK_Task_0_0" Association="PWMModel.FK_Task_0_0">
             <End Role="Status" EntitySet="Status" />
             <End Role="Task" EntitySet="Task" />
+          </AssociationSet>
+          <EntitySet Name="Session" EntityType="PWMModel.Session" />
+          <AssociationSet Name="FK_Session_0_0" Association="PWMModel.FK_Session_0_0">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Session" EntitySet="Session" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Session_1_0" Association="PWMModel.FK_Session_1_0">
+            <End Role="Task" EntitySet="Task" />
+            <End Role="Session" EntitySet="Session" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Alert">
@@ -359,19 +357,6 @@
           <Property Name="IdStatus" Type="Int64" Nullable="false" />
           <NavigationProperty Name="Status" Relationship="PWMModel.FK_Resource_0_0" FromRole="Resource" ToRole="Status" />
         </EntityType>
-        <EntityType Name="Session">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="StartTime" Type="DateTime" Nullable="false" />
-          <Property Name="EndTime" Type="DateTime" Nullable="false" />
-          <Property Name="ElapsedSeconds" Type="Int64" Nullable="false" />
-          <Property Name="IdTask" Type="Int64" Nullable="false" />
-          <Property Name="IdResource" Type="Int64" Nullable="false" />
-          <NavigationProperty Name="Status" Relationship="PWMModel.FK_Session_0_0" FromRole="Session" ToRole="Status" />
-          <NavigationProperty Name="Task" Relationship="PWMModel.FK_Session_1_0" FromRole="Session" ToRole="Task" />
-        </EntityType>
         <EntityType Name="Status">
           <Key>
             <PropertyRef Name="Id" />
@@ -383,9 +368,9 @@
           <Property Name="IdStatusType" Type="Int64" Nullable="false" />
           <NavigationProperty Name="Project" Relationship="PWMModel.FK_Project_0_0" FromRole="Status" ToRole="Project" />
           <NavigationProperty Name="Resource" Relationship="PWMModel.FK_Resource_0_0" FromRole="Status" ToRole="Resource" />
-          <NavigationProperty Name="Session" Relationship="PWMModel.FK_Session_0_0" FromRole="Status" ToRole="Session" />
           <NavigationProperty Name="StatusType" Relationship="PWMModel.FK_Status_0_0" FromRole="Status" ToRole="StatusType" />
           <NavigationProperty Name="Task" Relationship="PWMModel.FK_Task_0_0" FromRole="Status" ToRole="Task" />
+          <NavigationProperty Name="Session" Relationship="PWMModel.FK_Session_0_0" FromRole="Status" ToRole="Session" />
         </EntityType>
         <EntityType Name="StatusType">
           <Key>
@@ -407,8 +392,8 @@
           <Property Name="IdProject" Type="Int64" Nullable="false" />
           <Property Name="IdStatus" Type="Int64" Nullable="false" />
           <NavigationProperty Name="Project" Relationship="PWMModel.FK_Task_1_0" FromRole="Task" ToRole="Project" />
-          <NavigationProperty Name="Session" Relationship="PWMModel.FK_Session_1_0" FromRole="Task" ToRole="Session" />
           <NavigationProperty Name="Status" Relationship="PWMModel.FK_Task_0_0" FromRole="Task" ToRole="Status" />
+          <NavigationProperty Name="Session" Relationship="PWMModel.FK_Session_1_0" FromRole="Task" ToRole="Session" />
         </EntityType>
         <Association Name="FK_Alert_0_0">
           <End Role="Project" Type="PWMModel.Project" Multiplicity="0..1" />
@@ -470,30 +455,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Session_0_0">
-          <End Role="Status" Type="PWMModel.Status" Multiplicity="1" />
-          <End Role="Session" Type="PWMModel.Session" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Status">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Session">
-              <PropertyRef Name="IdResource" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Session_1_0">
-          <End Role="Task" Type="PWMModel.Task" Multiplicity="1" />
-          <End Role="Session" Type="PWMModel.Session" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Task">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Session">
-              <PropertyRef Name="IdTask" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Status_0_0">
           <End Role="StatusType" Type="PWMModel.StatusType" Multiplicity="1" />
           <End Role="Status" Type="PWMModel.Status" Multiplicity="*" />
@@ -515,6 +476,42 @@
             </Principal>
             <Dependent Role="Task">
               <PropertyRef Name="IdStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Session">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="DateTime" Name="StartTime" Nullable="false" />
+          <Property Type="DateTime" Name="EndTime" Nullable="false" />
+          <Property Type="Int64" Name="IdTask" Nullable="false" />
+          <Property Type="Int64" Name="IdResource" Nullable="false" />
+          <NavigationProperty Name="Status" Relationship="PWMModel.FK_Session_0_0" FromRole="Session" ToRole="Status" />
+          <NavigationProperty Name="Task" Relationship="PWMModel.FK_Session_1_0" FromRole="Session" ToRole="Task" />
+        </EntityType>
+        <Association Name="FK_Session_0_0">
+          <End Type="PWMModel.Status" Role="Status" Multiplicity="1" />
+          <End Type="PWMModel.Session" Role="Session" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Session">
+              <PropertyRef Name="IdResource" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Session_1_0">
+          <End Type="PWMModel.Task" Role="Task" Multiplicity="1" />
+          <End Type="PWMModel.Session" Role="Session" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Task">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Session">
+              <PropertyRef Name="IdTask" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -559,14 +556,6 @@
             <ScalarProperty Name="Password" ColumnName="Password" />
             <ScalarProperty Name="IdStatus" ColumnName="IdStatus" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
-          <EntitySetMapping Name="Session"><EntityTypeMapping TypeName="PWMModel.Session"><MappingFragment StoreEntitySet="Session">
-            <ScalarProperty Name="Id" ColumnName="Id" />
-            <ScalarProperty Name="StartTime" ColumnName="StartTime" />
-            <ScalarProperty Name="EndTime" ColumnName="EndTime" />
-            <ScalarProperty Name="ElapsedSeconds" ColumnName="ElapsedSeconds" />
-            <ScalarProperty Name="IdTask" ColumnName="IdTask" />
-            <ScalarProperty Name="IdResource" ColumnName="IdResource" />
-          </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="Status"><EntityTypeMapping TypeName="PWMModel.Status"><MappingFragment StoreEntitySet="Status">
             <ScalarProperty Name="Id" ColumnName="Id" />
             <ScalarProperty Name="Name" ColumnName="Name" />
@@ -587,6 +576,17 @@
             <ScalarProperty Name="IdProject" ColumnName="IdProject" />
             <ScalarProperty Name="IdStatus" ColumnName="IdStatus" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Session">
+            <EntityTypeMapping TypeName="PWMModel.Session">
+              <MappingFragment StoreEntitySet="Session">
+                <ScalarProperty Name="IdResource" ColumnName="IdResource" />
+                <ScalarProperty Name="IdTask" ColumnName="IdTask" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -608,53 +608,54 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="Model" ZoomLevel="64">
-        <EntityTypeShape EntityType="PWMModel.Alert" Width="1.5" PointX="7.5" PointY="2.875" Height="1.9210009765624996" IsExpanded="true" />
-        <EntityTypeShape EntityType="PWMModel.Note" Width="1.5" PointX="7.5" PointY="5.625" Height="1.5923063151041674" IsExpanded="true" />
+        <EntityTypeShape EntityType="PWMModel.Alert" Width="1.5" PointX="7.5" PointY="1.5" Height="1.9210009765624996" IsExpanded="true" />
+        <EntityTypeShape EntityType="PWMModel.Note" Width="1.5" PointX="7.5" PointY="4" Height="1.5923063151041674" IsExpanded="true" />
         <EntityTypeShape EntityType="PWMModel.Parameter" Width="1.5" PointX="0.75" PointY="0.75" Height="1.5923063151041665" IsExpanded="true" />
-        <EntityTypeShape EntityType="PWMModel.Project" Width="1.5" PointX="5.25" PointY="3.625" Height="2.9070849609374996" IsExpanded="true" />
-        <EntityTypeShape EntityType="PWMModel.Resource" Width="1.5" PointX="5.25" PointY="7.875" Height="1.9210009765624996" IsExpanded="true" />
-        <EntityTypeShape EntityType="PWMModel.Session" Width="1.5" PointX="12.75" PointY="4.875" Height="2.2496956380208317" IsExpanded="true" />
-        <EntityTypeShape EntityType="PWMModel.Status" Width="1.5" PointX="3" PointY="5.125" Height="2.5783902994791674" IsExpanded="true" />
-        <EntityTypeShape EntityType="PWMModel.StatusType" Width="1.5" PointX="0.75" PointY="5.625" Height="1.5923063151041674" IsExpanded="true" />
-        <EntityTypeShape EntityType="PWMModel.Task" Width="1.5" PointX="10.5" PointY="4.375" Height="2.4140429687499996" IsExpanded="true" />
+        <EntityTypeShape EntityType="PWMModel.Project" Width="1.5" PointX="5.25" PointY="2.25" Height="2.9070849609374996" IsExpanded="true" />
+        <EntityTypeShape EntityType="PWMModel.Resource" Width="1.5" PointX="5.25" PointY="6.5" Height="1.9210009765624996" IsExpanded="true" />
+        <EntityTypeShape EntityType="PWMModel.Status" Width="1.5" PointX="3" PointY="3.75" Height="2.5783902994791656" IsExpanded="true" />
+        <EntityTypeShape EntityType="PWMModel.StatusType" Width="1.5" PointX="0.75" PointY="4.25" Height="1.5923063151041674" IsExpanded="true" />
+        <EntityTypeShape EntityType="PWMModel.Task" Width="1.5" PointX="10.5" PointY="3" Height="2.4140429687499996" IsExpanded="true" />
         <AssociationConnector Association="PWMModel.FK_Alert_0_0" ManuallyRouted="false">
-          <ConnectorPoint PointX="6.75" PointY="4.21050048828125" />
-          <ConnectorPoint PointX="7.5" PointY="4.21050048828125" />
+          <ConnectorPoint PointX="6.75" PointY="2.83550048828125" />
+          <ConnectorPoint PointX="7.5" PointY="2.83550048828125" />
         </AssociationConnector>
         <AssociationConnector Association="PWMModel.FK_Note_0_0" ManuallyRouted="false">
-          <ConnectorPoint PointX="6.75" PointY="6.07854248046875" />
-          <ConnectorPoint PointX="7.5" PointY="6.07854248046875" />
+          <ConnectorPoint PointX="6.75" PointY="4.57854248046875" />
+          <ConnectorPoint PointX="7.5" PointY="4.57854248046875" />
         </AssociationConnector>
         <AssociationConnector Association="PWMModel.FK_Project_0_0" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.5" PointY="5.82854248046875" />
-          <ConnectorPoint PointX="5.25" PointY="5.82854248046875" />
+          <ConnectorPoint PointX="4.5" PointY="4.45354248046875" />
+          <ConnectorPoint PointX="5.25" PointY="4.45354248046875" />
         </AssociationConnector>
         <AssociationConnector Association="PWMModel.FK_Task_1_0" ManuallyRouted="false">
-          <ConnectorPoint PointX="6.75" PointY="5.21050048828125" />
-          <ConnectorPoint PointX="10.5" PointY="5.21050048828125" />
+          <ConnectorPoint PointX="6.75" PointY="3.71050048828125" />
+          <ConnectorPoint PointX="10.5" PointY="3.71050048828125" />
         </AssociationConnector>
         <AssociationConnector Association="PWMModel.FK_Resource_0_0" ManuallyRouted="false">
-          <ConnectorPoint PointX="3.75" PointY="7.7033902994791674" />
-          <ConnectorPoint PointX="3.75" PointY="8.83550048828125" />
-          <ConnectorPoint PointX="5.25" PointY="8.83550048828125" />
-        </AssociationConnector>
-        <AssociationConnector Association="PWMModel.FK_Session_0_0" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.5" PointY="7.4915983072916674" />
-          <ConnectorPoint PointX="13.5" PointY="7.4915983072916674" />
-          <ConnectorPoint PointX="13.5" PointY="7.1246956380208317" />
-        </AssociationConnector>
-        <AssociationConnector Association="PWMModel.FK_Session_1_0" ManuallyRouted="false">
-          <ConnectorPoint PointX="12" PointY="5.832021484375" />
-          <ConnectorPoint PointX="12.75" PointY="5.832021484375" />
+          <ConnectorPoint PointX="3.75" PointY="6.3283902994791656" />
+          <ConnectorPoint PointX="3.75" PointY="7.46050048828125" />
+          <ConnectorPoint PointX="5.25" PointY="7.46050048828125" />
         </AssociationConnector>
         <AssociationConnector Association="PWMModel.FK_Status_0_0" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="6.4211531575520837" />
-          <ConnectorPoint PointX="3" PointY="6.4211531575520837" />
+          <ConnectorPoint PointX="2.25" PointY="5.0461531575520837" />
+          <ConnectorPoint PointX="3" PointY="5.0461531575520837" />
         </AssociationConnector>
         <AssociationConnector Association="PWMModel.FK_Task_0_0" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.5" PointY="7.3544498111979166" />
-          <ConnectorPoint PointX="11.25" PointY="7.3544498111979166" />
-          <ConnectorPoint PointX="11.25" PointY="6.78904296875" />
+          <ConnectorPoint PointX="4.5" PointY="5.9915983072916665" />
+          <ConnectorPoint PointX="11.25" PointY="5.9915983072916665" />
+          <ConnectorPoint PointX="11.25" PointY="5.41404296875" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="PWMModel.Session" Width="1.5" PointX="13.375" PointY="4.625" Height="2.0853483072916674" />
+        <AssociationConnector Association="PWMModel.FK_Session_0_0" >
+          <ConnectorPoint PointX="4.5" PointY="5.7607023111979174" />
+          <ConnectorPoint PointX="11.166666666666666" PointY="5.7607023111979165" />
+          <ConnectorPoint PointX="11.333333333333334" PointY="5.7607023111979174" />
+          <ConnectorPoint PointX="13.375" PointY="5.7607023111979174" />
+        </AssociationConnector>
+        <AssociationConnector Association="PWMModel.FK_Session_1_0" >
+          <ConnectorPoint PointX="12" PointY="5.019521484375" />
+          <ConnectorPoint PointX="13.375" PointY="5.019521484375" />
         </AssociationConnector>
       </Diagram>
     </Diagrams>

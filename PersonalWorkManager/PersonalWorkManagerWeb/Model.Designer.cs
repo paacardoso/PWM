@@ -23,10 +23,10 @@ using System.Runtime.Serialization;
 [assembly: EdmRelationshipAttribute("PWMModel", "FK_Project_0_0", "Status", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(PersonalWorkManagerWeb.Status), "Project", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(PersonalWorkManagerWeb.Project), true)]
 [assembly: EdmRelationshipAttribute("PWMModel", "FK_Task_1_0", "Project", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(PersonalWorkManagerWeb.Project), "Task", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(PersonalWorkManagerWeb.Task), true)]
 [assembly: EdmRelationshipAttribute("PWMModel", "FK_Resource_0_0", "Status", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(PersonalWorkManagerWeb.Status), "Resource", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(PersonalWorkManagerWeb.Resource), true)]
-[assembly: EdmRelationshipAttribute("PWMModel", "FK_Session_0_0", "Status", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(PersonalWorkManagerWeb.Status), "Session", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(PersonalWorkManagerWeb.Session), true)]
-[assembly: EdmRelationshipAttribute("PWMModel", "FK_Session_1_0", "Task", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(PersonalWorkManagerWeb.Task), "Session", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(PersonalWorkManagerWeb.Session), true)]
 [assembly: EdmRelationshipAttribute("PWMModel", "FK_Status_0_0", "StatusType", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(PersonalWorkManagerWeb.StatusType), "Status", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(PersonalWorkManagerWeb.Status), true)]
 [assembly: EdmRelationshipAttribute("PWMModel", "FK_Task_0_0", "Status", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(PersonalWorkManagerWeb.Status), "Task", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(PersonalWorkManagerWeb.Task), true)]
+[assembly: EdmRelationshipAttribute("PWMModel", "FK_Session_0_0", "Status", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(PersonalWorkManagerWeb.Status), "Session", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(PersonalWorkManagerWeb.Session), true)]
+[assembly: EdmRelationshipAttribute("PWMModel", "FK_Session_1_0", "Task", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(PersonalWorkManagerWeb.Task), "Session", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(PersonalWorkManagerWeb.Session), true)]
 
 #endregion
 
@@ -161,22 +161,6 @@ namespace PersonalWorkManagerWeb
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<Session> Session
-        {
-            get
-            {
-                if ((_Session == null))
-                {
-                    _Session = base.CreateObjectSet<Session>("Session");
-                }
-                return _Session;
-            }
-        }
-        private ObjectSet<Session> _Session;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<Status> Status
         {
             get
@@ -221,6 +205,22 @@ namespace PersonalWorkManagerWeb
             }
         }
         private ObjectSet<Task> _Task;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<Session> Session
+        {
+            get
+            {
+                if ((_Session == null))
+                {
+                    _Session = base.CreateObjectSet<Session>("Session");
+                }
+                return _Session;
+            }
+        }
+        private ObjectSet<Session> _Session;
 
         #endregion
         #region AddTo Methods
@@ -266,14 +266,6 @@ namespace PersonalWorkManagerWeb
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the Session EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToSession(Session session)
-        {
-            base.AddObject("Session", session);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the Status EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToStatus(Status status)
@@ -295,6 +287,14 @@ namespace PersonalWorkManagerWeb
         public void AddToTask(Task task)
         {
             base.AddObject("Task", task);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the Session EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToSession(Session session)
+        {
+            base.AddObject("Session", session);
         }
 
         #endregion
@@ -1326,16 +1326,14 @@ namespace PersonalWorkManagerWeb
         /// <param name="id">Initial value of the Id property.</param>
         /// <param name="startTime">Initial value of the StartTime property.</param>
         /// <param name="endTime">Initial value of the EndTime property.</param>
-        /// <param name="elapsedSeconds">Initial value of the ElapsedSeconds property.</param>
         /// <param name="idTask">Initial value of the IdTask property.</param>
         /// <param name="idResource">Initial value of the IdResource property.</param>
-        public static Session CreateSession(global::System.Int64 id, global::System.DateTime startTime, global::System.DateTime endTime, global::System.Int64 elapsedSeconds, global::System.Int64 idTask, global::System.Int64 idResource)
+        public static Session CreateSession(global::System.Int64 id, global::System.DateTime startTime, global::System.DateTime endTime, global::System.Int64 idTask, global::System.Int64 idResource)
         {
             Session session = new Session();
             session.Id = id;
             session.StartTime = startTime;
             session.EndTime = endTime;
-            session.ElapsedSeconds = elapsedSeconds;
             session.IdTask = idTask;
             session.IdResource = idResource;
             return session;
@@ -1418,30 +1416,6 @@ namespace PersonalWorkManagerWeb
         private global::System.DateTime _EndTime;
         partial void OnEndTimeChanging(global::System.DateTime value);
         partial void OnEndTimeChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int64 ElapsedSeconds
-        {
-            get
-            {
-                return _ElapsedSeconds;
-            }
-            set
-            {
-                OnElapsedSecondsChanging(value);
-                ReportPropertyChanging("ElapsedSeconds");
-                _ElapsedSeconds = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("ElapsedSeconds");
-                OnElapsedSecondsChanged();
-            }
-        }
-        private global::System.Int64 _ElapsedSeconds;
-        partial void OnElapsedSecondsChanging(global::System.Int64 value);
-        partial void OnElapsedSecondsChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1781,28 +1755,6 @@ namespace PersonalWorkManagerWeb
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("PWMModel", "FK_Session_0_0", "Session")]
-        public EntityCollection<Session> Session
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Session>("PWMModel.FK_Session_0_0", "Session");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Session>("PWMModel.FK_Session_0_0", "Session", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("PWMModel", "FK_Status_0_0", "StatusType")]
         public StatusType StatusType
         {
@@ -1853,6 +1805,28 @@ namespace PersonalWorkManagerWeb
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Task>("PWMModel.FK_Task_0_0", "Task", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("PWMModel", "FK_Session_0_0", "Session")]
+        public EntityCollection<Session> Session
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Session>("PWMModel.FK_Session_0_0", "Session");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Session>("PWMModel.FK_Session_0_0", "Session", value);
                 }
             }
         }
@@ -2217,28 +2191,6 @@ namespace PersonalWorkManagerWeb
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("PWMModel", "FK_Session_1_0", "Session")]
-        public EntityCollection<Session> Session
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Session>("PWMModel.FK_Session_1_0", "Session");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Session>("PWMModel.FK_Session_1_0", "Session", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("PWMModel", "FK_Task_0_0", "Status")]
         public Status Status
         {
@@ -2267,6 +2219,28 @@ namespace PersonalWorkManagerWeb
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Status>("PWMModel.FK_Task_0_0", "Status", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("PWMModel", "FK_Session_1_0", "Session")]
+        public EntityCollection<Session> Session
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Session>("PWMModel.FK_Session_1_0", "Session");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Session>("PWMModel.FK_Session_1_0", "Session", value);
                 }
             }
         }

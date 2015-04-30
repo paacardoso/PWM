@@ -97,7 +97,6 @@ CREATE TABLE "Session" (
     `Id`                INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     `StartTime`         DATE NOT NULL,
     `EndTime`           DATE NOT NULL,
-    `ElapsedSeconds`    INTEGER NOT NULL,
     `IdTask`            INTEGER NOT NULL,
     `IdResource`        INTEGER NOT NULL,
     FOREIGN KEY(`IdTask`) REFERENCES Task ( Id ),

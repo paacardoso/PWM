@@ -15,7 +15,7 @@ var AjaxUtil = (function () {
         jqxhr = $.ajax({
             type: "POST",
             url: url,
-            data: data,
+            data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             dataType: "json"
         })
@@ -35,7 +35,7 @@ var AjaxUtil = (function () {
     }
 
     return {
-        Call: function (url, data, doneFunc, failFunc) {
+        invoke: function (url, data, doneFunc, failFunc) {
             return ajaxCall(url, data, doneFunc, failFunc);
         }
     };

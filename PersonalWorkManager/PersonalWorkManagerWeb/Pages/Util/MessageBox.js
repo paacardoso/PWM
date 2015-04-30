@@ -9,13 +9,13 @@ var MessageBox = (function () {
                 StackTrace: undefined
             };
 
-        console.log("options before extend: " + JSON.stringify(options));
+        //console.log("options before extend: " + JSON.stringify(options));
         if (options !== undefined) {
             jQuery.extend(options, defaults);
         } else {
             options = defaults;
         }
-        console.log("options after extend: " + JSON.stringify(options));
+        //console.log("options after extend: " + JSON.stringify(options));
 
         if (options.Div === undefined) {
             if ($("#divModalMessage").length > 0) {
@@ -76,33 +76,33 @@ var MessageBox = (function () {
     }
 
     return {
-        Success: function (msg, options) {
+        success: function (msg, options) {
             showMainMessage(msg, "success", "ok", options);
         },
-        Info: function (msg, options) {
+        info: function (msg, options) {
             showMainMessage(msg, "info", "exclamation-sign", options);
         },
-        Warning: function (msg, options) {
+        warning: function (msg, options) {
             showMainMessage(msg, "warning", "warning-sign", options);
         },
-        Danger: function (msg, options) {
+        danger: function (msg, options) {
             showMainMessage(msg, "danger", "remove", options);
         },
-        Error: function (msg, options) {
+        error: function (msg, options) {
             showMainMessage(msg, "danger", "remove", options);
         },
-        Exception: function (msg, options) {
+        exception: function (msg, options) {
             showMainMessage(msg, "danger", "remove", options);
         },
-        Clear: function () {
+        clear: function () {
             clearMain();
         },
 
         // Ask Methods
-        Ask: function (title, message, cancelledFunc, confirmedFunc) {
+        ask: function (title, message, cancelledFunc, confirmedFunc) {
             msgBoxAsk(title, message, cancelledFunc, confirmedFunc);
         },
-        Hide: function () {
+        hide: function () {
             msgBoxHide();
         }
 
