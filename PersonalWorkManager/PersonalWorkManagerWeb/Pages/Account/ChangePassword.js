@@ -19,7 +19,7 @@
             msg += "A nova senha não é igual à senha de confirmação.";
         }
         if (msg.length > 0) {
-            MessageBox.Info(msg);
+            MessageBox.info(msg);
             return false;
         }
         return true;
@@ -28,29 +28,29 @@
 
     /*---   U P D A T E   ---*/
     function updatePasswordCallbackOk(result) {
-        console.log('success ... ');
+        //console.log('success ... ');
         var msg = JSON.parse(result.d);
-        console.log('msg: ' + JSON.stringify(msg));
+        //console.log('msg: ' + JSON.stringify(msg));
         if (msg.Result === true) {
             window.location.href = UrlUtil.resolveURL("/Pages/Projects.aspx");
         } else {
-            MessageBox.Info(msg.Message);
+            MessageBox.info(msg.Message);
         }
     }
     function updatePasswordCallbackFailed(msg) {
-        console.log('failed ... ');
+        //console.log('failed ... ');
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace });
     }
     function updatePassword() {
         var currentUser;
         if (validatePassword() === true) {
             currentUser = JSON.parse(sessionStorage.getItem("current_resource"));
-            console.log('changing id: ' + currentUser.Id);
-            AjaxUtil.Call("ChangePassword.aspx/ChangePasswordJSON",
-                          '{Id:' + currentUser.Id + ', ' +
-                          'OldPassword:"' + $("#txtOldPassword").val() + '", ' +
-                          'NewPassword:"' + $("#txtNewPassword").val() + '"}',
+            //console.log('changing id: ' + currentUser.Id);
+            AjaxUtil.invoke("ChangePassword.aspx/ChangePasswordJSON",
+                          {Id: currentUser.Id,
+                           OldPassword: $("#txtOldPassword").val(),
+                           NewPassword: $("#txtNewPassword").val()},
                           updatePasswordCallbackOk,
                           updatePasswordCallbackFailed);
         }

@@ -1,18 +1,32 @@
 ﻿/*---   M E S S A G E B O X   ---*/
 var MessageBox = (function () {
 
-    function showMainMessage(msg, level, icon, options) {
+    function showMessage(msg, level, icon, options) {
 
         var html,
-            divElement,
-            defaultOptions = {
-                StackTrace: ""
+            defaults = {
+                Div: undefined,
+                StackTrace: undefined
             };
 
+        //console.log("options before extend: " + JSON.stringify(options));
         if (options !== undefined) {
-            jQuery.extend(options, defaultOptions);
+            jQuery.extend(options, defaults);
         } else {
-            options = defaultOptions;
+            options = defaults;
+        }
+        //console.log("options after extend: " + JSON.stringify(options));
+
+        if (options.Div === undefined) {
+            if ($("#divModalMessage").length > 0) {
+                if ($("#divModalMessage").is(":visible")) {
+                    options.Div = "#divModalMessage";
+                } else {
+                    options.Div = "#divMainMessage";
+                }
+            } else {
+                options.Div = "#divMainMessage";
+            }
         }
 
         html = "<div class='row'>" +
@@ -21,16 +35,18 @@ var MessageBox = (function () {
                        icon + "' aria-hidden='true'></span>" +
                    "</div>" +
                    "<div class='col-sm-11'>" +
-                       "<a href='#' class='close' onclick=\"$('#divMainMessage')" +
-                       ".hide();\">&times;</a>" +
+                       "<a href='#' class='close'" +
+                       " onclick=\"$('" + options.Div + "')" +
+                       ".html(''); $('" + options.Div + "')" +
+                       ".attr('class', ''); \">&times;</a>" +
                        "<strong><span>" + msg + "</span></strong>";
-        if (options.StackTrace !== "") {
+        if (options.StackTrace !== undefined) {
             html += "<span style='float: right'>" +
                         "<a style='text-align: right; color: #AAAAAA' href='#'" +
                         " onclick=\"$('#lblMainStackTrace').toggle();\">" +
                         "StackTrace&nbsp;</a>" +
                     "</span>" +
-                    "<div style='display: none'>" +
+                    "<div id='lblMainStackTrace' style='display: none'>" +
                         "<hr>" +
                         options.StackTrace +
                     "</div>";
@@ -38,22 +54,38 @@ var MessageBox = (function () {
         html +=    "</div>" +
                "</div>";
 
-        if ($("#divModalMessage").length > 0) {
-            if ($("#divModalMessage").is(":visible")) {
-                divElement = "#divModalMessage";
-            } else {
-                divElement = "#divMainMessage";
-            }
+        $(options.Div).html(html);
+        $(options.Div).attr("class", "alert alert-" + level);
+        $(options.Div).show();
+    }
+    function clearMessage(options) {
+        var defaults = {
+                Div: undefined
+            };
+
+        //console.log("options before extend: " + JSON.stringify(options));
+        if (options !== undefined) {
+            jQuery.extend(options, defaults);
         } else {
-            divElement = "#divMainMessage";
+            options = defaults;
+        }
+        //console.log("options after extend: " + JSON.stringify(options));
+
+        if (options.Div === undefined) {
+            if ($("#divModalMessage").length > 0) {
+                if ($("#divModalMessage").is(":visible")) {
+                    options.Div = "#divModalMessage";
+                } else {
+                    options.Div = "#divMainMessage";
+                }
+            } else {
+                options.Div = "#divMainMessage";
+            }
         }
 
-        $(divElement).html(html);
-        $(divElement).attr("class", "alert alert-" + level);
-        $(divElement).show();
-    }
-    function clearMain() {
-        $("#divMainMessage").hide();
+        //console.log("hiding message ....");
+        $(options.Div).hide();
+        //console.log("message visibility: " + $(options.Div).is(":visible"));
     }
 
     function msgBoxAsk(title, message, cancelledFunc, confirmedFunc) {
@@ -70,33 +102,33 @@ var MessageBox = (function () {
     }
 
     return {
-        Success: function (msg, options) {
-            showMainMessage(msg, "success", "ok", options);
+        success: function (msg, options) {
+            showMessage(msg, "success", "ok", options);
         },
-        Info: function (msg, options) {
-            showMainMessage(msg, "info", "exclamation-sign", options);
+        info: function (msg, options) {
+            showMessage(msg, "info", "exclamation-sign", options);
         },
-        Warning: function (msg, options) {
-            showMainMessage(msg, "warning", "warning-sign", options);
+        warning: function (msg, options) {
+            showMessage(msg, "warning", "warning-sign", options);
         },
-        Danger: function (msg, options) {
-            showMainMessage(msg, "danger", "remove", options);
+        danger: function (msg, options) {
+            showMessage(msg, "danger", "remove", options);
         },
-        Error: function (msg, options) {
-            showMainMessage(msg, "danger", "remove", options);
+        error: function (msg, options) {
+            showMessage(msg, "danger", "remove", options);
         },
-        Exception: function (msg, options) {
-            showMainMessage(msg, "danger", "remove", options);
+        exception: function (msg, options) {
+            showMessage(msg, "danger", "remove", options);
         },
-        Clear: function () {
-            clearMain();
+        clear: function (options) {
+            clearMessage(options);
         },
 
         // Ask Methods
-        Ask: function (title, message, cancelledFunc, confirmedFunc) {
+        ask: function (title, message, cancelledFunc, confirmedFunc) {
             msgBoxAsk(title, message, cancelledFunc, confirmedFunc);
         },
-        Hide: function () {
+        hide: function () {
             msgBoxHide();
         }
 

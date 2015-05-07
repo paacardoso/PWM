@@ -1,4 +1,6 @@
-﻿var Projects = (function () {
+﻿/*jslint browser: true*/
+/*global ProjectTasks, ProjectAlerts, ProjectNotes, ProjectSessions*/
+var Projects = (function () {
 
     var pageHasLoaded = false,
         tabProjectMode = "";
@@ -13,7 +15,7 @@
             if (msg.length > 0) { msg += "<br>"; }
             msg += "O campo 'Nome' é obrigatório.";
         }
-        if ($("#txtStartDate").datetimepicker().children("input").val() === '') {
+        if ($("#txtStartDate").data("DateTimePicker").date() === null) {
             if (msg.length > 0) { msg += "<br>"; }
             msg += "O campo 'Data Inicial' é obrigatório.";
         }
@@ -22,40 +24,11 @@
             msg += "O campo 'Estado' é obrigatório.";
         }
         if (msg.length > 0) {
-            MessageBox.Info(msg);
+            MessageBox.info(msg);
             return false;
         }
-        MessageBox.Clear();
+        MessageBox.clear();
         return true;
-    }
-//    function setupFields(enabled) {
-//        $("#txtId").prop("disabled", enabled);
-//        $("#txtCode").prop("disabled", enabled);
-//        $("#txtName").prop("disabled", enabled);
-//        $("#txtDescription").prop("disabled", enabled);
-//        $("#txtStartDate").prop("disabled", enabled);
-//        $("#txtEndDate").prop("disabled", enabled);
-//        $("#ddlStatus").prop("disabled", enabled);
-//    }
-    function switchTab(tab) {
-        switch (tab) {
-        case "project":
-            $("#tlbProject").show();
-            $("#tlbTasks").hide();
-            $("#tlbAlerts").hide();
-            $("#tlbNotes").hide();
-            $("#tlbSessions").hide();
-            break;
-        case "tasks":
-            $("#tlbProject").hide();
-            $("#tlbTasks").show();
-            $("#tlbAlerts").hide();
-            $("#tlbNotes").hide();
-            $("#tlbSessions").hide();
-            ProjectTasks.tabLoad();
-            break;
-        default:
-        }
     }
     function setupToolbar() {
         switch (tabProjectMode) {
@@ -101,18 +74,20 @@
         }
     }
     function clearForm() {
-        $("#txtId").val('');
-        $("#txtCode").val('');
-        $("#txtName").val('');
-        $("#txtDescription").val('');
-        $("#txtStartDate").datetimepicker().children("input").val('');
-        $("#txtEndDate").datetimepicker().children("input").val('');
+        $("#txtId").val("");
+        $("#txtCode").val("");
+        $("#txtName").val("");
+        $("#txtDescription").val("");
+        $("#txtStartDate").data("DateTimePicker").minDate(false).maxDate(false);
+        $("#txtEndDate").data("DateTimePicker").minDate(false).maxDate(false);
+        $("#txtStartDate").data("DateTimePicker").date(DateUtil.today());
+        $("#txtEndDate").data("DateTimePicker").date(null);
         $("#ddlStatus").val(-1);
     }
     function setupMode(mode) {
         //console.log("Changing to mode: " + mode);
         tabProjectMode = mode;
-        MessageBox.Clear();
+        MessageBox.clear();
         setupTabs();
 
         switch (tabProjectMode) {
@@ -121,6 +96,7 @@
             break;
         case "new":
             $("#divMain").show();
+            $('#tabProject a[href="#tabMain"]').tab('show');
             $("#ddlProject")[0].selectize.clear(true);
             clearForm();
             setupToolbar();
@@ -133,29 +109,55 @@
         }
     }
     function getProjectCallbackOk(result) {
-        var proj = JSON.parse(result.d)[0];
+        var proj = JSON.parse(result.d)[0],
+            obj;
+        //console.log("Opening project id: " + proj.Id);
         $("#txtId").val(proj.Id);
         $("#txtCode").val(proj.Code);
         $("#txtName").val(proj.Name);
         $("#txtDescription").val(proj.Description);
-        $("#txtStartDate").datetimepicker().children("input")
-            .val(DateUtil.Format(proj.StartDate));
-        $("#txtEndDate").datetimepicker().children("input")
-            .val(DateUtil.Format(proj.EndDate));
+        $("#txtStartDate").data("DateTimePicker").date(DateUtil
+            .parseUTC(proj.StartDate));
+        $("#txtEndDate").data("DateTimePicker").date(DateUtil
+            .parseUTC(proj.EndDate));
         $("#ddlStatus").val(proj.IdStatus);
 
-        ProjectTasks.tabTasksHasLoaded = false;
+        ProjectTasks.invalidate();
+        ProjectAlerts.invalidate();
+        ProjectNotes.invalidate();
+        ProjectSessions.invalidate();
 
-        $("#tabProject a[href='#tabMain']").tab("show");
         setupMode("edit");
+
+        if (sessionStorage.getItem("search_all_selected_obj") !== null) {
+            obj = JSON.parse(sessionStorage.getItem("search_all_selected_obj"));
+            switch (obj.Type) {
+            case "task":
+                $('#tabProject a[href="#tabTasks"]').tab('show');
+                break;
+            case "alert":
+                $('#tabProject a[href="#tabAlerts"]').tab('show');
+                break;
+            case "note":
+                $('#tabProject a[href="#tabNotes"]').tab('show');
+                break;
+            case "session":
+                $('#tabProject a[href="#tabSessions"]').tab('show');
+                break;
+            default:
+                break;
+            }
+        } else {
+            $("#tabProject a[href='#tabMain']").tab("show");
+        }
     }
     //function getProjectCallbackFailed() {
     // handled by the default ajax function (AjaxUtil.js\defaultFailFunc)
     //}
     function getProject(id) {
         if (id !== '') {
-            AjaxUtil.Call("Projects.aspx/GetProjectJSON",
-                          '{Id:' + id + '}',
+            AjaxUtil.invoke("Projects.aspx/GetProjectJSON",
+                          {Id: id},
                           getProjectCallbackOk);
         }
     }
@@ -163,6 +165,8 @@
 
     /*---   A D D   ---*/
     function insertCallbackOk(result) {
+        var ddl = $("#ddlProject"),
+            selectize = ddl[0].selectize;
         //console.log("New project id: " + result.d);
         $("#ddlProject")[0].selectize
             .addOption({ Id: result.d,
@@ -170,23 +174,24 @@
                          Name: $("#txtName").val(),
                          Description: $("#txtDescription").val()
                        });
+        selectize.setValue(result.d);
         setupMode("edit");
     }
     function insertCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace });
     }
     function insert() {
         if (validateInputFields() === true) {
-            AjaxUtil.Call("Projects.aspx/InsertProjectJSON",
-                          '{Code:"' + $("#txtCode").val() + '", ' +
-                          'Name:"' + $("#txtName").val() + '", ' +
-                          'Description:"' + $("#txtDescription").val() + '", ' +
-                          'StartDate:"' + $("#txtStartDate").datetimepicker()
-                            .children("input").val() + '", ' +
-                          'EndDate:"' + $("#txtEndDate").datetimepicker()
-                            .children("input").val() + '", ' +
-                          'IdStatus:' + $("#ddlStatus").val() + '}',
+            AjaxUtil.invoke("Projects.aspx/InsertProjectJSON",
+                          {Code: $("#txtCode").val(),
+                           Name: $("#txtName").val(),
+                           Description: $("#txtDescription").val(),
+                           StartDate: DateUtil.toUTC($("#txtStartDate")
+                               .data("DateTimePicker").date()),
+                           EndDate: DateUtil.toUTC($("#txtEndDate")
+                               .data("DateTimePicker").date()),
+                           IdStatus: $("#ddlStatus").val()},
                           insertCallbackOk,
                           insertCallbackFailed);
         }
@@ -195,7 +200,7 @@
 
     /*---   E D I T   ---*/
     function updateCallbackOk(result) {
-        console.log("Updating Successfull !");
+        //console.log("Updating Successfull !");
         $("#ddlProject")[0].selectize
             .updateOption($("#txtId").val(),
                           { Id: $("#txtId").val(),
@@ -207,21 +212,21 @@
     }
     function updateCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace });
     }
     function update() {
         if (validateInputFields() === true) {
-            console.log("Updating fields ...");
-            AjaxUtil.Call("Projects.aspx/UpdateProjectJSON",
-                          '{Id:' + $("#txtId").val() + ', ' +
-                          'Code:"' + $("#txtCode").val() + '", ' +
-                          'Name:"' + $("#txtName").val() + '", ' +
-                          'Description:"' + $("#txtDescription").val() + '", ' +
-                          'StartDate:"' + $("#txtStartDate").datetimepicker()
-                            .children("input").val() + '", ' +
-                          'EndDate:"' + $("#txtEndDate").datetimepicker()
-                            .children("input").val() + '", ' +
-                          'IdStatus:' + $("#ddlStatus").val() + '}',
+            //console.log("Updating fields ...");
+            AjaxUtil.invoke("Projects.aspx/UpdateProjectJSON",
+                          {Id: $("#txtId").val(),
+                           Code: $("#txtCode").val(),
+                           Name: $("#txtName").val(),
+                           Description: $("#txtDescription").val(),
+                           StartDate: DateUtil.toUTC($("#txtStartDate")
+                               .data("DateTimePicker").date()),
+                           EndDate: DateUtil.toUTC($("#txtEndDate")
+                               .data("DateTimePicker").date()),
+                          IdStatus: $("#ddlStatus").val()},
                           updateCallbackOk,
                           updateCallbackFailed);
         }
@@ -232,21 +237,21 @@
     function removeCallbackOk(result, id) {
         $("#ddlProject")[0].selectize.clear(true);
         $("#ddlProject")[0].selectize.removeOption(id);
-        MessageBox.Hide();
+        MessageBox.hide();
         clearForm();
         setupMode('');
     }
     function removeCallbackFailed(msg) {
-        MessageBox.Hide();
+        MessageBox.hide();
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace });
     }
     function removeCancelled() {
-        MessageBox.Hide();
+        MessageBox.hide();
     }
     function removeConfirmed(id) {
-        AjaxUtil.Call("Projects.aspx/DeleteProjectJSON",
-                      '{Id:' + id + '}',
+        AjaxUtil.invoke("Projects.aspx/DeleteProjectJSON",
+                      {Id: id},
                       function (result) { removeCallbackOk(result, id); },
                       removeCallbackFailed);
     }
@@ -254,7 +259,7 @@
         var ddl = $("#ddlProject"),
             selectize = ddl[0].selectize,
             proj = selectize.getItem(selectize.getValue());
-        MessageBox.Ask("Remover Projecto",
+        MessageBox.ask("Remover Projecto",
                        "Confirma a remoção do projecto '" + proj.text() + "' ?",
                        removeCancelled,
                        function () { removeConfirmed(selectize.getValue()); });
@@ -305,20 +310,45 @@
             onChange: function (value) { getProject(value); },
             dropdownParent: "body"
         });
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            // e.target // newly activated tab
+            // e.relatedTarget // previous active tab
+            var activatedTab = e.target.id.replace("anc", ""),
+                previousTab = e.relatedTarget.id.replace("anc", "");
+            //console.log("activatedTab: " + activatedTab);
+            //console.log("previousTab: " + previousTab);
+            // Switch toolbars
+            $("#tlb" + previousTab).hide();
+            $("#tlb" + activatedTab).show();
+            switch (activatedTab) {
+            case "Main":
+                break;
+            case "Tasks":
+                ProjectTasks.tabLoad();
+                break;
+            case "Alerts":
+                ProjectAlerts.tabLoad();
+                break;
+            case "Notes":
+                ProjectNotes.tabLoad();
+                break;
+            case "Sessions":
+                ProjectSessions.tabLoad();
+                break;
+            default:
+                break;
+            }
+        });
         $("#txtName").attr("maxlength", "200");
         $("#txtDescription").attr("maxlength", "1000");
         $("#txtStartDate").datetimepicker({
-            format: "DD-MM-YYYY"
+            format: DateUtil.DATE_FORMAT
         });
         $("#txtEndDate").datetimepicker({
-            format: "DD-MM-YYYY"
+            format: DateUtil.DATE_FORMAT
         });
-        $("#txtStartDate").on("dp.change", function (e) {
-            $("#txtEndDate").data("DateTimePicker").minDate(e.date);
-        });
-        $("#txtEndDate").on("dp.change", function (e) {
-            $("#txtStartDate").data("DateTimePicker").maxDate(e.date);
-        });
+        DateUtil.defineDateInterval("#txtStartDate", "#txtEndDate");
+
         $(".selectize-input").css("margin-bottom", "-5px");
     }
     function setupPage() {
@@ -329,14 +359,30 @@
 
     /*---   L O A D   ---*/
     function afterProjectsLoad() {
-        if (sessionStorage.getItem("search_all_selected_id") !== null) {
-            /*
-            var id = sessionStorage.getItem("search_all_selected_id"),
+        //console.log(typeof sessionStorage.getItem("search_all_selected_obj"));
+        if (sessionStorage.getItem("search_all_selected_obj") !== null) {
+            var obj,
                 ddl = $("#ddlProject"),
-                selectize = ddl[0].selectize,
-                proj = selectize.getItem(selectize.setValue(id, false));
-            */
-            sessionStorage.setItem("search_all_selected_id", null);
+                selectize = ddl[0].selectize;
+            obj = JSON.parse(sessionStorage.getItem("search_all_selected_obj"));
+
+            switch (obj.Type) {
+            case "project":
+                //console.log("selecting project id: " + obj.Id);
+                selectize.setValue(obj.Id, false);
+                sessionStorage.removeItem("search_all_selected_obj");
+                break;
+            case "task":
+            case "alert":
+            case "note":
+                //console.log("selecting project id: " + obj.IdProject);
+                selectize.setValue(obj.IdProject, false);
+                // session storage variable should not be cleared here,
+                // because it will be needed in getProjectCallbackOK()
+                break;
+            default:
+                break;
+            }
         }
     }
     function getProjectsCallbackOk(result) {
@@ -358,8 +404,8 @@
     // handled by the default ajax function (AjaxUtil.js\defaultFailFunc)
     //}
     function getProjects() {
-        AjaxUtil.Call("Projects.aspx/GetProjectsJSON",
-                      "",
+        AjaxUtil.invoke("Projects.aspx/GetProjectsJSON",
+                      {},
                       getProjectsCallbackOk);
     }
     function getProjectStatusesCallbackOk(result) {
@@ -372,8 +418,8 @@
     // handled by the default ajax function (AjaxUtil.js\defaultFailFunc)
     //}
     function getProjectStatuses() {
-        AjaxUtil.Call("Projects.aspx/GetProjectStatusesJSON",
-                 "",
+        AjaxUtil.invoke("Projects.aspx/GetProjectStatusesJSON",
+                 {},
                  getProjectStatusesCallbackOk);
     }
 
@@ -402,8 +448,6 @@
         }
         pageHasLoaded = true;
 
-        switchTab("project");
-
         setupPage();
 
         getProjectStatuses();
@@ -419,8 +463,7 @@
         cancelNewProject: function () { return cancelNewProject(); },
         saveProject: function () { return saveProject(); },
         removeProject: function () { return removeProject(); },
-        getProject: function (id) { return getProject(id); },
-        switchTab: function (tab) { return switchTab(tab); }
+        getProject: function (id) { return getProject(id); }
     };
 
 }());

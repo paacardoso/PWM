@@ -52,19 +52,57 @@
                              || (p.Description != null && p.Description.ToLower().Contains(text)))
                     .Select(p => new
                     {
-                        Type = "Projecto",
-                        Id = "Projecto_" + p.Id.ToString(),
+                        Type = "project",
+                        Id = "project_" + p.Id.ToString(),
                         Name = p.Code + " " + p.Name,
                         Description = p.Description
                     })
+                    .Union(objCtx.Task.ToList()
+                    .Where(p => p.Name.ToLower().Contains(text)
+                            || (p.Description != null && p.Description.ToLower().Contains(text)))
+                    .Select(p => new
+                    {
+                        Type = "task",
+                        Id = "task_" + p.Id.ToString() + "_" + p.IdProject.ToString(),
+                        Name = p.Name,
+                        Description = p.Description
+                    }))
+                    .Union(objCtx.Alert.ToList()
+                    .Where(p => p.Name.ToLower().Contains(text)
+                            || (p.Description != null && p.Description.ToLower().Contains(text)))
+                    .Select(p => new
+                    {
+                        Type = "alert",
+                        Id = "alert_" + p.Id.ToString() + "_" + p.IdProject.ToString(),
+                        Name = p.Name,
+                        Description = p.Description
+                    }))
+                    .Union(objCtx.Note.ToList()
+                    .Where(p => p.Text.ToLower().Contains(text))
+                    .Select(p => new
+                    {
+                        Type = "note",
+                        Id = "note_" + p.Id.ToString() + "_" + p.IdProject.ToString(),
+                        Name = string.Empty,
+                        Description = p.Text
+                    }))
+                    .Union(objCtx.Note.ToList()
+                    .Where(p => p.Text.ToLower().Contains(text))
+                    .Select(p => new
+                    {
+                        Type = "note",
+                        Id = "note_" + p.Id.ToString() + "_" + p.IdProject.ToString(),
+                        Name = string.Empty,
+                        Description = p.Text
+                    }))
                     .Union(objCtx.Parameter.ToList()
                     .Where(p => p.Name.ToLower().Contains(text)
                             || (p.Value == null || p.Value.ToLower().Contains(text))
                             || (p.Description != null && p.Description.ToLower().Contains(text)))
                     .Select(p => new
                     {
-                        Type = "Parametro",
-                        Id = "Parametro_" + p.Id.ToString(),
+                        Type = "parameter",
+                        Id = "parameter_" + p.Id.ToString(),
                         Name = p.Name,
                         Description = p.Description
                     }))
@@ -73,8 +111,8 @@
                              || p.Login.ToLower().Contains(text))
                     .Select(p => new
                     {
-                        Type = "Recurso",
-                        Id = "Recurso_" + p.Id.ToString(),
+                        Type = "resource",
+                        Id = "resource_" + p.Id.ToString(),
                         Name = p.Name,
                         Description = p.Login
                     }))
@@ -83,8 +121,8 @@
                              || p.Description.ToLower().Contains(text))
                     .Select(p => new
                     {
-                        Type = "Estado",
-                        Id = "Estado_" + p.Id.ToString(),
+                        Type = "status",
+                        Id = "status_" + p.Id.ToString(),
                         Name = p.Name,
                         Description = p.Description
                     }));

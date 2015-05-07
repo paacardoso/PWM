@@ -46,7 +46,7 @@
                 <th data-field="Login" data-sortable="true">Login</th>
                 <th data-field="Name" data-sortable="true">Nome</th>
                 <th data-field="Status" data-sortable="true">Estado</th>
-                <th data-field="action" data-formatter="Resources.actionFormatter" data-events="actionEvents">Acção</th>
+                <th data-field="action" data-formatter="TableUtil.actionFormatter" data-events="actionEvents">Acção</th>
             </tr>
             </thead>
         </table>

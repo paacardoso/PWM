@@ -1,7 +1,6 @@
 ﻿var ProjectTasks = (function () {
 
-    var tabHasLoaded = false,
-        tabMode = '';
+    var tabHasLoaded = false;
 
     /*---   A F T E R   L O A D   ---*/
     function validateInputFields() {
@@ -11,7 +10,7 @@
         }
         if ($("#txtTaskDescription").val() === "") {
             if (msg.length > 0) { msg += "<br>"; }
-            msg += "O campo 'Nome' é obrigatório.";
+            msg += "O campo 'Descrição' é obrigatório.";
         }
         if ($("#txtTaskOrder").val() === "") {
             if (msg.length > 0) { msg += "<br>"; }
@@ -22,134 +21,168 @@
             msg += "O campo 'Estado' é obrigatório.";
         }
         if (msg.length > 0) {
-            MessageBox.Info(msg);
+            MessageBox.info(msg, { Div: "#divTaskModalMessage" });
             return false;
         }
-        MessageBox.Clear();
+        MessageBox.clear({ Div: "#divTaskModalMessage" });
         return true;
     }
-    function setupToolbar(mode) {
-        tabMode = mode;
-        switch (tabMode) {
-        case '':
-            $("#btnTaskNew").show();
-            $("#btnTaskSave").hide();
-            $("#btnTaskRemove").hide();
-            $("#btnTaskCancel").hide();
-            break;
-        case "new":
-            $("#btnTaskNew").hide();
-            $("#btnTaskSave").show();
-            $("#btnTaskRemove").hide();
-            $("#btnTaskCancel").show();
-            break;
-        case "edit":
-            $("#btnTaskNew").show();
-            $("#btnTaskSave").show();
-            $("#btnTaskRemove").show();
-            $("#btnTaskCancel").hide();
-            break;
-        default:
+    function setupToolbar() {
+        var selectedRows = $("#tblTasks").bootstrapTable("getSelections");
+        if (selectedRows.length === 0) {
+            $("#btnTaskEdit").prop("disabled", true);
+            $("#btnTaskRemove").prop("disabled", true);
+        } else {
+            if (selectedRows.length === 1) {
+                $("#btnTaskEdit").prop("disabled", false);
+                $("#btnTaskRemove").prop("disabled", false);
+            } else {
+                $("#btnTaskEdit").prop("disabled", true);
+                $("#btnTaskRemove").prop("disabled", false);
+            }
         }
-    }
-    function clearForm() {
-        // TODO
     }
 
 
     /*---   A D D   ---*/
     function insertCallbackOk(result) {
-        // TODO
-        setupToolbar("edit");
+        $("#mdlTask").modal("hide");
+        var data = {Id: result.d,
+                    Name: $("#txtTaskName").val(),
+                    Description: $("#txtTaskDescription").val(),
+                    Order: $("#txtTaskOrder").val(),
+                    Status: $("#ddlTaskStatus option:selected").text() };
+        $("#tblTasks").bootstrapTable('append', data);
     }
     function insertCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace,
+                                          Div: "#divTaskModalMessage" });
     }
     function insertTask() {
         if (validateInputFields() === true) {
-            AjaxUtil.Call("Projects.aspx/InsertTaskJSON",
-                          '{Name:"' + $("#txtTaskName").val() + '", ' +
-                          'Description:"' + $("#txtDescription").val() + '", ' +
-                          'Order:' + $("#txtTaskorder").val() + ', ' +
-                          'IdStatus:' + $("#ddlStatus").val() + '}',
+            AjaxUtil.invoke("Projects.aspx/InsertTaskJSON",
+                          {Name: $("#txtTaskName").val(),
+                           Description: $("#txtTaskDescription").val(),
+                           Order: $("#txtTaskOrder").val(),
+                           IdProject: $("#txtId").val(),
+                           IdStatus: $("#ddlTaskStatus").val()},
                           insertCallbackOk,
                           insertCallbackFailed);
         }
+    }
+    function showAddDialog() {
+        MessageBox.clear({ Div: "#divTaskModalMessage" });
+        $("#mdlTaskLabel").text("Adicionar nova Tarefa");
+        $("#txtTaskId").val("");
+        $("#txtTaskName").val("");
+        $("#txtTaskDescription").val("");
+        $("#txtTaskOrder").val("");
+        $("#ddlTaskStatus").val("");
+        $("#btnTaskActionConfirmed").unbind("click");
+        $("#btnTaskActionConfirmed").on("click", insertTask);
+        $("#mdlTask").modal("show");
     }
 
 
     /*---   E D I T   ---*/
     function updateCallbackOk(result) {
-        // TODO
-        setupToolbar("edit");
+        $("#mdlTask").modal("hide");
+        $("#tblTasks").bootstrapTable("updateRow", {
+            index: TableUtil.getTableIndexById("#tblTasks", $("#txtTaskId").val()),
+            row: {
+                Id: $("#txtTaskId").val(),
+                Name: $("#txtTaskName").val(),
+                Description: $("#txtTaskDescription").val(),
+                Order: $("#txtTaskOrder").val(),
+                Status: $("#ddlTaskStatus option:selected").text()
+            }
+        });
     }
     function updateCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace,
+                                          Div: "#divTaskModalMessage" });
     }
     function update() {
         if (validateInputFields() === true) {
-            AjaxUtil.Call("Projects.aspx/updateJSON",
-                          '{Id:"' + $("#txtTaskId").val() + '", ' +
-                          'Name:"' + $("#txtTaskName").val() + '", ' +
-                          'Description:"' + $("#txtTaskDescription").val() + '", ' +
-                          'Order:' + $("#txtTaskOrder").val() + ', ' +
-                          'IdStatus:' + $("#ddlTaskStatus").val() + '}',
+            AjaxUtil.invoke("Projects.aspx/updateTaskJSON",
+                          {Id: $("#txtTaskId").val(),
+                           Name: $("#txtTaskName").val(),
+                           Description: $("#txtTaskDescription").val(),
+                           Order: $("#txtTaskOrder").val(),
+                           IdProject: $("#txtId").val(),
+                           IdStatus: $("#ddlTaskStatus").val()},
                           updateCallbackOk,
                           updateCallbackFailed);
         }
     }
     function showEditDialog(row) {
-        var param;
+        var task;
         if (row === undefined) {
-            param = $("#tblTasks").bootstrapTable("getSelections")[0];
+            task = $("#tblTasks").bootstrapTable("getSelections")[0];
         } else {
-            param = row;
+            task = row;
         }
-        MessageBox.Clear();
-        $("#mdlLabel").text("Editar Tarefa");
-        $("#txtTaskId").val(param.Id);
-        $("#txtName").val(param.Name);
-        $("#txtDescription").val(param.Description);
-        $("#txtOrder").val(param.Order);
-        $("#ddlTaskStatus option:contains('" + param.StatusName + "')")
+        MessageBox.clear({ Div: "#divTaskModalMessage" });
+        $("#mdlTaskLabel").text("Editar Tarefa");
+        $("#txtTaskId").val(task.Id);
+        $("#txtTaskName").val(task.Name);
+        $("#txtTaskDescription").val(task.Description);
+        $("#txtTaskOrder").val(task.Order);
+        $("#ddlTaskStatus option:contains('" + task.StatusName + "')")
             .attr("selected", true);
-        $("#btnActionConfirmed").unbind("click");
-        $("#btnActionConfirmed").on("click", update);
+        $("#btnTaskActionConfirmed").unbind("click");
+        $("#btnTaskActionConfirmed").on("click", update);
         $("#mdlTask").modal("show");
     }
 
 
     /*---   R E M O V E   ---*/
-    function removeCallbackOk(result, id) {
-        // TODO
-        MessageBox.Hide();
-        clearForm();
-        setupToolbar('');
+    function removeCallbackOk(result, ids) {
+        $("#tblTasks").bootstrapTable("remove", ids);
+        MessageBox.hide();
+        setupToolbar();
     }
     function removeCallbackFailed(msg) {
-        MessageBox.Hide();
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
+        MessageBox.hide();
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace,
+                                          Div: "#divTaskModalMessage" });
     }
     function removeCancelled() {
-        MessageBox.Hide();
+        MessageBox.hide();
     }
-    function removeConfirmed(id) {
-        AjaxUtil.Call("Projects.aspx/DeleteTaskJSON",
-                      '{Id:' + id + '}',
-                      function (result) { removeCallbackOk(result, id); },
+    function removeConfirmed(task) {
+        var tasks = [],
+            ids = {
+                field: "Id",
+                values: []
+            },
+            index;
+
+        if (task !== undefined) {
+            tasks[0] = task;
+        } else {
+            tasks = $("#tblTasks").bootstrapTable("getSelections");
+        }
+
+        for (index = 0; index < tasks.length; index += 1) {
+            ids.values[index] = tasks[index].Id;
+        }
+        AjaxUtil.invoke("Projects.aspx/DeleteTasksJSON",
+                      {Ids: ids.values.join()},
+                      function (result) { removeCallbackOk(result, ids); },
                       removeCallbackFailed);
     }
-    function showRemoveDialog(param) {
-        if (param !== undefined) {
-            MessageBox.Ask("Remover Tarefa",
-                           "Confirma a remoção da tarefa '" + param.Name + "' ?",
+    function showRemoveDialog(task) {
+        if (task !== undefined) {
+            MessageBox.ask("Remover Tarefa",
+                           "Confirma a remoção da tarefa '" + task.Name + "' ?",
                            removeCancelled,
-                           function () { removeConfirmed(param); });
+                           function () { removeConfirmed(task); });
         } else {
-            MessageBox.Ask("Remover Tarefa",
+            MessageBox.ask("Remover Tarefa",
                            "Confirma a remoção das tarefas seleccionadas ?",
                            removeCancelled,
                            function () { removeConfirmed(undefined); });
@@ -158,32 +191,39 @@
 
 
     /*---   S E T U P   ---*/
-    function setupForm() {
-        // TODO
+    function setupTable() {
+        window.actionEvents = {
+            "click .edit": function (e, value, row, index) {
+                showEditDialog(row);
+            },
+            "click .remove": function (e, value, row, index) {
+                showRemoveDialog(row);
+            }
+        };
     }
-    function actionFormatter(value, row, index) {
-        return [
-            '<i style="cursor: pointer;" class="edit glyphicon glyphicon-edit"></i>',
-            '<i style="cursor: pointer;" class="remove glyphicon glyphicon-remove"></i>'
-        ].join('');
+    function setupForm() {
+        $("#txtTaskName").attr("maxlength", "200");
+        $("#txtTaskDescription").attr("maxlength", "1000");
+        $("#txtTaskOrder").inputmask({ mask: "9[9]",
+                                       greedy: false });
     }
     function setupPage() {
-        setupToolbar('');
+        TableUtil.setToolbarBehavior("#tblTasks", setupToolbar);
+        setupTable();
         setupForm();
     }
 
 
     /*---   L O A D   ---*/
     function afterTasksLoad() {
-        var id, index;
-        if (sessionStorage.getItem("search_all_selected_id") !== null) {
-            id = sessionStorage.getItem("search_all_selected_id");
-
-            index = TableUtil.getTableIndexById('#tblTasks', id);
+        if (sessionStorage.getItem("search_all_selected_obj") !== null) {
+            var obj,
+                index;
+            obj = JSON.parse(sessionStorage.getItem("search_all_selected_obj"));
+            index = TableUtil.getTableIndexById('#tblTasks', obj.Id);
             $("#tblTasks").bootstrapTable("check", index);
             showEditDialog();
-
-            sessionStorage.setItem("search_all_selected_id", null);
+            sessionStorage.removeItem("search_all_selected_obj");
         }
     }
     function getTasksCallbackOk(result) {
@@ -191,15 +231,31 @@
         $("#tblTasks").bootstrapTable({
             data: JSON.parse(result.d)
         });
+        setupToolbar();
         afterTasksLoad();
     }
     //function getTasksCallbackFailed() {
     // handled by the default ajax function (AjaxUtil.js\defaultFailFunc)
     //}
-    function getProjectTasks(idProject) {
-        AjaxUtil.Call("Projects.aspx/GetTasksJSON",
-                      '{IdProject:' + idProject + '}',
+    function getTasks() {
+        var idProject = $("#txtId").val();
+        AjaxUtil.invoke("Projects.aspx/GetTasksJSON",
+                      {IdProject: idProject},
                       getTasksCallbackOk);
+    }
+    function getTaskStatusesCallbackOk(result) {
+        var ddl = $("#ddlTaskStatus");
+        $.each(JSON.parse(result.d), function () {
+            ddl.append($("<option />").val(this.Id).text(this.Name));
+        });
+    }
+    //function getTaskStatusesCallbackFailed() {
+    // handled by the default ajax function (AjaxUtil.js\defaultFailFunc)
+    //}
+    function getTaskStatuses() {
+        AjaxUtil.invoke("Projects.aspx/GetTaskStatusesJSON",
+                      {},
+                      getTaskStatusesCallbackOk);
     }
 
 
@@ -212,38 +268,20 @@
         tabHasLoaded = true;
 
         setupPage();
-        getProjectTasks($("#txtId").val());
-    }
-    function newTask() {
-        clearForm();
-        setupToolbar("new");
-    }
-    function saveTask() {
-        if (tabMode === "new") {
-            insertTask();
-        } else if (tabMode === "edit") {
-            update();
-        }
-    }
-    function removeTask() {
-        showRemoveDialog();
-    }
-    function cancelNewTask() {
-        setupToolbar('');
+
+        getTaskStatuses();
+        getTasks();
     }
 
 
     /*---   P U B L I C   ---*/
     return {
-        actionFormatter: function (value, row, index) {
-            return actionFormatter(value, row, index);
-        },
-        getProjectTasks: function (idProject) { return getProjectTasks(idProject); },
-        newTask: function () { return newTask(); },
-        saveTask: function () { return saveTask(); },
-        removeTask: function () { return removeTask(); },
-        cancelNewTask: function () { return cancelNewTask(); },
-        tabLoad: function () { return tabLoad(); }
+        getTasks: function (idProject) { return getTasks(idProject); },
+        showAddDialog: function () { return showAddDialog(); },
+        showEditDialog: function (row) { return showEditDialog(row); },
+        showRemoveDialog: function (task) { return showRemoveDialog(task); },
+        tabLoad: function () { return tabLoad(); },
+        invalidate: function () { tabHasLoaded = false; }
     };
 
 }());

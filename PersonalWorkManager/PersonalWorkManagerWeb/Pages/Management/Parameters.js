@@ -9,39 +9,54 @@
             msg += "O campo 'Nome' é obrigatório.";
         }
         if (msg.length > 0) {
-            MessageBox.Info(msg);
+            MessageBox.info(msg);
             return false;
         }
         return true;
+    }
+    function setupToolbar() {
+        var selectedRows = $("#tblParameters").bootstrapTable("getSelections");
+        if (selectedRows.length === 0) {
+            $("#btnEdit").prop("disabled", true);
+            $("#btnRemove").prop("disabled", true);
+        } else {
+            if (selectedRows.length === 1) {
+                $("#btnEdit").prop("disabled", false);
+                $("#btnRemove").prop("disabled", false);
+            } else {
+                $("#btnEdit").prop("disabled", true);
+                $("#btnRemove").prop("disabled", false);
+            }
+        }
     }
 
 
     /*---   A D D   ---*/
     function insertCallbackOk(result) {
         $("#mdlParameter").modal("hide");
-        var data = '[{"Id":' + result.d + ', ' +
-                   '"Name":"' + $("#txtName").val() + '", ' +
-                   '"Value":"' + $("#txtValue").val() + '", ' +
-                   '"Description":"' + $("#txtDescription").val() + '"}]';
-        $("#tblParameters").bootstrapTable('append', JSON.parse(data));
+        var data = {Id: result.d,
+                    Name: $("#txtName").val(),
+                    Value: $("#txtValue").val(),
+                    Description: $("#txtDescription").val() };
+        $("#tblParameters").bootstrapTable('append', data);
     }
     function insertCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace, Div: "#divModalMessage" });
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace});
     }
     function insert() {
         if (validateRequired() === true) {
-            AjaxUtil.Call("Parameters.aspx/InsertParameterJSON",
-                          '{Name:"' + $("#txtName").val() + '", ' +
-                          'Value:"' + $("#txtValue").val() + '", ' +
-                          'Description:"' + $("#txtDescription").val() + '"}',
+            AjaxUtil.invoke("Parameters.aspx/InsertParameterJSON",
+                          {Name: $("#txtName").val(),
+                           Value: $("#txtValue").val(),
+                           Description: $("#txtDescription").val()},
                           insertCallbackOk,
                           insertCallbackFailed);
         }
     }
     function showAddDialog() {
         $("#mdlLabel").text("Adicionar Novo Parâmetro");
-        MessageBox.Clear();
+        MessageBox.clear();
         $("#txtId").val("");
         $("#txtName").val("");
         $("#txtValue").val("");
@@ -68,15 +83,15 @@
     }
     function updateCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace });
     }
     function update() {
         if (validateRequired() === true) {
-            AjaxUtil.Call("Parameters.aspx/UpdateParameterJSON",
-                          '{Id:' + $("#txtId").val() + ', ' +
-                          'Name:"' + $("#txtName").val() + '", ' +
-                          'Value:"' + $("#txtValue").val() + '", ' +
-                          'Description:"' + $("#txtDescription").val() + '"}',
+            AjaxUtil.invoke("Parameters.aspx/UpdateParameterJSON",
+                          {Id: $("#txtId").val(),
+                           Name: $("#txtName").val(),
+                           Value: $("#txtValue").val(),
+                           Description: $("#txtDescription").val()},
                           updateCallbackOk,
                           updateCallbackFailed);
         }
@@ -88,7 +103,7 @@
         } else {
             param = row;
         }
-        MessageBox.Clear();
+        MessageBox.clear();
         $("#mdlLabel").text("Editar Parâmetro");
         $("#txtId").val(param.Id);
         $("#txtName").val(param.Name);
@@ -104,15 +119,16 @@
     function removeCallbackOk(result, ids) {
         //console.log("ids: " + JSON.stringify(ids));
         $("#tblParameters").bootstrapTable("remove", ids);
-        MessageBox.Hide();
+        MessageBox.hide();
+        setupToolbar();
     }
     function removeCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Hide();
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
+        MessageBox.hide();
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace });
     }
     function removeCancelled() {
-        MessageBox.Hide();
+        MessageBox.hide();
     }
     function removeConfirmed(param) {
         var params = [],
@@ -132,20 +148,20 @@
             ids.values[index] = params[index].Id;
         }
 
-        AjaxUtil.Call("Parameters.aspx/DeleteParametersJSON",
-                      '{Ids:"' + ids.values.join() + '"}',
+        AjaxUtil.invoke("Parameters.aspx/DeleteParametersJSON",
+                      {Ids: ids.values.join()},
                       function (result) { removeCallbackOk(result, ids); },
                       removeCallbackFailed);
 
     }
     function showRemoveDialog(param) {
         if (param !== undefined) {
-            MessageBox.Ask("Remover Parâmetro",
+            MessageBox.ask("Remover Parâmetro",
                            "Confirma a remoção do parâmetro '" + param.Name + "' ?",
                            removeCancelled,
                            function () { removeConfirmed(param); });
         } else {
-            MessageBox.Ask("Remover Parâmetro",
+            MessageBox.ask("Remover Parâmetro",
                            "Confirma a remoção dos parâmetros seleccionados ?",
                            removeCancelled,
                            function () { removeConfirmed(undefined); });
@@ -154,21 +170,6 @@
 
 
     /*---   S E T U P   ---*/
-    function setupToolbar() {
-        var selectedRows = $("#tblParameters").bootstrapTable("getSelections");
-        if (selectedRows.length === 0) {
-            $("#btnEdit").prop("disabled", true);
-            $("#btnRemove").prop("disabled", true);
-        } else {
-            if (selectedRows.length === 1) {
-                $("#btnEdit").prop("disabled", false);
-                $("#btnRemove").prop("disabled", false);
-            } else {
-                $("#btnEdit").prop("disabled", true);
-                $("#btnRemove").prop("disabled", false);
-            }
-        }
-    }
     function setupTable() {
         window.actionEvents = {
             "click .edit": function (e, value, row, index) {
@@ -184,20 +185,8 @@
         $("#txtValue").attr("maxlength", '2000');
         $("#txtDescription").attr("maxlength", "1000");
     }
-    function actionFormatter(value, row, index) {
-        return [
-            '<i style="cursor: pointer;" class="edit glyphicon glyphicon-edit"></i>',
-            '<i style="cursor: pointer;" class="remove glyphicon glyphicon-remove"></i>'
-        ].join('');
-    }
     function setupPage() {
-        $("#tblParameters")
-            .on("check.bs.table", function (e, row) {
-                setupToolbar();
-            })
-            .on("uncheck.bs.table", function (e, row) {
-                setupToolbar();
-            });
+        TableUtil.setToolbarBehavior("#tblParameters", setupToolbar);
         setupTable();
         setupForm();
     }
@@ -205,16 +194,14 @@
 
     /*---   L O A D   ---*/
     function afterTableLoad() {
-        //console.log("sessionStorage.getItem('search_all_selected_id'): " +
-        //    sessionStorage.getItem("search_all_selected_id"));
-        //console.log("type of sessionStorage.getItem('search_all_selected_id'): " +
-        //    typeof sessionStorage.getItem("search_all_selected_id"));
-        if (sessionStorage.getItem("search_all_selected_id").toString() !== 'null') {
-            var id = sessionStorage.getItem("search_all_selected_id"),
-                index = TableUtil.getTableIndexById('#tblParameters', id);
+        if (sessionStorage.getItem("search_all_selected_obj") !== null) {
+            var obj,
+                index;
+            obj = JSON.parse(sessionStorage.getItem("search_all_selected_obj"));
+            index = TableUtil.getTableIndexById('#tblParameters', obj.Id);
             $("#tblParameters").bootstrapTable("check", index);
             showEditDialog();
-            sessionStorage.setItem("search_all_selected_id", null);
+            sessionStorage.removeItem("search_all_selected_obj");
         }
     }
     function getParametersCallbackOk(result) {
@@ -229,8 +216,8 @@
     // handled by the default ajax function (AjaxUtil.js\defaultFailFunc)
     //}
     function getParameters() {
-        AjaxUtil.Call("Parameters.aspx/GetParametersJSON",
-                      "",
+        AjaxUtil.invoke("Parameters.aspx/GetParametersJSON",
+                      {},
                       getParametersCallbackOk);
     }
 
@@ -253,9 +240,6 @@
 
     /*---   P U B L I C   ---*/
     return {
-        actionFormatter: function (value, row, index) {
-            return actionFormatter(value, row, index);
-        },
         getParameters: function () { return getParameters(); },
         showAddDialog: function () { return showAddDialog(); },
         showEditDialog: function (row) { return showEditDialog(row); },

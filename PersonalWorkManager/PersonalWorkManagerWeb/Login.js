@@ -8,7 +8,7 @@
         var currentUser = JSON.parse(result.d),
             vars;
         if (currentUser === null) {
-            MessageBox.Info("O Login e/ou a senha estão incorrectos. Tente novamente.");
+            MessageBox.info("O Login e/ou a senha estão incorrectos. Tente novamente.");
         } else {
             sessionStorage.setItem("current_resource", JSON.stringify(currentUser));
             vars = UrlUtil.getUrlVars();
@@ -21,13 +21,13 @@
     }
     function loginCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
-        MessageBox.Exception(ex.Message, {StackTrace: ex.StackTrace });
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace });
     }
     function login() {
-        AjaxUtil.Call("Login.aspx/LoginJSON",
-                      '{Login:"' + $("#txtLogin").val() + '", ' +
-                      'Password:"' + $("#txtPassword").val() + '", ' +
-                      'Persistable:' + $("#chkPersistLoginCookie").is(":checked") + '}',
+        AjaxUtil.invoke("Login.aspx/LoginJSON",
+                      {Login: $("#txtLogin").val(),
+                       Password: $("#txtPassword").val(),
+                       Persistable: $("#chkPersistLoginCookie").is(":checked")},
                       loginCallbackOk,
                       loginCallbackFailed);
     }

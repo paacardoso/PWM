@@ -14,16 +14,15 @@
         {
             using (var objCtx = new PWMEntities())
             {
-                var records = from e in objCtx.Status
-                              join et in objCtx.StatusType on e.IdStatusType equals et.Id
+                var records = from s in objCtx.Status
+                              join st in objCtx.StatusType on s.IdStatusType equals st.Id
                               select new
                               {
-                                  Id = e.Id,
-                                  Name = e.Name,
-                                  Description = e.Description,
-                                  StatusTypeName = et.Name,
-                                  Order = e.Order
-
+                                  Id = s.Id,
+                                  Name = s.Name,
+                                  Description = s.Description,
+                                  StatusTypeName = st.Name,
+                                  Order = s.Order
                               };
                 string json = JsonConvert.SerializeObject(records);
                 return json;
@@ -35,12 +34,12 @@
         {
             using (var objCtx = new PWMEntities())
             {
-                var records = from e in objCtx.StatusType
-                              orderby e.Id ascending
+                var records = from s in objCtx.StatusType
+                              orderby s.Id ascending
                               select new
                               {
-                                  Id = e.Id,
-                                  Name = e.Name
+                                  Id = s.Id,
+                                  Name = s.Name
                               };
                 string json = JsonConvert.SerializeObject(records);
                 return json;
