@@ -27,9 +27,15 @@
                 string json = null;
                 if (resource.ToList().Count() > 0)
                 {
-                    FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, Login, DateTime.Now, DateTime.Now.AddMinutes(1), Persistable, "member");
-                    HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(ticket));
-                    HttpContext.Current.Response.Cookies.Add(cookie);
+                    HttpCookie authCookie = FormsAuthentication.GetAuthCookie(Login, Persistable);
+                    if (!Persistable)
+                    {
+                        //this is because if it was not set then it got 
+                        //automatically set to expire next year even if 
+                        //the cookie was not set as persistent
+                        authCookie.Expires = DateTime.Now.AddMinutes(60);
+                    }
+                    HttpContext.Current.Response.Cookies.Add(authCookie); 
                     json = JsonConvert.SerializeObject(resource.ToList()[0]);
                 }
                 return json;

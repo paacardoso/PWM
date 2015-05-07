@@ -42,12 +42,27 @@ var TableUtil = (function () {
             lastPos = str.lenght;
         }
         if (lastPos > -1) {
-            return str.substring(0, lastPos);
+            return str.substring(0, lastPos) + " (...)";
         }
         return str;
     }
     function dateFormatter(value, row, index) {
         return DateUtil.Format(value);
+    }
+    function setToolbarBehavior(tableName, toolbarFunc) {
+        $(tableName)
+            .on("check.bs.table", function (e, row) {
+                toolbarFunc();
+            })
+            .on("uncheck.bs.table", function (e, row) {
+                toolbarFunc();
+            })
+            .on("check-all.bs.table", function (e, row) {
+                toolbarFunc();
+            })
+            .on("uncheck-all.bs.table", function (e, row) {
+                toolbarFunc();
+            });
     }
 
     return {
@@ -62,6 +77,9 @@ var TableUtil = (function () {
         },
         dateFormatter: function (value, row, index) {
             return dateFormatter(value, row, index);
+        },
+        setToolbarBehavior: function (tableName, toolbarFunc) {
+            return setToolbarBehavior(tableName, toolbarFunc);
         }
     };
 

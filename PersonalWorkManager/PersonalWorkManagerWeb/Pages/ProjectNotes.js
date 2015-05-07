@@ -12,8 +12,23 @@
             MessageBox.info(msg, { Div: "#divNoteModalMessage" });
             return false;
         }
-        MessageBox.clear();
+        MessageBox.clear({ Div: "#divNoteModalMessage" });
         return true;
+    }
+    function setupToolbar() {
+        var selectedRows = $("#tblNotes").bootstrapTable("getSelections");
+        if (selectedRows.length === 0) {
+            $("#btnNoteEdit").prop("disabled", true);
+            $("#btnNoteRemove").prop("disabled", true);
+        } else {
+            if (selectedRows.length === 1) {
+                $("#btnNoteEdit").prop("disabled", false);
+                $("#btnNoteRemove").prop("disabled", false);
+            } else {
+                $("#btnNoteEdit").prop("disabled", true);
+                $("#btnNoteRemove").prop("disabled", false);
+            }
+        }
     }
 
 
@@ -41,6 +56,7 @@
         }
     }
     function showAddDialog() {
+        MessageBox.clear({ Div: "#divNoteModalMessage" });
         $("#mdlNoteLabel").text("Adicionar nova Nota");
         $("#txtNoteId").val("");
         $("#txtNoteText").val("");
@@ -83,7 +99,7 @@
         } else {
             note = row;
         }
-        MessageBox.clear();
+        MessageBox.clear({ Div: "#divNoteModalMessage" });
         $("#mdlNoteLabel").text("Editar Nota");
         $("#txtNoteId").val(note.Id);
         $("#txtNoteText").val(note.Text);
@@ -97,6 +113,7 @@
     function removeCallbackOk(result, ids) {
         $("#tblNotes").bootstrapTable("remove", ids);
         MessageBox.hide();
+        setupToolbar();
     }
     function removeCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
@@ -145,21 +162,6 @@
 
 
     /*---   S E T U P   ---*/
-    function setupToolbar() {
-        var selectedRows = $("#tblNotes").bootstrapTable("getSelections");
-        if (selectedRows.length === 0) {
-            $("#btnNoteEdit").prop("disabled", true);
-            $("#btnNoteRemove").prop("disabled", true);
-        } else {
-            if (selectedRows.length === 1) {
-                $("#btnNoteEdit").prop("disabled", false);
-                $("#btnNoteRemove").prop("disabled", false);
-            } else {
-                $("#btnNoteEdit").prop("disabled", true);
-                $("#btnNoteRemove").prop("disabled", false);
-            }
-        }
-    }
     function setupTable() {
         window.actionEvents = {
             "click .edit": function (e, value, row, index) {
@@ -174,9 +176,7 @@
         $("#txtNoteText").attr("maxlength", "4000");
     }
     function setupPage() {
-        $("#tblNotes")
-            .on("check.bs.table", function (e, row) { setupToolbar(); })
-            .on("uncheck.bs.table", function (e, row) { setupToolbar(); });
+        TableUtil.setToolbarBehavior("#tblNotes", setupToolbar);
         setupTable();
         setupForm();
     }

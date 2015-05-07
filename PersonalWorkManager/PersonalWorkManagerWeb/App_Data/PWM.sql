@@ -7,7 +7,7 @@ CREATE TABLE "Parameter" (
     `Value`             VARCHAR(2000),
     `Description`       VARCHAR(1000)
 );
-INSERT INTO `Parameter` VALUES (1,'Sample parameter','Sample value','Sample Dewcription');
+INSERT INTO `Parameter` VALUES (1,'Sample parameter','Sample value','Sample Description');
 
 -- StatusType
 CREATE TABLE "StatusType" (

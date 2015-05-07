@@ -73,7 +73,7 @@
         public static long InsertProjectJSON(string Code, string Name, string Description, string StartDate, string EndDate, long IdStatus)
         {
             DateTime? EndDateDT = null;
-            if (EndDate.Length > 0)
+            if (!string.IsNullOrEmpty(EndDate) && (EndDate.Length > 0))
             {
                 EndDateDT = DateTime.Parse(EndDate);
             }
@@ -91,7 +91,7 @@
         public static bool UpdateProjectJSON(long Id, string Code, string Name, string Description, string StartDate, string EndDate, long IdStatus)
         {
             DateTime? EndDateDT = null;
-            if (EndDate.Length > 0)
+            if (!string.IsNullOrEmpty(EndDate) && (EndDate.Length > 0))
             {
                 EndDateDT = DateTime.Parse(EndDate);
             }

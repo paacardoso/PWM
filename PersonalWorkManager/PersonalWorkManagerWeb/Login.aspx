@@ -29,7 +29,7 @@
                 <input type="password" class="form-control" id="txtPassword" placeholder="Senha">
             </div>
             <div class="checkbox">
-                <label><input type="checkbox" runat="server" id="chkPersistLoginCookie" />Manter sessão activa</label>
+                <label><input type="checkbox" id="chkPersistLoginCookie" />Manter sessão activa</label>
             </div>
             <button id="btnLogin" type="button" class="btn btn-primary" onclick="Login.login();">Entrar</button>
         </div>

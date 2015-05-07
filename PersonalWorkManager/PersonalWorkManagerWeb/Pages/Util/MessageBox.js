@@ -1,7 +1,7 @@
 ﻿/*---   M E S S A G E B O X   ---*/
 var MessageBox = (function () {
 
-    function showMainMessage(msg, level, icon, options) {
+    function showMessage(msg, level, icon, options) {
 
         var html,
             defaults = {
@@ -58,8 +58,34 @@ var MessageBox = (function () {
         $(options.Div).attr("class", "alert alert-" + level);
         $(options.Div).show();
     }
-    function clearMain() {
-        $("#divMainMessage").hide();
+    function clearMessage(options) {
+        var defaults = {
+                Div: undefined
+            };
+
+        //console.log("options before extend: " + JSON.stringify(options));
+        if (options !== undefined) {
+            jQuery.extend(options, defaults);
+        } else {
+            options = defaults;
+        }
+        //console.log("options after extend: " + JSON.stringify(options));
+
+        if (options.Div === undefined) {
+            if ($("#divModalMessage").length > 0) {
+                if ($("#divModalMessage").is(":visible")) {
+                    options.Div = "#divModalMessage";
+                } else {
+                    options.Div = "#divMainMessage";
+                }
+            } else {
+                options.Div = "#divMainMessage";
+            }
+        }
+
+        //console.log("hiding message ....");
+        $(options.Div).hide();
+        //console.log("message visibility: " + $(options.Div).is(":visible"));
     }
 
     function msgBoxAsk(title, message, cancelledFunc, confirmedFunc) {
@@ -77,25 +103,25 @@ var MessageBox = (function () {
 
     return {
         success: function (msg, options) {
-            showMainMessage(msg, "success", "ok", options);
+            showMessage(msg, "success", "ok", options);
         },
         info: function (msg, options) {
-            showMainMessage(msg, "info", "exclamation-sign", options);
+            showMessage(msg, "info", "exclamation-sign", options);
         },
         warning: function (msg, options) {
-            showMainMessage(msg, "warning", "warning-sign", options);
+            showMessage(msg, "warning", "warning-sign", options);
         },
         danger: function (msg, options) {
-            showMainMessage(msg, "danger", "remove", options);
+            showMessage(msg, "danger", "remove", options);
         },
         error: function (msg, options) {
-            showMainMessage(msg, "danger", "remove", options);
+            showMessage(msg, "danger", "remove", options);
         },
         exception: function (msg, options) {
-            showMainMessage(msg, "danger", "remove", options);
+            showMessage(msg, "danger", "remove", options);
         },
-        clear: function () {
-            clearMain();
+        clear: function (options) {
+            clearMessage(options);
         },
 
         // Ask Methods
