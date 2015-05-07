@@ -93,7 +93,7 @@
 
                 <% if (Page.User.Identity.IsAuthenticated) { %>
                 <!-- MESSAGES -->
-                <li class="dropdown">
+                <%--<li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
@@ -141,10 +141,10 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li>--%>
 
                 <!-- TASKS -->
-                <li class="dropdown">
+                <%--<li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-tasks fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
@@ -220,10 +220,10 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li>--%>
 
                 <!-- ALERTS -->
-                <li class="dropdown">
+                <%--<li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
@@ -280,7 +280,7 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li>--%>
                 <% } %>
 
                 <!-- AUTHENTICATION -->

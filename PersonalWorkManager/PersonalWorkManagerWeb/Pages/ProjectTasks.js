@@ -10,7 +10,7 @@
         }
         if ($("#txtTaskDescription").val() === "") {
             if (msg.length > 0) { msg += "<br>"; }
-            msg += "O campo 'Nome' é obrigatório.";
+            msg += "O campo 'Descrição' é obrigatório.";
         }
         if ($("#txtTaskOrder").val() === "") {
             if (msg.length > 0) { msg += "<br>"; }
@@ -24,8 +24,23 @@
             MessageBox.info(msg, { Div: "#divTaskModalMessage" });
             return false;
         }
-        MessageBox.clear();
+        MessageBox.clear({ Div: "#divTaskModalMessage" });
         return true;
+    }
+    function setupToolbar() {
+        var selectedRows = $("#tblTasks").bootstrapTable("getSelections");
+        if (selectedRows.length === 0) {
+            $("#btnTaskEdit").prop("disabled", true);
+            $("#btnTaskRemove").prop("disabled", true);
+        } else {
+            if (selectedRows.length === 1) {
+                $("#btnTaskEdit").prop("disabled", false);
+                $("#btnTaskRemove").prop("disabled", false);
+            } else {
+                $("#btnTaskEdit").prop("disabled", true);
+                $("#btnTaskRemove").prop("disabled", false);
+            }
+        }
     }
 
 
@@ -57,6 +72,7 @@
         }
     }
     function showAddDialog() {
+        MessageBox.clear({ Div: "#divTaskModalMessage" });
         $("#mdlTaskLabel").text("Adicionar nova Tarefa");
         $("#txtTaskId").val("");
         $("#txtTaskName").val("");
@@ -108,7 +124,7 @@
         } else {
             task = row;
         }
-        MessageBox.clear();
+        MessageBox.clear({ Div: "#divTaskModalMessage" });
         $("#mdlTaskLabel").text("Editar Tarefa");
         $("#txtTaskId").val(task.Id);
         $("#txtTaskName").val(task.Name);
@@ -126,6 +142,7 @@
     function removeCallbackOk(result, ids) {
         $("#tblTasks").bootstrapTable("remove", ids);
         MessageBox.hide();
+        setupToolbar();
     }
     function removeCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
@@ -174,21 +191,6 @@
 
 
     /*---   S E T U P   ---*/
-    function setupToolbar() {
-        var selectedRows = $("#tblTasks").bootstrapTable("getSelections");
-        if (selectedRows.length === 0) {
-            $("#btnTaskEdit").prop("disabled", true);
-            $("#btnTaskRemove").prop("disabled", true);
-        } else {
-            if (selectedRows.length === 1) {
-                $("#btnTaskEdit").prop("disabled", false);
-                $("#btnTaskRemove").prop("disabled", false);
-            } else {
-                $("#btnTaskEdit").prop("disabled", true);
-                $("#btnTaskRemove").prop("disabled", false);
-            }
-        }
-    }
     function setupTable() {
         window.actionEvents = {
             "click .edit": function (e, value, row, index) {
@@ -202,12 +204,11 @@
     function setupForm() {
         $("#txtTaskName").attr("maxlength", "200");
         $("#txtTaskDescription").attr("maxlength", "1000");
-        $("#txtTaskOrder").inputmask("9[9]");
+        $("#txtTaskOrder").inputmask({ mask: "9[9]",
+                                       greedy: false });
     }
     function setupPage() {
-        $("#tblTasks")
-            .on("check.bs.table", function (e, row) { setupToolbar(); })
-            .on("uncheck.bs.table", function (e, row) { setupToolbar(); });
+        TableUtil.setToolbarBehavior("#tblTasks", setupToolbar);
         setupTable();
         setupForm();
     }

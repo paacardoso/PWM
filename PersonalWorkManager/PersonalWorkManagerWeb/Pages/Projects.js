@@ -165,6 +165,8 @@ var Projects = (function () {
 
     /*---   A D D   ---*/
     function insertCallbackOk(result) {
+        var ddl = $("#ddlProject"),
+            selectize = ddl[0].selectize;
         //console.log("New project id: " + result.d);
         $("#ddlProject")[0].selectize
             .addOption({ Id: result.d,
@@ -172,6 +174,7 @@ var Projects = (function () {
                          Name: $("#txtName").val(),
                          Description: $("#txtDescription").val()
                        });
+        selectize.setValue(result.d);
         setupMode("edit");
     }
     function insertCallbackFailed(msg) {

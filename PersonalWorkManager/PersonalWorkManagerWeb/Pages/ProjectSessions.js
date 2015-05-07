@@ -24,8 +24,23 @@
             MessageBox.info(msg, { Div: "#divSessionModalMessage" });
             return false;
         }
-        MessageBox.clear();
+        MessageBox.clear({ Div: "#divSessionModalMessage" });
         return true;
+    }
+    function setupToolbar() {
+        var selectedRows = $("#tblSessions").bootstrapTable("getSelections");
+        if (selectedRows.length === 0) {
+            $("#btnSessionEdit").prop("disabled", true);
+            $("#btnSessionRemove").prop("disabled", true);
+        } else {
+            if (selectedRows.length === 1) {
+                $("#btnSessionEdit").prop("disabled", false);
+                $("#btnSessionRemove").prop("disabled", false);
+            } else {
+                $("#btnSessionEdit").prop("disabled", true);
+                $("#btnSessionRemove").prop("disabled", false);
+            }
+        }
     }
 
 
@@ -60,6 +75,7 @@
         }
     }
     function showAddDialog() {
+        MessageBox.clear({ Div: "#divSessionModalMessage" });
         $("#mdlSessionLabel").text("Adicionar nova Sessão");
         $("#txtSessionId").val("");
         $("#txtSessionStartTime").data("DateTimePicker").minDate(false).maxDate(false);
@@ -117,7 +133,7 @@
         } else {
             session = row;
         }
-        MessageBox.clear();
+        MessageBox.clear({ Div: "#divSessionModalMessage" });
         $("#mdlSessionLabel").text("Editar Sessão");
         $("#txtSessionId").val(session.Id);
         $("#txtSessionStartTime").data("DateTimePicker").date(DateUtil
@@ -138,6 +154,7 @@
     function removeCallbackOk(result, ids) {
         $("#tblSessions").bootstrapTable("remove", ids);
         MessageBox.hide();
+        setupToolbar();
     }
     function removeCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
@@ -186,21 +203,6 @@
 
 
     /*---   S E T U P   ---*/
-    function setupToolbar() {
-        var selectedRows = $("#tblSessions").bootstrapTable("getSelections");
-        if (selectedRows.length === 0) {
-            $("#btnSessionEdit").prop("disabled", true);
-            $("#btnSessionRemove").prop("disabled", true);
-        } else {
-            if (selectedRows.length === 1) {
-                $("#btnSessionEdit").prop("disabled", false);
-                $("#btnSessionRemove").prop("disabled", false);
-            } else {
-                $("#btnSessionEdit").prop("disabled", true);
-                $("#btnSessionRemove").prop("disabled", false);
-            }
-        }
-    }
     function setupTable() {
         window.actionEvents = {
             "click .edit": function (e, value, row, index) {
@@ -223,9 +225,7 @@
         DateUtil.defineDateInterval("#txtSessionStartTime", "#txtSessionEndTime");
     }
     function setupPage() {
-        $("#tblSessions")
-            .on("check.bs.table", function (e, row) { setupToolbar(); })
-            .on("uncheck.bs.table", function (e, row) { setupToolbar(); });
+        TableUtil.setToolbarBehavior("#tblSessions", setupToolbar);
         setupTable();
         setupForm();
     }

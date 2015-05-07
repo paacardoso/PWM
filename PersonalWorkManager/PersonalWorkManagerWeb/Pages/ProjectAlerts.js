@@ -20,8 +20,23 @@
             MessageBox.info(msg, { Div: "#divAlertModalMessage" });
             return false;
         }
-        MessageBox.clear();
+        MessageBox.clear({ Div: "#divAlertModalMessage" });
         return true;
+    }
+    function setupToolbar() {
+        var selectedRows = $("#tblAlerts").bootstrapTable("getSelections");
+        if (selectedRows.length === 0) {
+            $("#btnAlertEdit").prop("disabled", true);
+            $("#btnAlertRemove").prop("disabled", true);
+        } else {
+            if (selectedRows.length === 1) {
+                $("#btnAlertEdit").prop("disabled", false);
+                $("#btnAlertRemove").prop("disabled", false);
+            } else {
+                $("#btnAlertEdit").prop("disabled", true);
+                $("#btnAlertRemove").prop("disabled", false);
+            }
+        }
     }
 
 
@@ -53,6 +68,7 @@
         }
     }
     function showAddDialog() {
+        MessageBox.clear({ Div: "#divAlertModalMessage" });
         $("#mdlAlertLabel").text("Adicionar novo Alerta");
         $("#txtAlertId").val("");
         $("#txtAlertName").val("");
@@ -103,7 +119,7 @@
         } else {
             my_alert = row;
         }
-        MessageBox.clear();
+        MessageBox.clear({ Div: "#divAlertModalMessage" });
         $("#mdlAlertLabel").text("Editar Alerta");
         $("#txtAlertId").val(my_alert.Id);
         $("#txtAlertName").val(my_alert.Name);
@@ -120,6 +136,7 @@
     function removeCallbackOk(result, ids) {
         $("#tblAlerts").bootstrapTable("remove", ids);
         MessageBox.hide();
+        setupToolbar();
     }
     function removeCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
@@ -168,21 +185,6 @@
 
 
     /*---   S E T U P   ---*/
-    function setupToolbar() {
-        var selectedRows = $("#tblAlerts").bootstrapTable("getSelections");
-        if (selectedRows.length === 0) {
-            $("#btnAlertEdit").prop("disabled", true);
-            $("#btnAlertRemove").prop("disabled", true);
-        } else {
-            if (selectedRows.length === 1) {
-                $("#btnAlertEdit").prop("disabled", false);
-                $("#btnAlertRemove").prop("disabled", false);
-            } else {
-                $("#btnAlertEdit").prop("disabled", true);
-                $("#btnAlertRemove").prop("disabled", false);
-            }
-        }
-    }
     function setupTable() {
         window.actionEvents = {
             "click .edit": function (e, value, row, index) {
@@ -202,9 +204,7 @@
         });
     }
     function setupPage() {
-        $("#tblAlerts")
-            .on("check.bs.table", function (e, row) { setupToolbar(); })
-            .on("uncheck.bs.table", function (e, row) { setupToolbar(); });
+        TableUtil.setToolbarBehavior("#tblAlerts", setupToolbar);
         setupTable();
         setupForm();
     }

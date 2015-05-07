@@ -23,6 +23,21 @@
         }
         return true;
     }
+    function setupToolbar() {
+        var selectedRows = $("#tblStatuses").bootstrapTable("getSelections");
+        if (selectedRows.length === 0) {
+            $("#btnEdit").prop("disabled", true);
+            $("#btnRemove").prop("disabled", true);
+        } else {
+            if (selectedRows.length === 1) {
+                $("#btnEdit").prop("disabled", false);
+                $("#btnRemove").prop("disabled", false);
+            } else {
+                $("#btnEdit").prop("disabled", true);
+                $("#btnRemove").prop("disabled", false);
+            }
+        }
+    }
 
 
     /*---   A D D   ---*/
@@ -121,6 +136,7 @@
     function removeCallbackOk(result, ids) {
         $("#tblStatuses").bootstrapTable("remove", ids);
         MessageBox.hide();
+        setupToolbar();
     }
     function removeCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
@@ -170,21 +186,6 @@
 
 
     /*---   S E T U P   ---*/
-    function setupToolbar() {
-        var selectedRows = $("#tblStatuses").bootstrapTable("getSelections");
-        if (selectedRows.length === 0) {
-            $("#btnEdit").prop("disabled", true);
-            $("#btnRemove").prop("disabled", true);
-        } else {
-            if (selectedRows.length === 1) {
-                $("#btnEdit").prop("disabled", false);
-                $("#btnRemove").prop("disabled", false);
-            } else {
-                $("#btnEdit").prop("disabled", true);
-                $("#btnRemove").prop("disabled", false);
-            }
-        }
-    }
     function setupTable() {
         window.actionEvents = {
             "click .edit": function (e, value, row, index) {
@@ -198,12 +199,11 @@
     function setupForm() {
         $("#txtName").attr("maxlength", "200");
         $("#txtDescription").attr("maxlength", "1000");
-        $("#txtOrder").inputmask("9[9]");
+        $("#txtOrder").inputmask({ mask: "9[9]",
+                                   greedy: false });
     }
     function setupPage() {
-        $("#tblStatuses")
-            .on("check.bs.table", function (e, row) { setupToolbar(); })
-            .on("uncheck.bs.table", function (e, row) { setupToolbar(); });
+        TableUtil.setToolbarBehavior("#tblStatuses", setupToolbar);
         setupTable();
         setupForm();
     }

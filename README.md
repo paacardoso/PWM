@@ -9,6 +9,15 @@ Personal Work Manager
   All work is related to one resource, so login is always required. This way PWM can trace all actions made within the project.
   This include not only changes to the project, but also, logging the time spent within each project's task.
 
+## TODO List
+- Current Release
+  . Closed 2015.05.05: Resolve Issue #2: Toolbar isn't being updated on select all checkbox
+  . Resolve Issue #4: Login cookie does not expire
+- Next Release
+  . Draggable modal dialogs
+  . Accept button should trigger on enter key
+  . Tables that have order field, should be ordered by order field
+  
 
 ## Future implementations
 - Financial Accounts Management
