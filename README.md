@@ -12,7 +12,8 @@ Personal Work Manager
 ## TODO List
 - Current Release
   . Closed 2015.05.05: Resolve Issue #2: Toolbar isn't being updated on select all checkbox
-  . Resolve Issue #4: Login cookie does not expire
+  . Closed Resolve Issue #4: Login cookie does not expire
+  . Closed Configurable App name
 - Next Release
   . Draggable modal dialogs
   . Accept button should trigger on enter key

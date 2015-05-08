@@ -88,9 +88,9 @@
     <Content Include="Pages\Projects.aspx" />
     <Content Include="Pages\Projects.js" />
     <Content Include="Pages\Util\TableUtil.js" />
-    <Content Include="PersonalWorkManagerWeb.Publish.xml" />
+    <None Include="PersonalWorkManagerWeb.Publish.xml" />
     <Content Include="Resources\startbootstrap-sb-admin-2-1.0.5\bower_components\font-awesome\css\font-awesome.min.css" />
-    <Content Include="Settings.JSLint.xml" />
+    <None Include="Settings.JSLint.xml" />
     <Content Include="Site.Master.js" />
     <Content Include="Resources\bootstrap-3.3.2-dist\css\bootstrap-theme.css" />
     <Content Include="Resources\bootstrap-3.3.2-dist\css\bootstrap-theme.min.css" />
@@ -238,7 +238,7 @@
     <Content Include="Site.Master" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <None Include="packages.config" />
     <None Include="App_Data\PWM.s3db" />
     <EntityDeploy Include="Model.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -251,11 +251,11 @@
     <None Include="Resources\bootstrap-3.3.2-dist\fonts\glyphicons-halflings-regular.ttf" />
     <None Include="Resources\bootstrap-3.3.2-dist\fonts\glyphicons-halflings-regular.woff" />
     <None Include="Resources\bootstrap-3.3.2-dist\fonts\glyphicons-halflings-regular.woff2" />
-    <None Include="Resources\startbootstrap-sb-admin-2-1.0.5\bower_components\font-awesome\fonts\fontawesome-webfont.eot" />
-    <None Include="Resources\startbootstrap-sb-admin-2-1.0.5\bower_components\font-awesome\fonts\fontawesome-webfont.svg" />
-    <None Include="Resources\startbootstrap-sb-admin-2-1.0.5\bower_components\font-awesome\fonts\fontawesome-webfont.ttf" />
-    <None Include="Resources\startbootstrap-sb-admin-2-1.0.5\bower_components\font-awesome\fonts\fontawesome-webfont.woff" />
-    <None Include="Resources\startbootstrap-sb-admin-2-1.0.5\bower_components\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="Resources\startbootstrap-sb-admin-2-1.0.5\bower_components\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="Resources\startbootstrap-sb-admin-2-1.0.5\bower_components\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="Resources\startbootstrap-sb-admin-2-1.0.5\bower_components\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Resources\startbootstrap-sb-admin-2-1.0.5\bower_components\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="Resources\startbootstrap-sb-admin-2-1.0.5\bower_components\font-awesome\fonts\FontAwesome.otf" />
     <None Include="Settings.StyleCop" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -268,7 +268,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>2332</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/PWM</IISUrl>
+          <IISUrl>http://localhost/PWM_DEV</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

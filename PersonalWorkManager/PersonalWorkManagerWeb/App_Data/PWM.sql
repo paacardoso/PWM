@@ -8,6 +8,7 @@ CREATE TABLE "Parameter" (
     `Description`       VARCHAR(1000)
 );
 INSERT INTO `Parameter` VALUES (1,'Sample parameter','Sample value','Sample Description');
+INSERT INTO `Parameter` VALUES (2,'APP_NAME','PWM - Personal Work Manager','Application''s name');
 
 -- StatusType
 CREATE TABLE "StatusType" (
