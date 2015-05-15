@@ -16,7 +16,7 @@ Personal Work Manager
 ## Development configurations
 - IIS 6
   - Directory Security configuration
-    Allow "Anonymous Acsess"
+    Allow "Anonymous Access"
     Allow "Integrated Windows Authentication"
 - Stylecop
   Load xml file configuration available in web project folder (Settings.StyleCop). Stylecop usually auto load this file.

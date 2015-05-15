@@ -36,6 +36,11 @@
                         authCookie.Expires = DateTime.Now.AddMinutes(60);
                     }
                     HttpContext.Current.Response.Cookies.Add(authCookie); 
+                    
+                    /*FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, Login, DateTime.Now, DateTime.Now.AddMinutes(60), Persistable, "member");
+                    HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(ticket));
+                    HttpContext.Current.Response.Cookies.Add(cookie);*/
+
                     json = JsonConvert.SerializeObject(resource.ToList()[0]);
                 }
                 return json;
