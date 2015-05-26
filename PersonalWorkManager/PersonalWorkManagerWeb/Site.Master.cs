@@ -9,7 +9,7 @@
         {
         }
 
-        protected string getAppName()
+        protected string GetAppName()
         {
             Parameter parameter;
             using (var objCtx = new PWMEntities())
@@ -17,9 +17,13 @@
                 parameter = objCtx.Parameter.SingleOrDefault(x => x.Name == "APP_NAME");
             }
             if (parameter == null)
+            {
                 return "[APP_NAME] is undefined !";
+            }
             else
+            {
                 return parameter.Value;
+            }
         }
     }
 

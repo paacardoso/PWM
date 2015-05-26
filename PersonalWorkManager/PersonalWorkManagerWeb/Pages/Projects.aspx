@@ -118,6 +118,13 @@
                     <button id="btnTaskRemove" type="button" class="btn btn-default" onclick="ProjectTasks.showRemoveDialog();">
                         <i class="glyphicon glyphicon-remove"></i>&nbsp;Remover
                     </button>
+
+                    <button id="btnTaskOrderUp" type="button" class="btn btn-default" style="margin-left:10px;" onclick="ProjectTasks.moveOrderUp();">
+                        <i class="glyphicon glyphicon-arrow-up"></i>
+                    </button>
+                    <button id="btnTaskOrderDown" type="button" class="btn btn-default" onclick="ProjectTasks.moveOrderDown();">
+                        <i class="glyphicon glyphicon-arrow-down"></i>
+                    </button>
                 </div>
                 <table id="tblTasks" 
                    class="table table-striped table-bordered table-condensed"
@@ -125,7 +132,7 @@
                    data-pagination="true"
                    data-show-toggle="true"
                    data-show-columns="true"
-                   data-sort-name="Id"
+                   data-sort-name="Order"
                    data-sort-order="asc"
                    data-toolbar="#tlbTasks"
                    data-click-to-select="true">
@@ -137,7 +144,7 @@
                     <th data-field="Description" data-sortable="true" data-formatter="TableUtil.textFormatter">Descrição</th>
                     <th data-field="Order" data-sortable="true">Ordem</th>
                     <th data-field="Status" data-sortable="true">Estado</th>
-                    <th data-field="action" data-formatter="TableUtil.actionFormatter" data-events="actionEvents">Acção</th>
+                    <th data-field="action" data-formatter="ProjectTasks.actionFormatter" data-events="actionEvents">Acção</th>
                 </tr>
                 </thead>
             </table>

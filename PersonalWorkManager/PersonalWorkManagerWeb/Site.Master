@@ -85,7 +85,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="<%= ResolveUrl("~/Default.aspx")%>"><%= getAppName() %></a>
+                <a class="navbar-brand" href="<%= ResolveUrl("~/Default.aspx")%>"><%= GetAppName() %></a>
             </div>
 
             <!-- T O P   L E V E L   B U T T O N S -->

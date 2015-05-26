@@ -30,9 +30,9 @@
                     HttpCookie authCookie = FormsAuthentication.GetAuthCookie(Login, Persistable);
                     if (!Persistable)
                     {
-                        //this is because if it was not set then it got 
-                        //automatically set to expire next year even if 
-                        //the cookie was not set as persistent
+                        // this is because if it was not set then it got 
+                        // automatically set to expire next year even if 
+                        // the cookie was not set as persistent
                         authCookie.Expires = DateTime.Now.AddMinutes(60);
                     }
                     HttpContext.Current.Response.Cookies.Add(authCookie); 

@@ -267,6 +267,7 @@
     }
     function getSessionTasksCallbackOk(result) {
         var ddl = $("#ddlSessionTask");
+        ddl.empty();
         $.each(JSON.parse(result.d), function () {
             ddl.append($("<option />").val(this.Id).text(this.Name));
         });
@@ -282,6 +283,7 @@
     }
     function getSessionResourcesCallbackOk(result) {
         var ddl = $("#ddlSessionResource");
+        ddl.empty();
         $.each(JSON.parse(result.d), function () {
             ddl.append($("<option />").val(this.Id).text(this.Name));
         });

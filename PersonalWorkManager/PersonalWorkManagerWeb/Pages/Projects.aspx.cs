@@ -2,8 +2,8 @@
 {
 
     using System;
-    using System.Globalization;
     using System.Linq;
+    using System.Transactions;
     using System.Web.Services;
     using Newtonsoft.Json;
 
@@ -117,9 +117,59 @@
             Project project;
             using (var objCtx = new PWMEntities())
             {
-                project = objCtx.Project.SingleOrDefault(x => x.Id == Id);
-                objCtx.Project.DeleteObject(project);
-                objCtx.SaveChanges();
+                objCtx.Connection.Open(); 
+
+                // Begin transaction
+                using (var dbContextTransaction = objCtx.Connection.BeginTransaction())
+                {
+                    try 
+                    {
+                        // Delete Tasks
+                        var tasks = objCtx.Task.Where(x => x.IdProject == Id);
+                        foreach (Task task in tasks)
+                        {
+                            // Delete Task Sessions
+                            var sessions = objCtx.Session.Where(x => x.IdTask == task.Id);
+                            foreach (Session session in sessions)
+                            {
+                                objCtx.Session.DeleteObject(session);
+                            }
+                            objCtx.SaveChanges();
+
+                            objCtx.Task.DeleteObject(task);
+                        }
+                        objCtx.SaveChanges();
+
+                        // Delete Alerts
+                        var alerts = objCtx.Alert.Where(x => x.IdProject == Id);
+                        foreach (Alert alert in alerts)
+                        {
+                            objCtx.Alert.DeleteObject(alert);
+                        }
+                        objCtx.SaveChanges();
+
+                        // Delete Notes
+                        var notes = objCtx.Note.Where(x => x.IdProject == Id);
+                        foreach (Note note in notes)
+                        {
+                            objCtx.Note.DeleteObject(note);
+                        }
+                        objCtx.SaveChanges();
+
+                        // Delete Project
+                        project = objCtx.Project.SingleOrDefault(x => x.Id == Id);
+                        objCtx.Project.DeleteObject(project);
+                        objCtx.SaveChanges();
+
+                        // Commit transaction
+                        dbContextTransaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        // Roolback transaction
+                        dbContextTransaction.Rollback();
+                    }
+                }
             }
             return true;
         }
@@ -212,6 +262,23 @@
             using (var objCtx = new PWMEntities())
             {
                 objCtx.ExecuteStoreCommand("DELETE FROM Task WHERE Id IN (" + Ids + ")");
+                objCtx.SaveChanges();
+            }
+            return true;
+        }
+
+        [WebMethod]
+        public static bool MoveTaskOrderJSON(int Id, int Order)
+        {
+            Task Task;
+            using (var objCtx = new PWMEntities())
+            {
+                Task = objCtx.Task.SingleOrDefault(x => x.Id == Id);
+                Task.Order = Task.Order + (Order);
+                if (Task.Order <= 0)
+                {
+                    Task.Order =  1;
+                }
                 objCtx.SaveChanges();
             }
             return true;

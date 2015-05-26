@@ -1,4 +1,6 @@
-﻿var ProjectTasks = (function () {
+﻿/*jslint browser: true*/
+/*global ProjectSessions*/
+var ProjectTasks = (function () {
 
     var tabHasLoaded = false;
 
@@ -29,9 +31,20 @@
     }
     function setupToolbar() {
         var selectedRows = $("#tblTasks").bootstrapTable("getSelections");
-        if (selectedRows.length === 0) {
+
+        $("#btnTaskEdit").prop("disabled", (selectedRows.length === 0) ||
+                                           (selectedRows.length > 1));
+        $("#btnTaskRemove").prop("disabled", (selectedRows.length === 0));
+        $("#btnTaskOrderUp").prop("disabled", (selectedRows.length === 0) ||
+                                              (selectedRows.length > 1));
+        $("#btnTaskOrderDown").prop("disabled", (selectedRows.length === 0) ||
+                                                (selectedRows.length > 1));
+
+        /*if (selectedRows.length === 0) {
             $("#btnTaskEdit").prop("disabled", true);
             $("#btnTaskRemove").prop("disabled", true);
+            $("#btnTaskOrderUp").prop("disabled", true);
+            $("#btnTaskOrderDown").prop("disabled", true);
         } else {
             if (selectedRows.length === 1) {
                 $("#btnTaskEdit").prop("disabled", false);
@@ -40,7 +53,7 @@
                 $("#btnTaskEdit").prop("disabled", true);
                 $("#btnTaskRemove").prop("disabled", false);
             }
-        }
+        }*/
     }
 
 
@@ -53,6 +66,7 @@
                     Order: $("#txtTaskOrder").val(),
                     Status: $("#ddlTaskStatus option:selected").text() };
         $("#tblTasks").bootstrapTable('append', data);
+        ProjectSessions.invalidate();
     }
     function insertCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
@@ -98,6 +112,7 @@
                 Status: $("#ddlTaskStatus option:selected").text()
             }
         });
+        ProjectSessions.invalidate();
     }
     function updateCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
@@ -130,11 +145,56 @@
         $("#txtTaskName").val(task.Name);
         $("#txtTaskDescription").val(task.Description);
         $("#txtTaskOrder").val(task.Order);
-        $("#ddlTaskStatus option:contains('" + task.StatusName + "')")
+        $("#ddlTaskStatus option:contains('" + task.Status + "')")
             .attr("selected", true);
         $("#btnTaskActionConfirmed").unbind("click");
         $("#btnTaskActionConfirmed").on("click", update);
         $("#mdlTask").modal("show");
+    }
+    function moveOrderCallbackOk(result) {
+        $("#mdlTask").modal("hide");
+        console.log("order after: " + $("#txtTaskOrder").val());
+        $("#tblTasks").bootstrapTable("updateRow", {
+            index: TableUtil.getTableIndexById("#tblTasks", $("#txtTaskId").val()),
+            row: {
+                Order: $("#txtTaskOrder").val()
+            }
+        });
+        var data = $("#tblTasks").bootstrapTable("getData");
+        //console.log(JSON.stringify(data));
+        $("#tblTasks").bootstrapTable("destroy");
+        $("#tblTasks").bootstrapTable({
+            data: data
+        });
+    }
+    function moveOrderCallbackFailed(msg) {
+        var ex = JSON.parse(msg.responseText);
+        MessageBox.exception(ex.Message, {StackTrace: ex.StackTrace,
+                                          Div: "#divTaskModalMessage" });
+    }
+    function moveOrder(row, order) {
+        var task;
+        if (row === undefined) {
+            task = $("#tblTasks").bootstrapTable("getSelections")[0];
+        } else {
+            task = row;
+        }
+        if ((order === -1) && (task.Order <= 1)) {
+            return;
+        }
+        $("#txtTaskId").val(task.Id);
+        $("#txtTaskOrder").val((parseInt(task.Order, 10) + parseInt(order, 10)));
+        AjaxUtil.invoke("Projects.aspx/MoveTaskOrderJSON",
+                        {Id: task.Id,
+                        Order: order},
+                        moveOrderCallbackOk,
+                        moveOrderCallbackFailed);
+    }
+    function moveOrderUp(row) {
+        moveOrder(row, -1);
+    }
+    function moveOrderDown(row) {
+        moveOrder(row, 1);
     }
 
 
@@ -143,6 +203,7 @@
         $("#tblTasks").bootstrapTable("remove", ids);
         MessageBox.hide();
         setupToolbar();
+        ProjectSessions.invalidate();
     }
     function removeCallbackFailed(msg) {
         var ex = JSON.parse(msg.responseText);
@@ -198,6 +259,12 @@
             },
             "click .remove": function (e, value, row, index) {
                 showRemoveDialog(row);
+            },
+            "click .up": function (e, value, row, index) {
+                moveOrderUp(row);
+            },
+            "click .down": function (e, value, row, index) {
+                moveOrderDown(row);
             }
         };
     }
@@ -211,6 +278,18 @@
         TableUtil.setToolbarBehavior("#tblTasks", setupToolbar);
         setupTable();
         setupForm();
+    }
+    function actionFormatter(value, row, index) {
+        return [
+            '<i style="cursor: pointer;"' +
+                ' class="edit glyphicon glyphicon-edit"></i>',
+            '<i style="cursor: pointer;"' +
+                ' class="remove glyphicon glyphicon-remove"></i>',
+            '<i style="cursor: pointer;"' +
+                ' class="up glyphicon glyphicon-arrow-up"></i>',
+            '<i style="cursor: pointer;"' +
+                ' class="down glyphicon glyphicon-arrow-down"></i>'
+        ].join('');
     }
 
 
@@ -245,6 +324,7 @@
     }
     function getTaskStatusesCallbackOk(result) {
         var ddl = $("#ddlTaskStatus");
+        ddl.empty();
         $.each(JSON.parse(result.d), function () {
             ddl.append($("<option />").val(this.Id).text(this.Name));
         });
@@ -280,8 +360,13 @@
         showAddDialog: function () { return showAddDialog(); },
         showEditDialog: function (row) { return showEditDialog(row); },
         showRemoveDialog: function (task) { return showRemoveDialog(task); },
+        moveOrderUp: function (row) { return moveOrderUp(row); },
+        moveOrderDown: function (row) { return moveOrderDown(row); },
         tabLoad: function () { return tabLoad(); },
-        invalidate: function () { tabHasLoaded = false; }
+        invalidate: function () { tabHasLoaded = false; },
+        actionFormatter: function (value, row, index) {
+            return actionFormatter(value, row, index);
+        }
     };
 
 }());

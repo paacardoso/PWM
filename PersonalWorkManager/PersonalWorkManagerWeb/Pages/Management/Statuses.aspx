@@ -35,8 +35,8 @@
                data-pagination="true"
                data-show-toggle="true"
                data-show-columns="true"
-               data-sort-name="Id"
-               data-sort-order="asc"
+               <%--data-sort-name="Id"
+               data-sort-order="asc"-- being made in code behind%>
                data-toolbar="#toolbar"
                data-click-to-select="true">
             <thead>

@@ -16,6 +16,7 @@
             {
                 var records = from s in objCtx.Status
                               join st in objCtx.StatusType on s.IdStatusType equals st.Id
+                              orderby s.IdStatusType ascending, s.Order ascending
                               select new
                               {
                                   Id = s.Id,
