@@ -8,12 +8,13 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
+using System.Data.EntityClient;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
-using System.Data.EntityClient;
-using System.ComponentModel;
-using System.Xml.Serialization;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 [assembly: EdmSchemaAttribute()]
 #region EDM Relationship Metadata
@@ -223,6 +224,7 @@ namespace PersonalWorkManagerWeb
         private ObjectSet<Session> _Session;
 
         #endregion
+
         #region AddTo Methods
     
         /// <summary>
@@ -298,11 +300,11 @@ namespace PersonalWorkManagerWeb
         }
 
         #endregion
+
     }
-    
 
     #endregion
-    
+
     #region Entities
     
     /// <summary>
@@ -331,6 +333,7 @@ namespace PersonalWorkManagerWeb
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -457,6 +460,7 @@ namespace PersonalWorkManagerWeb
         partial void OnIdProjectChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -499,6 +503,7 @@ namespace PersonalWorkManagerWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -523,6 +528,7 @@ namespace PersonalWorkManagerWeb
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -601,6 +607,7 @@ namespace PersonalWorkManagerWeb
         partial void OnIdProjectChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -643,6 +650,7 @@ namespace PersonalWorkManagerWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -669,6 +677,7 @@ namespace PersonalWorkManagerWeb
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -771,6 +780,7 @@ namespace PersonalWorkManagerWeb
         partial void OnDescriptionChanged();
 
         #endregion
+
     
     }
     
@@ -804,6 +814,7 @@ namespace PersonalWorkManagerWeb
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -1002,6 +1013,7 @@ namespace PersonalWorkManagerWeb
         partial void OnIdStatusChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -1110,6 +1122,7 @@ namespace PersonalWorkManagerWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -1140,6 +1153,7 @@ namespace PersonalWorkManagerWeb
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -1266,6 +1280,7 @@ namespace PersonalWorkManagerWeb
         partial void OnIdStatusChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -1308,6 +1323,7 @@ namespace PersonalWorkManagerWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -1340,6 +1356,7 @@ namespace PersonalWorkManagerWeb
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -1466,6 +1483,7 @@ namespace PersonalWorkManagerWeb
         partial void OnIdResourceChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -1546,6 +1564,7 @@ namespace PersonalWorkManagerWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -1576,6 +1595,7 @@ namespace PersonalWorkManagerWeb
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -1702,6 +1722,7 @@ namespace PersonalWorkManagerWeb
         partial void OnIdStatusTypeChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -1832,6 +1853,7 @@ namespace PersonalWorkManagerWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -1858,6 +1880,7 @@ namespace PersonalWorkManagerWeb
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -1936,6 +1959,7 @@ namespace PersonalWorkManagerWeb
         partial void OnDescriptionChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -1962,6 +1986,7 @@ namespace PersonalWorkManagerWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -1994,6 +2019,7 @@ namespace PersonalWorkManagerWeb
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -2144,6 +2170,7 @@ namespace PersonalWorkManagerWeb
         partial void OnIdStatusChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -2246,8 +2273,10 @@ namespace PersonalWorkManagerWeb
         }
 
         #endregion
+
     }
 
     #endregion
+
     
 }
